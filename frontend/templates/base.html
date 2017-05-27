@@ -1,0 +1,49 @@
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+
+    {% compress css %}
+        {% block styles %}
+            <link rel="stylesheet" href="{% static "vendors/bootstrap/dist/css/bootstrap.min.css" %}">
+            <link rel="stylesheet" href="{% static "vendors/font-awesome/css/font-awesome.min.css" %}">
+
+            <link rel="stylesheet" href="{% static "styles/gentelella.scss" %}" type="text/x-scss">
+        {% endblock %}
+    {% endcompress %}
+</head>
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col">
+            {% include "side_menu.html" %}
+        </div>
+
+        <div class="top_nav">
+            {% include "top_menu.html" %}
+        </div>
+
+        <div class="right_col" role="main">
+        </div>
+
+        {% include "footer.html" %}
+    </div>
+</div>
+
+{% block js %}
+    <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}" charset="utf-8"></script>
+    <script src="{% static 'vendors/bootstrap/dist/js/bootstrap.min.js' %}" charset="utf-8"></script>
+
+    <script src="{% static 'js/gentelella.min.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/main.js' %}" charset="utf-8"></script>
+{% endblock %}
+</body>
+</html>

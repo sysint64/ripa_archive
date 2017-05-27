@@ -7,4 +7,6 @@ ansible/hosts
 ansible/*.retry
 ansible/vars/secret.yml
 src/ripa_archive/settings/local.py
-assets/vendor/bower_components
+__pycache__/
+gentelella/
+frontend/static/vendors/
