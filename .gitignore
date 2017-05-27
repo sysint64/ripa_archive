@@ -1,0 +1,10 @@
+*~
+.DS_Store
+.idea
+.env
+var
+ansible/hosts
+ansible/*.retry
+ansible/vars/secret.yml
+src/ripa_archive/settings/local.py
+assets/vendor/bower_components
