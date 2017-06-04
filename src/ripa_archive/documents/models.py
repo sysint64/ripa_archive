@@ -1,7 +1,8 @@
 from autoslug import AutoSlugField
 from django.db import models
+from django.urls import reverse
 
-from django.utils.translation import ugettext as _
+import os
 
 
 class FolderManager(models.Manager):
@@ -32,22 +33,41 @@ class Folder(models.Model):
     objects = FolderManager()
 
     @property
-    def path(self):
-        if self.parent is None and self.name == "Root":
-            return "/"
+    def permalink(self):
+        if self.path != "":
+            return reverse("documents:browser", kwargs={"path": self.path})
+        else:
+            return reverse("documents:browser")
 
-        folders = [self.name]
+    @property
+    def path_folders(self):
+        items = [self]
         current_folder = self.parent
 
         while current_folder is not None:
-            folders = [current_folder.name] + folders
+            items = [current_folder] + items
             current_folder = current_folder.parent
 
-            if current_folder is not None:
-                if current_folder.parent is None and current_folder.name == "Root":
-                    break
+        return items
 
-        return "/%s/" % "/".join(folders)
+    @property
+    def path(self):
+        folders = self.path_folders
+
+        # Remove root folder
+        if len(folders) >= 1 and folders[0].parent == None and folders[0].name == "Root":
+            folders = folders[1:]
+
+        return "/".join([str(folder) for folder in folders])
+
+    @property
+    def breadcrumbs(self):
+        items = []
+
+        for folder in self.path_folders:
+            items.append({"name": folder.name, "permalink": folder.permalink})
+
+        return items
 
     def __str__(self):
         return self.name
@@ -65,28 +85,60 @@ class Document(models.Model):
     class Meta:
         default_related_name = "documents"
 
-    folder = models.ForeignKey(Folder, null=True)
+    folder = models.ForeignKey(Folder, null=True)  # TODO: rm null=True
+    status = models.ForeignKey(Status, null=True)  # TODO: rm null=True
 
     @property
-    def document_data(self):
+    def data(self):
         return DocumentData.objects.filter(document=self).order_by("-datetime").last()
 
     def __str__(self):
-        if self.document_data is not None:
-            return self.document_data.name
+        if self.data is not None:
+            return self.data.name
 
         return "None"
 
 
 class DocumentType:
-    TXT = "0"
-    DOC = "1"
-    PDF = "2"
+    FILE = "0"
+    TEXT = "1"
+    WORD = "2"
+    PDF = "3"
+    SOUND = "4"
+    EXCEL = "5"
+    ARCHIVE = "6"
+    IMAGE = "7"
+    VIDEO = "8"
+    POWERPOINT = "9"
+
+    EXTENSIONS = (
+        (TEXT, ("txt",)),
+        (PDF, ("pdf",)),
+        (SOUND, ("mp3", "wav", "flac", "acc",)),
+        (ARCHIVE, ("7z", "zip", "rar", "tar", "gz",)),
+        (IMAGE, ("jpg", "jpeg", "png",)),
+        (VIDEO, ("avi", "mp4", "mpeg4", "3gp",)),
+        (WORD, ("doc", "docx",)),
+        (EXCEL, ("xls", "xlsx", "xlsb",)),
+        (POWERPOINT, ("ppt", "pptx",)),
+    )
+
+    @staticmethod
+    def get_type_from_name(name):
+        _, ext = os.path.splitext(name)
+        ext = ext[1:]
+
+        for type_extensions_pair in DocumentType.EXTENSIONS:
+            document_type, extensions = type_extensions_pair
+
+            if ext in extensions:
+                return document_type
+
+        return DocumentType.FILE
 
 
 class DocumentData(models.Model):
     document = models.ForeignKey(Document)
-    status = models.ForeignKey(Status)
     file = models.FileField(upload_to="documents/")
     name = models.CharField(max_length=60)
     datetime = models.DateTimeField()
@@ -96,4 +148,19 @@ class DocumentData(models.Model):
 
     @property
     def type(self):
-        return DocumentType.TXT
+        return DocumentType.get_type_from_name(self.file.name)
+
+    @property
+    def icon(self):
+        return {
+            DocumentType.FILE: "fa-file-o",
+            DocumentType.EXCEL: "fa-file-excel-o",
+            DocumentType.PDF: "fa-file-pdf-o",
+            DocumentType.SOUND: "fa-file-sound-o",
+            DocumentType.TEXT: "fa-file-text-o",
+            DocumentType.ARCHIVE: "fa-file-archive-o",
+            DocumentType.WORD: "fa-file-word-o",
+            DocumentType.IMAGE: "fa-file-image-o",
+            DocumentType.VIDEO: "fa-file-video-o",
+            DocumentType.POWERPOINT: "fa-file-powerpoint-o",
+        }.get(self.type, "fa-file-o")
