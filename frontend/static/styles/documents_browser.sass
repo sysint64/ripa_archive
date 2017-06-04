@@ -16,9 +16,6 @@
             .edit, .remove
                 color: #fff
 
-        //.data-link
-        //    cursor: pointer
-
         .edit
             color: #b96e00
             margin: 0 5px
@@ -26,3 +23,23 @@
         .remove
             color: #b90d00
             margin: 0 5px
+
+#select-region
+    z-index: 9999
+    position: absolute
+    display: none
+    border: 1px solid #1ABB9C
+    background: rgba(26, 187, 156, 0.2)
+    cursor: default
+
+.context-menu-icon::before, .context-menu-icon.context-menu-icon--fa::before
+    color: #2A3F54
+
+
+.context-menu-list
+    border-radius: 0
+    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15)
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15)
+
+.context-menu-item.context-menu-hover
+    background-color: #1ABB9C
