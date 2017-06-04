@@ -48,8 +48,10 @@
     });
 
     $selectable.bind("contextmenu", function() {
-        $selectable.removeClass("selected");
-        $(this).addClass("selected");
+        if (!$(this).hasClass("selected")) {
+            $selectable.removeClass("selected");
+            $(this).addClass("selected");
+        }
     });
 
     // TODO: need to refactor
@@ -95,7 +97,8 @@
         if ($(event.target).closest(".selectable").length > 0)
             return;
 
-        $selectable.removeClass("selected");
+        $selectable.not(".selected-by-region").removeClass("selected");
+        $selectable.removeClass("selected-by-region");
         $lastSelected = null;
     });
 
@@ -144,15 +147,15 @@
 
             // test element in rect
             if (top + height >= selectRegionCoords.top() && top <= selectRegionCoords.top() + selectRegionCoords.height()) {
-                $(this).addClass("selected");
+                $(this).addClass("selected").addClass("selected-by-region");
             } else {
-                $(this).removeClass("selected");
+                $(this).removeClass("selected").removeClass("selected-by-region");
             }
         });
     });
 
     $(window).mouseup(function() {
-        selectRegionCoords = null;
         $selectRegion.hide();
+        selectRegionCoords = null;
     });
 })(jQuery);
