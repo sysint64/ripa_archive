@@ -5,11 +5,19 @@
 
 .documents-browser-table
     tbody
+        cursor: default
         tr:hover
-            background: #eee
+            background: #f0f0f0
 
-        .data-link
-            cursor: pointer
+        tr.selected
+            background: #1ABB9C
+            color: #fff
+            
+            .edit, .remove
+                color: #fff
+
+        //.data-link
+        //    cursor: pointer
 
         .edit
             color: #b96e00

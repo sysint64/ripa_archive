@@ -3,7 +3,14 @@
 
 {% block styles %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static "styles/documents_browser.sass" %}" type="text/x-scss">
+    <link rel="stylesheet" href="{% static "vendors/jQuery-contextMenu/dist/jquery.contextMenu.min.css" %}">
+    <link rel="stylesheet" href="{% static "styles/documents_browser.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'vendors/jQuery-contextMenu/dist/jquery.contextMenu.min.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/documents_browser.js' %}" charset="utf-8"></script>
 {% endblock %}
 
 {% block content %}
@@ -18,56 +25,65 @@
         </small>
     </h3>
 
-    <table class="table documents-browser-table">
-        <thead>
-        <tr>
-            <th width="10"></th>
-            <th width="20"></th>
-            <th>Name</th>
-            <th>Datetime</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {# Folders #}
-        {% for folder in parent_folder.folders.all %}
+    {% if parent_folder.folders.all.count == 0 and parent_folder.documents.all.count == 0 %}
+        Folder is empty
+    {% else %}
+        <table class="table documents-browser-table">
+            <thead>
             <tr>
-                <td><i class="fa fa-drag-handle"></i></td>
-                <td class="data-link" data-href="{{ folder.permalink }}">
-                    <i class="fa fa-folder"></i>
-                </td>
-                <td class="data-link" data-href="{{ folder.permalink }}">
-                    {{ folder }}
-                </td>
-                <td>{{ folder.documents.last.data.datetime }}</td>
-                <td></td>
-                <td class="actions">
-                    <a href="#" class="fa fa-trash-o remove"></a>
-                    <a href="#" class="fa fa-pencil edit"></a>
-                </td>
+                <th width="10"></th>
+                <th width="20"></th>
+                <th>Name</th>
+                <th>Datetime</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
-        {% endfor %}
+            </thead>
 
-        {# Documents #}
-        {% for document in parent_folder.documents.all %}
+            <tbody>
+            {# Folders #}
             <tr>
-                <td><i class="fa fa-drag-handle"></i></td>
-                <td class="data-link" data-href="#">
-                    <i class="fa {{ document.data.icon }}"></i>
-                </td>
-                <td class="data-link" data-href="#">
-                    {{ document }}
-                </td>
-                <td>{{ document.data.datetime }}</td>
-                <td>{{ document.status }}</td>
-                <td class="actions">
-                    <a href="#" class="fa fa-trash-o remove"></a>
-                    <a href="#" class="fa fa-pencil edit"></a>
-                </td>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            {% for folder in parent_folder.folders.all %}
+                <tr class="selectable context-menu">
+                    <td><i class="fa fa-drag-handle"></i></td>
+                    <td class="data-double-click-link" data-href="{{ folder.permalink }}">
+                        <i class="fa fa-folder"></i>
+                    </td>
+                    <td class="data-double-click-link" data-href="{{ folder.permalink }}">
+                        {{ folder }}
+                    </td>
+                    <td>{{ folder.documents.last.data.datetime }}</td>
+                    <td></td>
+                    <td class="actions">
+                        <a href="#" class="fa fa-trash-o remove"></a>
+                        <a href="#" class="fa fa-pencil edit"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            {# Documents #}
+            {% for document in parent_folder.documents.all %}
+                <tr class="selectable context-menu">
+                    <td><i class="fa fa-drag-handle"></i></td>
+                    <td class="data-link" data-href="#">
+                        <i class="fa {{ document.data.icon }}"></i>
+                    </td>
+                    <td class="data-link" data-href="#">
+                        {{ document }}
+                    </td>
+                    <td>{{ document.data.datetime }}</td>
+                    <td>{{ document.status }}</td>
+                    <td class="actions">
+                        <a href="#" class="fa fa-trash-o remove"></a>
+                        <a href="#" class="fa fa-pencil edit"></a>
+                        <a href="#" class="fa fa-pencil edit"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}

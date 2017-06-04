@@ -1,37 +1,37 @@
 {% load staticfiles %}
 
 <div class="left_col scroll-view">
-    <div class="navbar nav_title" style="border: 0;">
-        <a href="#" class="site_title">
-            <i class="fa fa-archive"></i> &nbsp;&nbsp;&nbsp;<span>Ripa Archive</span>
-        </a>
-    </div>
+{#    <div class="navbar nav_title" style="border: 0;">#}
+{#        <a href="#" class="site_title">#}
+{#            <i class="fa fa-archive"></i> &nbsp;&nbsp;&nbsp;<span>Ripa Archive</span>#}
+{#        </a>#}
+{#    </div>#}
 
     <div class="clearfix"></div>
-
-    <div class="profile clearfix">
-        <div class="profile_pic">
-            <img src="{% static "images/mock/img.jpg" %}" alt="..."
-                 class="img-circle profile_img">
-        </div>
-        <div class="profile_info">
-            <span>Welcome,</span>
-            <h2>John Doe</h2>
-        </div>
-    </div>
-
-    <br>
+{##}
+{#    <div class="profile clearfix">#}
+{#        <div class="profile_pic">#}
+{#            <img src="{% static "images/mock/img.jpg" %}" alt="..."#}
+{#                 class="img-circle profile_img">#}
+{#        </div>#}
+{#        <div class="profile_info">#}
+{#            <span>Welcome,</span>#}
+{#            <h2>John Doe</h2>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <br>#}
 
     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
         <div class="menu_section">
-            <h3>General</h3>
+{#            <h3>General</h3>#}
             <ul class="nav side-menu">
-                <li><a><i class="fa fa-home"></i> Home <span
-                        class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        <li><a href="">Dashboard</a></li>
-                    </ul>
-                </li>
+                <li><a><i class="fa fa-bar-chart-o"></i> Statistics</a></li>
+                <li class="active"><a><i class="fa fa-files-o"></i> Documents</a></li>
+                <li><a><i class="fa fa-users"></i> Users</a></li>
+                <li><a><i class="fa fa-key"></i> Permissions</a></li>
+                <li><a><i class="fa fa-history"></i> Activity</a></li>
+                <li><a><i class="fa fa-cogs"></i> Settings</a></li>
             </ul>
         </div>
     </div>
