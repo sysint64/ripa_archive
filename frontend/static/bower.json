@@ -1,12 +1,11 @@
 {
-  "name": "assets",
+  "name": "ripa_archive",
   "authors": [
     "Andrey Kabylin <andrey@kabylin.ru>"
   ],
   "directory": "vendors",
   "description": "",
   "main": "",
-  "license": "MIT",
   "homepage": "",
   "ignore": [
     "**/.*",

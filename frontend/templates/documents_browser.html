@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Documents</h2>
+    {% for folder in parent_folder.folders.all %}
+        <div>{{ folder }}</div>
+    {% endfor %}
+    <hr>
+    {% for document in parent_folder.documents.all %}
+        <div>{{ document }}</div>
+    {% endfor %}
+{% endblock %}
