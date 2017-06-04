@@ -49,7 +49,7 @@ $(document).ready(function() {
             $li.addClass('active');
 
             $('ul:first', $li).show();
-            $(this).find(".fa.fa-chevron-right").removeClass("fa-chevron-right").addClass("fa-chevron-down");
+            $(this).find(".fa.fa-chevron-x2").removeClass("fa-chevron-right").addClass("fa-chevron-down");
         }
     });
 
