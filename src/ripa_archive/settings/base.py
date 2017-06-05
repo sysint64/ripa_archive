@@ -17,7 +17,8 @@ INSTALLED_APPS = [
     'compressor',
     'easy_thumbnails',
 
-    'ripa_archive.documents.apps.DocumentsConfig'
+    'ripa_archive.documents.apps.DocumentsConfig',
+    'ripa_archive.permissions.apps.PermissionsConfig'
 ]
 
 MIDDLEWARE = [

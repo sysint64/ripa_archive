@@ -15,16 +15,7 @@
 
 {% block content %}
     <div id="select-region"></div>
-    <h3>Documents:
-        <small>
-            {% for breadcrumb in parent_folder.breadcrumbs %}
-                <a href="{{ breadcrumb.permalink }}">{{ breadcrumb.name }}</a>
-                {% if not forloop.last %}
-                    /
-                {% endif %}
-            {% endfor %}
-        </small>
-    </h3>
+    <h3>Documents: <small>{% include "documents_browser/breadcrumbs.html" %}</small></h3>
 
     {% if parent_folder.folders.all.count == 0 and parent_folder.documents.all.count == 0 %}
         Folder is empty

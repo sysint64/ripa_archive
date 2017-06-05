@@ -25,7 +25,7 @@
         items: {
             "edit": {name: "Edit", icon: "edit"},
             "cut": {name: "Cut", icon: "cut"},
-            copy: {name: "Copy", icon: "copy"},
+            "copy": {name: "Copy", icon: "copy"},
             "paste": {name: "Paste", icon: "paste"},
             "delete": {name: "Delete", icon: "delete"},
             "sep1": "-",
@@ -40,10 +40,14 @@
     $.contextMenu({
         selector: '.right_col',
         callback: function (key, options) {
+            switch (key) {
+                case "create_folders": location.href = "!action:create-folders/"; break;
+                case "create_documents": location.href = "!action:create-documents/"; break;
+            }
         },
         items: {
-            "create_folder": {name: "Create folder", icon: "fa-file-o"},
-            "create_document": {name: "Create document", icon: "fa-folder"}
+            "create_folders": {name: "Create folder(s)", icon: "fa-folder"},
+            "create_documents": {name: "Create document(s)", icon: "fa-file-o"}
         }
     });
 

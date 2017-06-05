@@ -1,0 +1,59 @@
+@import "consts"
+
+#block-template
+    display: none
+
+.multi-form
+    .help-text
+        font-weight: normal
+        opacity: 0.6
+
+    .block
+        background: #fff
+
+        .header
+            background: #e7e7e7
+            padding: 5px 10px
+            font-size: 16px
+
+            .fa-caret-down
+                margin-top: 4px
+                display: block
+                float: right
+
+            a.fa
+                margin-top: 4px
+                display: block
+                float: right
+                cursor: pointer
+
+            a.fa-trash-o
+                color: indianred
+
+        &.active
+            .header
+                background: $green
+                color: #fff
+
+            a.fa
+                color: #fff
+
+    .form-wrapper
+        padding-top: 10px
+
+    .add-block-button
+        display: block
+        float: right
+        border: none
+        background: #ddd
+        padding: 5px 20px
+
+    .submit-button
+        display: block
+        float: right
+        border: none
+        background: #ddd
+        padding: 5px 20px
+        margin-right: 0
+        background: $green
+        color: #fff

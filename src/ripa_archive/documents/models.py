@@ -1,8 +1,10 @@
-from autoslug import AutoSlugField
+import os
+
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
-import os
+from ripa_archive.permissions.models import ModelHavePermissionsMixin
 
 
 class FolderManager(models.Manager):
@@ -29,7 +31,7 @@ class Folder(models.Model):
         default_related_name = "folders"
 
     parent = models.ForeignKey('Folder', null=True, blank=True)
-    name = models.CharField(max_length=60)
+    name = models.CharField(verbose_name="name", help_text="this is help text", max_length=60)
     objects = FolderManager()
 
     @property
@@ -81,9 +83,12 @@ class Status(models.Model):
         return self.name
 
 
-class Document(models.Model):
+class Document(ModelHavePermissionsMixin, models.Model):
     class Meta:
         default_related_name = "documents"
+
+    owner = models.ForeignKey(User, null=True, related_name="owner")
+    contributors = models.ManyToManyField(User, related_name="contributors")
 
     folder = models.ForeignKey(Folder, null=True)  # TODO: rm null=True
     status = models.ForeignKey(Status, null=True)  # TODO: rm null=True
@@ -141,7 +146,7 @@ class DocumentData(models.Model):
     document = models.ForeignKey(Document)
     file = models.FileField(upload_to="documents/")
     name = models.CharField(max_length=60)
-    datetime = models.DateTimeField()
+    datetime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name

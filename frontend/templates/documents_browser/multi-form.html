@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "styles/multi_form.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'js/multi_form.js' %}" charset="utf-8"></script>
+{% endblock %}
+
+{% block content %}
+    <h3>{{ form_title }}:
+        <small>{% include "documents_browser/breadcrumbs.html" %}</small>
+    </h3>
+    <div id="csrf_token">{% csrf_token %}</div>
+
+    <div class="multi-form">
+        {# Template block for append #}
+        <div id="block-template">
+            <div class="block active">
+                <div class="header">
+                    New item
+                    <a class="fa fa-trash-o"></a>
+    {#                <i class="fa fa-caret-down"></i>#}
+                </div>
+                <div class="form-wrapper">
+                    <form method="post" class="form-horizontal form-label-left input_mask">
+                        {% for field, field_meta in form %}
+                            <div class="form-group">
+                                <label for="id_{{ field_meta.name }}"
+                                       class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    {{ field_meta.label }}
+                                    {% if field_meta.help_text != "" %}
+                                        <div class="help-text">{{ field_meta.help_text }}</div>
+                                    {% endif %}
+                                </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    {{ field }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {# Primary block #}
+        <div class="block active" id="block-primary">
+            <div class="header">
+                New item
+{#                <i class="fa fa-caret-down"></i>#}
+            </div>
+            <div class="form-wrapper">
+                <form method="post" class="form-horizontal form-label-left input_mask">
+                    {% for field, field_meta in form %}
+                        <div class="form-group">
+                            <label for="id_{{ field_meta.name }}"
+                                   class="control-label col-md-3 col-sm-3 col-xs-12">
+                                {{ field_meta.label }}
+{#                                {% if field_meta.help_text != "" %}#}
+{#                                    <div class="help-text">{{ field_meta.help_text }}</div>#}
+{#                                {% endif %}#}
+                            </label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                {{ field }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
+        <div id="block-cursor"></div>
+        <button class="submit-button"><i class="fa fa-check"></i> Create</button>
+        <button class="add-block-button"><i class="fa fa-plus"></i> Add another folder</button>
+    </div>
+{% endblock %}
