@@ -1,0 +1,20 @@
+<div class="form-group pull-left top_search">
+    {% if search_places|length > 0 %}
+    <div class="input-group">
+        <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle"
+                    data-toggle="dropdown" aria-expanded="false">{{ search_places.0.name }} <span
+                    class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                {% for place in search_places %}
+                    <li><a href="#" data-place="{{ place.code }}">{{ place.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <input type="text" class="form-control" placeholder="Search">
+    </div>
+    {% else %}
+        <input type="text" class="form-control" placeholder="Search">
+    {% endif %}
+</div>

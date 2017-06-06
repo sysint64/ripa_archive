@@ -15,10 +15,17 @@ def get_folder_or_404(path):
     return folder
 
 
+BROWSER_SEARCH_PLACES = (
+    {"name": "This folder", "code": "this-folder"},
+    {"name": "Everywhere", "code": "everywhere"},
+)
+
+
 def document_browser(request, path=None):
     parent_folder = get_folder_or_404(path)
     context = {
-        "parent_folder": parent_folder
+        "parent_folder": parent_folder,
+        "search_places": BROWSER_SEARCH_PLACES
     }
     return render_to_response("documents_browser/list.html", context=context)
 
@@ -33,7 +40,8 @@ def create_folders(request, path=None):
         "parent_folder": parent_folder,
         "form_title": "Create folders",
         "form": CreateFolderForm(),
-        "validator-url": reverse("documents:validator-create-folder")
+        "validator_url": reverse("documents:validator-create-folder"),
+        "search_places": BROWSER_SEARCH_PLACES,
     }
     return render_to_response("documents_browser/multi-form.html", context=context)
 
@@ -44,6 +52,7 @@ def create_documents(request, path=None):
         "parent_folder": parent_folder,
         "form_title": "Create documents",
         "form": CreateDocumentForm(),
-        "validator-url": reverse("documents:validator-create-document")
+        "validator_url": reverse("documents:validator-create-document"),
+        "search_places": BROWSER_SEARCH_PLACES,
     }
     return render_to_response("documents_browser/multi-form.html", context=context)

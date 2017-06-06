@@ -3,29 +3,7 @@
 
 <div class="nav_menu">
     <nav>
-{#        <div class="nav toggle">#}
-{#            <a id="menu_toggle"><i class="fa fa-archive"></i></a>#}
-{#        </div>#}
-{#        <div class="title_left">#}
-            <div class="form-group pull-left top_search">
-                <div class="input-group">
-{#                    <span class="input-group-btn">#}
-{#                      <button class="btn btn-default" type="button">This folder</button>#}
-{#                    </span>#}
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle"
-                                data-toggle="dropdown" aria-expanded="false">This folder <span
-                                class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            <li><a href="#">This folder</a></li>
-                            <li><a href="#">Everywhere</a></li>
-                        </ul>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Search">
-                </div>
-            </div>
-{#        </div>#}
+        {% include "search_input.html" %}
 
         <ul class="nav navbar-nav navbar-right">
             <li class="">
