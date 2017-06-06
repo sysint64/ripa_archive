@@ -4,7 +4,27 @@
 <div class="nav_menu">
     <nav>
 {#        <div class="nav toggle">#}
-{#            <a id="menu_toggle"><i class="fa fa-bars"></i></a>#}
+{#            <a id="menu_toggle"><i class="fa fa-archive"></i></a>#}
+{#        </div>#}
+{#        <div class="title_left">#}
+            <div class="form-group pull-left top_search">
+                <div class="input-group">
+{#                    <span class="input-group-btn">#}
+{#                      <button class="btn btn-default" type="button">This folder</button>#}
+{#                    </span>#}
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown" aria-expanded="false">This folder <span
+                                class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li><a href="#">This folder</a></li>
+                            <li><a href="#">Everywhere</a></li>
+                        </ul>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+            </div>
 {#        </div>#}
 
         <ul class="nav navbar-nav navbar-right">
@@ -31,25 +51,21 @@
             <li role="presentation" class="dropdown">
                 <a href="#" class="dropdown-toggle info-number"
                    data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-plus"></i>
+                </a>
+
+                <ul class="dropdown-menu list-unstyled" role="menu">
+                    <li><a href="!action:create-folders/">Folders</a></li>
+                    <li><a href="!action:create-documents/">Documents</a></li>
+                </ul>
+            </li>
+
+            <li role="presentation">
+                <a href="" class="info-number"
+                   data-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-bell"></i>
                     <span class="badge bg-green">6</span>
                 </a>
-
-                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                    <li>
-                        <a>
-                            <span class="image"><img src="{% static "images/mock/img.jpg" %}"
-                                                     alt="Profile Image"/></span>
-                            <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                            <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                        </a>
-                    </li>
-                </ul>
             </li>
 
         </ul>
