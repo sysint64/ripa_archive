@@ -42,6 +42,7 @@ def create_folders(request, path=None):
         "form": CreateFolderForm(),
         "validator_url": reverse("documents:validator-create-folder"),
         "search_places": BROWSER_SEARCH_PLACES,
+        "form": CreateFolderForm(auto_id=False),
     }
     return render_to_response("documents_browser/multi-form.html", context=context)
 

@@ -19,7 +19,8 @@
     "bootstrap": "^3.3.7",
     "font-awesome": "fontawesome#^4.6.1",
     "fastclick": "^1.0.6",
-    "jQuery-contextMenu": "^2.5.0"
+    "jQuery-contextMenu": "^2.5.0",
+    "jquery-selectric": "^1.11.1"
   },
   "resolutions": {
     "jquery": "^2.2.3",
