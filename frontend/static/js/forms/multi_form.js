@@ -53,13 +53,13 @@
         rebindEvents();
     });
 
-    $("#multiform").submit(function(e, isValid) {
-        e.preventDefault();
+    $("#multiform").submit(function(event, isValid) {
         $(this).find("input[name=forms_prefixes]").val(formsPrefixes.join(","));
 
         if (isValid)
             return;
 
+        event.preventDefault();
         validateApiForm($(this));
     });
 

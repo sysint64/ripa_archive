@@ -17,6 +17,15 @@
         <small>{% include "documents_browser/breadcrumbs.html" %}</small>
     </h3>
 
+    {# Display non ajax messages #}
+    {% if messages %}
+        <ul class="notification-messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <div class="multi-form">
         <form method="post" id="multiform"
               class="form-horizontal form-label-left input_mask"

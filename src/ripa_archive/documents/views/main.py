@@ -2,6 +2,7 @@ from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context_processors import csrf
 from django.urls import reverse
+from django.views import View
 
 from ripa_archive.documents.forms import CreateFolderForm, CreateDocumentForm, PermissionsForm
 from ripa_archive.documents.models import Folder, DocumentType
@@ -33,20 +34,6 @@ def document_browser(request, path=None):
 
 def edit(request):
     pass
-
-
-def create_folders(request, path=None):
-    parent_folder = get_folder_or_404(path)
-    context = {
-        "parent_folder": parent_folder,
-        "form_title": "Create folders",
-        "validator_url": reverse("documents:validator-create-folder"),
-        "search_places": BROWSER_SEARCH_PLACES,
-        "form": CreateFolderForm(),
-        # "permissions_form": PermissionsForm(),
-    }
-    context.update(csrf(request))
-    return render_to_response("forms/multi-form.html", context=context)
 
 
 def create_documents(request, path=None):

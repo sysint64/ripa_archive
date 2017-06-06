@@ -38,16 +38,12 @@ function validateApiForm($form) {
     });
 }
 
-function ajaxFormSubmit(e, isValid) {
-    if (isValid) {
-        if ($(this).data("refresh") === "true")
-            window.location.reload();
-
+function ajaxFormSubmit(event, isValid) {
+    if (isValid)
         return;
-    }
 
     validateApiForm($(this));
-    e.preventDefault();
+    event.preventDefault();
 }
 
 function attach_csrf_token(data) {
