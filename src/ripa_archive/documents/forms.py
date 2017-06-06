@@ -21,7 +21,7 @@ class CreateFolderForm(AjaxModelForm):
         name = self.cleaned_data["name"]
         parent = self.cleaned_data["parent"]
 
-        if Folder.objects.filter(parent=parent, name=name).count() > 0:
+        if Folder.objects.filter(parent=parent, name__iexact=name).count() > 0:
             raise ValidationError("Folder with this name already exist")
 
         return name
