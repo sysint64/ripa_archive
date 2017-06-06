@@ -31,7 +31,7 @@ class Folder(models.Model):
         default_related_name = "folders"
 
     parent = models.ForeignKey('Folder', null=True, blank=True)
-    name = models.CharField(verbose_name="name", help_text="this is help text", max_length=60)
+    name = models.CharField(verbose_name="name", help_text="this is a help text", max_length=60)
     objects = FolderManager()
 
     @property

@@ -12,7 +12,9 @@
         background: #fff
 
         .header
-            background: #e7e7e7
+            //background: #e7e7e7
+            background: $green
+            color: #fff
             padding: 5px 10px
             font-size: 16px
 
@@ -26,9 +28,10 @@
                 display: block
                 float: right
                 cursor: pointer
+                color: #fff
 
-            a.fa-trash-o
-                color: indianred
+            //a.fa-trash-o
+            //    color: indianred
 
         &.active
             .header
@@ -40,6 +43,10 @@
 
     .form-wrapper
         padding-top: 10px
+        padding-bottom: 10px
+
+    .form-group
+        margin-bottom: 0
 
     .add-block-button
         display: block
