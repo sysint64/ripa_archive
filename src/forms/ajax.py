@@ -38,7 +38,8 @@ class AjaxFormMixin:
                 "label": field.label,
                 "help_text": field.help_text,
                 "required": field.required,
-                "name": field_name
+                "name": field_name,
+                "hidden": isinstance(field.widget, forms.HiddenInput)
             })
 
 

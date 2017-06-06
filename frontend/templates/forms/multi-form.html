@@ -40,18 +40,22 @@
                     </div>
                     <div class="form-wrapper">
                         {% for field, field_meta in form %}
-                            <div class="form-group">
-                                <label for="id_{{ field_meta.name }}"
-                                       class="control-label col-md-3 col-sm-3 col-xs-12{% if field_meta.help_text != "" %} with-help-text{% endif %}">
-                                    {{ field_meta.label }}
-                                    {% if field_meta.help_text != "" %}
-                                        <div class="help-text">{{ field_meta.help_text }}</div>
-                                    {% endif %}
-                                </label>
-                                <div class="col-md-9 col-sm-9 col-xs-12">
-                                    {{ field }}
+                            {% if not field_meta.hidden %}
+                                <div class="form-group">
+                                    <label for="id_{{ field_meta.name }}"
+                                           class="control-label col-md-3 col-sm-3 col-xs-12{% if field_meta.help_text != "" %} with-help-text{% endif %}">
+                                        {{ field_meta.label }}
+                                        {% if field_meta.help_text != "" %}
+                                            <div class="help-text">{{ field_meta.help_text }}</div>
+                                        {% endif %}
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        {{ field }}
+                                    </div>
                                 </div>
-                            </div>
+                            {% else %}
+                                <div style="display: none">{{ field }}</div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>

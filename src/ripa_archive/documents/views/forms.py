@@ -30,7 +30,7 @@ class MultiFormCreation(View):
             "form_title": self.title,
             "validator_url": reverse(self.validator_url),
             "search_places": BROWSER_SEARCH_PLACES,
-            "form": self.form_class(),
+            "form": self.form_class(initial={"parent": parent_folder}),
             # "permissions_form": PermissionsForm(),
         }
         return TemplateResponse(request=request, template="forms/multi-form.html", context=context)
@@ -46,11 +46,11 @@ class MultiFormCreation(View):
 
         # All forms are valid
         for form in forms:
-            self.on_create(form.save(commit=False))
+            self.perform_create(form.save(commit=False))
 
         return browser_redirect("browser", path)
 
-    def on_create(self, item):
+    def perform_create(self, item):
         item.parent = self.parent_folder
         item.save()
 
