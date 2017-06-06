@@ -4,7 +4,7 @@
     const primaryBlockHtml = $blockPrimary.html();
     const formPrefix = "block";
     var lastBlockNumber = 0;
-    var forms = [];
+    var formsPrefixes = [];
 
     $blockPrimary.find(".remove-block").remove();
 
@@ -16,9 +16,9 @@
 
         $(".remove-block").click(function() {
             const $block = $(this).closest(".block");
-            const index = forms.indexOf($block.data("prefix"));
-            forms.splice(index, 1);
-            console.log(forms);
+            const index = formsPrefixes.indexOf($block.data("prefix"));
+            formsPrefixes.splice(index, 1);
+            console.log(formsPrefixes);
             $(this).closest(".block").remove();
         });
     }
@@ -38,11 +38,14 @@
         const prefix = formPrefix + parseInt(lastBlockNumber);
 
         var $block = $("<div/>", {"class": "block", "html": primaryBlockHtml, "data-prefix": prefix});
-        $block.find("input").attr("name", function(index, attr) { return prefix + "-" + attr; });
+        const addPrefix = function(index, attr) { return prefix + "-" + attr; };
+        $block.find("label").attr("for", addPrefix);
+        $block.find("input").attr("name", addPrefix).attr("id", addPrefix);
+        $block.find(".form-error").attr("data-name", addPrefix);
         $("#block-cursor").before($block);
 
-        forms.push(prefix);
-        console.log(forms);
+        formsPrefixes.push(prefix);
+        console.log(formsPrefixes);
     }
 
     $(".add-block-button").click(function() {
@@ -50,9 +53,14 @@
         rebindEvents();
     });
 
-    $("#multiform").submit(function(e) {
+    $("#multiform").submit(function(e, isValid) {
         e.preventDefault();
-        $(this).find("input[name=forms]").val(forms.join(","));
+        $(this).find("input[name=forms_prefixes]").val(formsPrefixes.join(","));
+
+        if (isValid)
+            return;
+
+        validateApiForm($(this));
     });
 
     bindEvents();

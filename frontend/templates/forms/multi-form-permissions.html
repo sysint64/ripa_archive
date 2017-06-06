@@ -1,0 +1,26 @@
+{% extends "forms/multi-form.html" %}
+
+{% block after_cursor %}
+    <div class="block collapsed" id="block-permissions">
+        <div class="header">
+            Permissions
+            <i class="fa fa-caret-left"></i>
+        </div>
+        <div class="form-wrapper">
+            {% for field, field_meta in permissions_form %}
+                <div class="form-group">
+                    <label for="id_{{ field_meta.name }}"
+                           class="control-label col-md-3 col-sm-3 col-xs-12">
+                        {{ field_meta.label }}
+                        {% if field_meta.help_text != "" %}
+                            <div class="help-text">{{ field_meta.help_text }}</div>
+                        {% endif %}
+                    </label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

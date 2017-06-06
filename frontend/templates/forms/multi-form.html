@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "styles/multi_form.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'js/forms/helpers.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/forms/multi_form.js' %}" charset="utf-8"></script>
+{% endblock %}
+
+{% block content %}
+    <h3>{{ form_title }}:
+        <small>{% include "documents_browser/breadcrumbs.html" %}</small>
+    </h3>
+
+    <div class="multi-form">
+        <form method="post" id="multiform"
+              class="form-horizontal form-label-left input_mask"
+              data-validation="{{ validator_url }}"
+        >
+            {% block form_content %}
+                {# Primary block #}
+                <div class="block" id="block-primary">
+                    <div class="header">
+                        New item
+                        <a class="fa fa-trash-o remove-block"></a>
+                    </div>
+                    <div class="form-wrapper">
+                        {% for field, field_meta in form %}
+                            <div class="form-group">
+                                <label for="id_{{ field_meta.name }}"
+                                       class="control-label col-md-3 col-sm-3 col-xs-12{% if field_meta.help_text != "" %} with-help-text{% endif %}">
+                                    {{ field_meta.label }}
+                                    {% if field_meta.help_text != "" %}
+                                        <div class="help-text">{{ field_meta.help_text }}</div>
+                                    {% endif %}
+                                </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    {{ field }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endblock %}
+
+            <div id="block-cursor"></div>
+
+            {% block after_cursor %}
+            {% endblock %}
+
+            {% block action_buttons %}
+                <button class="submit-button" type="submit"><i class="fa fa-check"></i> Create</button>
+                <button class="add-block-button" type="button"><i class="fa fa-plus"></i> Add another folder</button>
+            {% endblock %}
+
+            <input type="hidden" name="forms_prefixes" value="">
+            {% csrf_token %}
+
+            <div class="clearfix"></div>
+        </form>
+    </div>
+{% endblock %}

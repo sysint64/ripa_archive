@@ -1,5 +1,5 @@
 from django import forms
-from forms.ajax import AjaxModelForm
+from forms.ajax import AjaxModelForm, AjaxForm
 from ripa_archive.documents.models import Folder, DocumentData, Status
 
 
@@ -15,3 +15,7 @@ class CreateDocumentForm(AjaxModelForm):
         fields = "name", "file",
 
     status = forms.ModelChoiceField(queryset=Status.objects.all(), label="Status")
+
+
+class PermissionsForm(AjaxModelForm):
+    pass

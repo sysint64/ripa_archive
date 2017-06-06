@@ -2,10 +2,11 @@ from django import forms
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.template.defaultfilters import safe
+from django.views import View
 from django.views.generic import FormView
 
 from forms import status
-
+from forms.multi_form import get_multi_form
 
 _GENERIC_ERRORS_DIV = '<div class="generic-errors" data-name="__all___error"></div>'
 _TOP_ERRORS_WRAPPER_DIV = '<div data-name="%s_error" class="form-error"></div>%s'
@@ -23,11 +24,12 @@ class AjaxFormMixin:
 
     def __getitem__(self, name):
         item = super().__getitem__(name)
+        prefix = "" if self.prefix is None else self.prefix + "-"
 
         if self.error_orient == AjaxFormErrorsLocation.TOP:
-            return safe(_TOP_ERRORS_WRAPPER_DIV % (name, item))
+            return safe(_TOP_ERRORS_WRAPPER_DIV % (prefix + name, item))
         elif self.error_orient == AjaxFormErrorsLocation.BOTTOM:
-            return safe(_BOTTOM_ERRORS_WRAPPER_DIV % (item, name))
+            return safe(_BOTTOM_ERRORS_WRAPPER_DIV % (item, prefix + name))
 
     def __iter__(self):
         for field_tuple in self.fields.items():
@@ -48,33 +50,31 @@ class AjaxModelForm(AjaxFormMixin, forms.ModelForm):
     pass
 
 
-class FormAjaxValidation(FormView):
+class FormAjaxValidator(View):
     form = None
 
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect('/')
 
-    def form_invalid(self, form):
-        data = []
-        print(form.data)
+    def get_errors(self, form):
+        errors = []
+        prefix = "" if form.prefix is None else form.prefix + "-"
 
         for k, v in form._errors.items():
-            text = {'desc': ', '.join(v), 'key': k}
-            data.append(text)
+            text = {'desc': ', '.join(v), 'key': prefix + k}
+            errors.append(text)
 
-        return JsonResponse({"errors": data}, status=status.HTTP_400_BAD_REQUEST)
+        return errors
 
-    def form_valid(self, form):
-        return JsonResponse({}, status=status.HTTP_200_OK)
+    def post(self, request, *args, **kwargs):
+        forms = get_multi_form(self.form, request.POST)
+        errors = []
 
-    def get_form_class(self):
-        return self.form
+        for form in forms:
+            if not form.is_valid():
+                errors += self.get_errors(form)
 
-    def get_form_kwargs(self):
-        kwargs = super(FormAjaxValidation, self).get_form_kwargs()
-        cls = self.get_form_class()
-
-        if hasattr(cls, 'get_arguments'):
-            kwargs.update(cls.get_arguments(self))
-
-        return kwargs
+        if len(errors) == 0:
+            return JsonResponse({}, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)

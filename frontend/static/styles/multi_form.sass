@@ -18,7 +18,7 @@
             font-size: 16px
             color: #fff
 
-            .fa-caret-down
+            .fa-caret-down, .fa-caret-left
                 margin-top: 4px
                 display: block
                 float: right
@@ -30,8 +30,14 @@
                 cursor: pointer
                 color: #fff
 
+
             //a.fa-trash-o
             //    color: indianred
+
+        &.collapsed
+            .header
+                background: #e7e7e7
+                color: #73879C
 
         &.active
             .header
@@ -70,8 +76,9 @@
     color: #f00
     font-size: 10px
 
-input.error
-    border-color: #f00 !important
+.form-group.error
+    input
+        border-color: #f00 !important
 
 .form-horizontal .control-label
     padding-top: 23px
