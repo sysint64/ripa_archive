@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'compressor',
     'easy_thumbnails',
 
+    'ripa_archive.accounts.apps.AccountsConfig',
     'ripa_archive.documents.apps.DocumentsConfig',
     'ripa_archive.permissions.apps.PermissionsConfig'
 ]
@@ -51,6 +52,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ripa_archive.wsgi.application'
 
+AUTH_USER_MODEL = 'accounts.User'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

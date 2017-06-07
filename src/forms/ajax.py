@@ -22,6 +22,12 @@ class AjaxFormMixin:
     error_orient = AjaxFormErrorsLocation.TOP
     generic_errors = safe(_GENERIC_ERRORS_DIV)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for (_, field) in self.fields.items():
+            field.widget.attrs.update({"class": "form-control"})
+
     def __getitem__(self, name):
         item = super().__getitem__(name)
         prefix = "" if self.prefix is None else self.prefix + "-"
@@ -32,8 +38,7 @@ class AjaxFormMixin:
             return safe(_BOTTOM_ERRORS_WRAPPER_DIV % (item, prefix + name))
 
     def __iter__(self):
-        for field_tuple in self.fields.items():
-            field_name, field = field_tuple
+        for (field_name, field) in self.fields.items():
             yield (self[field_name], {
                 "label": field.label,
                 "help_text": field.help_text,

@@ -32,7 +32,10 @@ function validateApiForm($form) {
 
             $.each(json.errors, function () {
                 $form.find("[data-name="+this.key+"_error]").html(this.desc);
-                $form.find("[name="+this.key+"]").closest(".form-group").addClass("error");
+                $form.find("[name="+this.key+"]")
+                    .addClass("error")
+                    .closest(".form-group")
+                    .addClass("error");
             });
         }
     });

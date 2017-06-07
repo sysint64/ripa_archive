@@ -1,10 +1,10 @@
 import os
 
-from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
-from ripa_archive.permissions.models import ModelHavePermissionsMixin
+from ripa_archive.accounts.models import User
+from ripa_archive.permissions.models import ModelStrict, ModelWhichHaveStrictsMixin
 
 
 class FolderManager(models.Manager):
@@ -25,11 +25,16 @@ class FolderManager(models.Manager):
         return parent_folder
 
 
+class FolderStrict(ModelStrict):
+    for_instance = models.ForeignKey("Folder")
+
+
 # Default folders: root and none
-class Folder(models.Model):
+class Folder(ModelWhichHaveStrictsMixin, models.Model):
     class Meta:
         default_related_name = "folders"
 
+    strict_model = FolderStrict
     parent = models.ForeignKey('Folder', null=True, blank=True)
     name = models.CharField(verbose_name="name", help_text="this is a help text", max_length=60)
     objects = FolderManager()
@@ -57,7 +62,7 @@ class Folder(models.Model):
         folders = self.path_folders
 
         # Remove root folder
-        if len(folders) >= 1 and folders[0].parent == None and folders[0].name == "Root":
+        if len(folders) >= 1 and folders[0].parent is None and folders[0].name == "Root":
             folders = folders[1:]
 
         return "/".join([str(folder) for folder in folders])
@@ -83,15 +88,15 @@ class Status(models.Model):
         return self.name
 
 
-class Document(ModelHavePermissionsMixin, models.Model):
+class Document(models.Model):
     class Meta:
         default_related_name = "documents"
 
     owner = models.ForeignKey(User, null=True, related_name="owner")
     contributors = models.ManyToManyField(User, related_name="contributors")
 
-    folder = models.ForeignKey(Folder, null=True)  # TODO: rm null=True
-    status = models.ForeignKey(Status, null=True)  # TODO: rm null=True
+    folder = models.ForeignKey(Folder)
+    status = models.ForeignKey(Status)
 
     @property
     def data(self):

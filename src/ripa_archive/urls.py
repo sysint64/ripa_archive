@@ -6,8 +6,8 @@ from django.conf.urls.static import static
 from ripa_archive import views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^documents/', include('ripa_archive.documents.urls', namespace="documents"))
+    url(r'^documents/', include('ripa_archive.documents.urls', namespace="documents")),
+    url(r'^accounts/', include('ripa_archive.accounts.urls', namespace="accounts"))
 ]
 
 

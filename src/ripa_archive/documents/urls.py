@@ -9,7 +9,7 @@ from ripa_archive.documents.views import main
 def browser_url(regex, view, name=None):
     return [
         url(r'^'+regex+'$', view, name=name),
-        url(r'^(?P<path>[0-9a-zA-Z /]+)/'+regex+'$', view, name=name),
+        url(r'^(?P<path>[0-9a-zA-ZА-Яа-я /]+)/'+regex+'$', view, name=name),
     ]
 
 urlpatterns = \

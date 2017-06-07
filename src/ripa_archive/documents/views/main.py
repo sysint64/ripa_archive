@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context_processors import csrf
@@ -23,6 +24,7 @@ BROWSER_SEARCH_PLACES = (
 )
 
 
+@login_required(login_url="accounts:login")
 def document_browser(request, path=None):
     parent_folder = get_folder_or_404(path)
     context = {
