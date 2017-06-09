@@ -52,12 +52,17 @@ class User(AbstractBaseUser):
         ),
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-
     objects = UserManager()
 
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
+
+    def __str__(self):
+        if self.get_full_name().strip() == "":
+            return self.email
+        else:
+            return self.get_full_name().strip()
 
     def get_short_name(self):
         return self.first_name

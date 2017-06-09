@@ -10,11 +10,20 @@
 {% block js %}
     {{ block.super }}
     <script src="{% static 'vendors/jQuery-contextMenu/dist/jquery.contextMenu.min.js' %}" charset="utf-8"></script>
-    <script src="{% static 'js/documents_browser.js' %}" charset="utf-8"></script>
+    <script src="{% static 'vendors/js-cookie/src/js.cookie.js' %}" charset="utf-8"></script>
+{#    <script src="{% static 'vendors/JSON-js/json2.js' %}" charset="utf-8"></script>#}
+    <script src="{% static 'vendors/jquery-json/dist/jquery.json.min.js' %}" charset="utf-8"></script>
+
+    <script src="{% static 'js/forms/helpers.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/documents_browser/main.js' %}" charset="utf-8"></script>
+{#    <script src="{% static 'js/documents_browser/select_region.js' %}" charset="utf-8"></script>#}
+    <script src="{% static 'js/documents_browser/drag_and_drop.js' %}" charset="utf-8"></script>
 {% endblock %}
 
 {% block content %}
     <div id="select-region"></div>
+    <div id="drag-region"></div>
+
     <h3>Documents: <small>{% include "documents_browser/breadcrumbs.html" %}</small></h3>
 
     {% if parent_folder.folders.all.count == 0 and parent_folder.documents.all.count == 0 %}
@@ -37,7 +46,7 @@
             <tr>
             </tr>
             {% for folder in parent_folder.folders.all %}
-                <tr class="selectable context-menu">
+                <tr class="selectable context-menu folder" data-folder-id="{{ folder.id }}">
                     <td><i class="fa fa-drag-handle"></i></td>
                     <td class="data-double-click-link" data-href="{{ folder.permalink }}">
                         <i class="fa fa-folder"></i>
@@ -56,7 +65,7 @@
 
             {# Documents #}
             {% for document in parent_folder.documents.all %}
-                <tr class="selectable context-menu">
+                <tr class="selectable context-menu document" data-document-id="{{ document.id }}">
                     <td><i class="fa fa-drag-handle"></i></td>
                     <td class="data-link" data-href="#">
                         <i class="fa {{ document.data.icon }}"></i>

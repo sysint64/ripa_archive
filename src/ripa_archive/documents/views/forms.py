@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views import View
 
 from forms.multi_form import get_multi_form
-from ripa_archive.documents.forms import CreateFolderForm
+from ripa_archive.documents.forms import CreateFolderForm, CreateDocumentForm
 from ripa_archive.documents.views.main import get_folder_or_404, BROWSER_SEARCH_PLACES
 
 
@@ -57,5 +57,11 @@ class MultiFormCreation(View):
 
 class CreateFolders(MultiFormCreation):
     title = "Create folders"
-    validator_url = "documents:validator-create-folder"
+    validator_url = "documents:validator-create-folders"
     form_class = CreateFolderForm
+
+
+class CreateDocuments(MultiFormCreation):
+    title = "Create documents"
+    validator_url = "documents:validator-create-documents"
+    form_class = CreateDocumentForm

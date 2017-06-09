@@ -1,5 +1,5 @@
 def get_multi_form(form_class, data):
-    forms_prefixes = data.get("forms_prefixes", None)
+    forms_prefixes = data.get("forms_prefixes")
     forms = [form_class(data)]
 
     if forms_prefixes is not None and forms_prefixes.strip() != "":

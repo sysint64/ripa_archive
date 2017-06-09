@@ -12,12 +12,18 @@
         tr:hover
             background: #f0f0f0
 
-        tr.selected
+        tr.selected, tr.to_folder
             background: #1ABB9C
             color: #fff
             
             .edit, .remove
                 color: #fff
+
+        tr.targeted
+            opacity: 0
+
+        tr.cut
+            opacity: 0.5
 
         .edit
             color: #b96e00
@@ -34,6 +40,18 @@
     border: 1px solid #1ABB9C
     background: rgba(26, 187, 156, 0.2)
     cursor: default
+
+#drag-region
+    z-index: 9999
+    position: absolute
+    display: none
+    background: rgba(26, 187, 156, 0.2)
+    width: 100%
+    left: 0
+    cursor: move
+//
+//.right_col
+//    position: relative
 
 .context-menu-icon::before, .context-menu-icon.context-menu-icon--fa::before
     color: #2A3F54

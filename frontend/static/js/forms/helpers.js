@@ -49,8 +49,8 @@ function ajaxFormSubmit(event, isValid) {
     event.preventDefault();
 }
 
-function attach_csrf_token(data) {
-    data["csrfmiddlewaretoken"] = $("input[name=csrfmiddlewaretoken]:first").val();
+function attachCSRFToken(data) {
+    data["csrfmiddlewaretoken"] = Cookies.get('csrftoken');
     return data;
 }
 

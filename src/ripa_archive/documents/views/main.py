@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404
+from django.template import RequestContext
 from django.template.context_processors import csrf
+from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views import View
 
@@ -31,21 +33,4 @@ def document_browser(request, path=None):
         "parent_folder": parent_folder,
         "search_places": BROWSER_SEARCH_PLACES
     }
-    return render_to_response("documents_browser/list.html", context=context)
-
-
-def edit(request):
-    pass
-
-
-def create_documents(request, path=None):
-    parent_folder = get_folder_or_404(path)
-    context = {
-        "parent_folder": parent_folder,
-        "form_title": "Create documents",
-        "form": CreateDocumentForm(),
-        "validator_url": reverse("documents:validator-create-document"),
-        "search_places": BROWSER_SEARCH_PLACES,
-    }
-    context.update(csrf(request))
-    return render_to_response("forms/multi-form.html", context=context)
+    return TemplateResponse(template="documents_browser/list.html", request=request, context=context)
