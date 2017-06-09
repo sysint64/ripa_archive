@@ -6,6 +6,7 @@
     var regionHeight = 0;
     var regionPivotOffset = 0;
     var preventDragging = false;
+    var preventAction = false;
 
     $workRegion.mousedown(function(event) {
         clickOffset = event.pageY;
@@ -92,6 +93,12 @@
             };
 
             resetState();
+
+            if (preventAction) {
+                preventAction = false;
+                return;
+            }
+
             executeAction("change-folder", inputData, function() {
                 $targeted.remove();
             });
@@ -104,6 +111,7 @@
 
     $(document).keydown(function(event) {
         if (event.which == 27) {
+            preventAction = true;
             mouseUpHandle(event);
             preventMouseUp = true;
         }
