@@ -15,11 +15,12 @@
 
         if ($("tr.selected").length > 0) {
             selectedOffset = $("tr.selected:first").offset().top;
-        } else {
-            preventDragging = true;
         }
 
         regionPivotOffset = clickOffset - selectedOffset;
+
+        if (!$(event.target).is("td"))
+            preventDragging = true;
     });
 
     $workRegion.mousemove(function(event) {
