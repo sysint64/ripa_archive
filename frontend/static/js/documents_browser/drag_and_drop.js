@@ -5,20 +5,24 @@
     var clicked = false;
     var regionHeight = 0;
     var regionPivotOffset = 0;
+    var preventDragging = false;
 
     $workRegion.mousedown(function(event) {
         clickOffset = event.pageY;
         clicked = true;
         var selectedOffset = 0;
 
-        if ($("tr.selected").length > 0)
+        if ($("tr.selected").length > 0) {
             selectedOffset = $("tr.selected:first").offset().top;
+        } else {
+            preventDragging = true;
+        }
 
         regionPivotOffset = clickOffset - selectedOffset;
     });
 
     $workRegion.mousemove(function(event) {
-        if (!clicked) {
+        if (!clicked || preventDragging) {
             $dragRegion.hide();
             return;
         }
@@ -56,7 +60,8 @@
         });
     });
 
-    $workRegion.mouseup(function(event) {
+    function mouseUpHandle(event) {
+        preventDragging = false;
         const $toFolder = $(".to_folder");
         const $targeted = $(".targeted");
 
@@ -92,6 +97,15 @@
             });
         } else {
             resetState();
+        }
+    }
+
+    $workRegion.mouseup(mouseUpHandle);
+
+    $(document).keydown(function(event) {
+        if (event.which == 27) {
+            mouseUpHandle(event);
+            preventMouseUp = true;
         }
     });
 })(jQuery);

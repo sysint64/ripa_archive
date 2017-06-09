@@ -3,6 +3,13 @@
     var selectRegionCoords = null;
 
     $workRegion.mousedown(function(event) {
+        console.log($(event.target).is("td"));
+
+        if ($(event.target).is("td") || $(event.target).is("tr")) {
+            selectRegionCoords = null;
+            return;
+        }
+
         selectRegionCoords = {
             x1: event.pageX,
             y1: event.pageY,

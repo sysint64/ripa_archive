@@ -1,6 +1,7 @@
 var $workRegion = $(".right_col");
 var $selectable = $(".selectable");
 var dragging = false;
+var preventMouseUp = false;
 
 function showWaitDialog() {
 
@@ -19,8 +20,6 @@ function getDocumentsIds() {
 }
 
 function executeAction(action, inputData, callback) {
-    console.log(inputData);
-    console.log({test: [1, 2, 3]});
     $.ajax({
         url: "/documents/!action:" + action + "/",
         data: $.toJSON(inputData),
@@ -34,9 +33,7 @@ function executeAction(action, inputData, callback) {
             callback();
         },
         error: function(info) {
-            // var json = $.parseJSON(info.responseText);
-            console.log(info);
-            // alert(":(")
+            console.log("Error", info);
         }
     });
 }
@@ -47,7 +44,9 @@ function executeAction(action, inputData, callback) {
     };
 
     $.fn.isBefore = function (elem) {
-        if (typeof(elem) == "string") elem = $(elem);
+        if (typeof(elem) == "string")
+            elem = $(elem);
+
         return this.add(elem).index(elem) > 0;
     };
 
@@ -137,6 +136,11 @@ function executeAction(action, inputData, callback) {
 
     // Deselect all items when click on free space
     $workRegion.click(function(event) {
+        if (preventMouseUp) {
+            preventMouseUp = false;
+            return;
+        }
+
         if (dragging)
             return;
 
