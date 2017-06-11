@@ -2,7 +2,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from forms.ajax import AjaxModelForm, AjaxForm
-from ripa_archive.documents.models import Folder, DocumentData, Status
+from ripa_archive.documents.models import Folder, DocumentData, Status, FolderCustomPermission
+from ripa_archive.permissions.models import Permission
 
 
 class CreateFolderForm(AjaxModelForm):
@@ -36,4 +37,12 @@ class CreateDocumentForm(AjaxModelForm):
 
 
 class PermissionsForm(AjaxModelForm):
-    pass
+    class Meta:
+        model = FolderCustomPermission
+        fields = "groups", "users", "permissions",
+
+    permissions = forms.ModelMultipleChoiceField(
+        label="Permissions",
+        queryset=Permission.objects.all(),
+        widget=forms.CheckboxSelectMultiple()
+    )

@@ -1,3 +1,28 @@
+function bindEvents() {
+    $(".block").click(function() {
+        $(".multi-form").find(".block").removeClass("active");
+        $(this).addClass("active");
+    });
+
+    $(".remove-block").click(function() {
+        const $block = $(this).closest(".block");
+        const index = formsPrefixes.indexOf($block.data("prefix"));
+        formsPrefixes.splice(index, 1);
+        console.log(formsPrefixes);
+        $(this).closest(".block").remove();
+    });
+}
+
+function unbindEvents() {
+    $(".block").unbind("click");
+    $(".remove-block").unbind("click");
+}
+
+function rebindEvents() {
+    unbindEvents();
+    bindEvents();
+}
+
 (function ($) {
     $("input").addClass("form-control");
     const $blockPrimary = $("#block-primary");
@@ -7,31 +32,6 @@
     var formsPrefixes = [];
 
     $blockPrimary.find(".remove-block").remove();
-
-    function bindEvents() {
-        $(".block").click(function() {
-            $(".multi-form").find(".block").removeClass("active");
-            $(this).addClass("active");
-        });
-
-        $(".remove-block").click(function() {
-            const $block = $(this).closest(".block");
-            const index = formsPrefixes.indexOf($block.data("prefix"));
-            formsPrefixes.splice(index, 1);
-            console.log(formsPrefixes);
-            $(this).closest(".block").remove();
-        });
-    }
-
-    function unbindEvents() {
-        $(".block").unbind("click");
-        $(".remove-block").unbind("click");
-    }
-
-    function rebindEvents() {
-        unbindEvents();
-        bindEvents();
-    }
 
     function putBlock() {
         lastBlockNumber += 1;

@@ -4,7 +4,7 @@ from django.db import models
 from django.urls import reverse
 
 from ripa_archive.accounts.models import User
-from ripa_archive.permissions.models import ModelStrict, ModelWhichHaveStrictsMixin
+from ripa_archive.permissions.models import ModelCustomPermission, ModelWhichHaveCustomPermissionsMixin
 
 
 class FolderManager(models.Manager):
@@ -25,16 +25,16 @@ class FolderManager(models.Manager):
         return parent_folder
 
 
-class FolderStrict(ModelStrict):
+class FolderCustomPermission(ModelCustomPermission):
     for_instance = models.ForeignKey("Folder")
 
 
 # Default folders: root and none
-class Folder(ModelWhichHaveStrictsMixin, models.Model):
+class Folder(ModelWhichHaveCustomPermissionsMixin, models.Model):
     class Meta:
         default_related_name = "folders"
 
-    strict_model = FolderStrict
+    custom_permission_model = FolderCustomPermission
     parent = models.ForeignKey('Folder', null=True, blank=True)
     name = models.CharField(verbose_name="name", help_text="this is a help text", max_length=60)
     objects = FolderManager()

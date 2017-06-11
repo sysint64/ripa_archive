@@ -1,16 +1,28 @@
 {% extends "forms/multi-form.html" %}
+{% load staticfiles %}
 
-{% block after_cursor %}
-    <div class="block collapsed" id="block-permissions">
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "styles/multi_form_permissions.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'js/forms/multi_form_permissions.js' %}" charset="utf-8"></script>
+{% endblock %}
+
+{% block after_actions_buttons %}
+    <div class="block" id="block-permissions">
         <div class="header">
-            Permissions
-            <i class="fa fa-caret-left"></i>
+            Permission
+            <a class="fa fa-trash-o remove-block"></a>
         </div>
         <div class="form-wrapper">
             {% for field, field_meta in permissions_form %}
                 <div class="form-group">
                     <label for="id_{{ field_meta.name }}"
                            class="control-label col-md-3 col-sm-3 col-xs-12">
+                        <span><span></span></span>
                         {{ field_meta.label }}
                         {% if field_meta.help_text != "" %}
                             <div class="help-text">{{ field_meta.help_text }}</div>
@@ -23,4 +35,11 @@
             {% endfor %}
         </div>
     </div>
+
+    <div id="permission-block-cursor"></div>
+
+    <button class="submit-button" type="submit"><i class="fa fa-check"></i> Create</button>
+    <button class="add-permission-button" type="button"><i class="fa fa-plus"></i> Add custom permission</button>
+
+    <div class="clearfix"></div>
 {% endblock %}

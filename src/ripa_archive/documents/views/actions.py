@@ -1,5 +1,3 @@
-from django.http import HttpResponseBadRequest
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -7,7 +5,6 @@ from rest_framework import serializers
 from rest_framework.response import Response
 
 from ripa_archive.documents.models import Folder
-from ripa_archive.request_conv import string_to_integer_list
 
 
 @require_http_methods(["POST"])

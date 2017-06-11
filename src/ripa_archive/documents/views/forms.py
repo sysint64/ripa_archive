@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views import View
 
 from forms.multi_form import get_multi_form
-from ripa_archive.documents.forms import CreateFolderForm, CreateDocumentForm
+from ripa_archive.documents.forms import CreateFolderForm, CreateDocumentForm, PermissionsForm
 from ripa_archive.documents.views.main import get_folder_or_404, BROWSER_SEARCH_PLACES
 
 
@@ -31,9 +31,9 @@ class MultiFormCreation(View):
             "validator_url": reverse(self.validator_url),
             "search_places": BROWSER_SEARCH_PLACES,
             "form": self.form_class(initial={"parent": parent_folder}),
-            # "permissions_form": PermissionsForm(),
+            "permissions_form": PermissionsForm(),
         }
-        return TemplateResponse(request=request, template="forms/multi-form.html", context=context)
+        return TemplateResponse(request=request, template="forms/multi-form-permissions.html", context=context)
 
     def post(self, request, path=None):
         self.parent_folder = get_folder_or_404(path)

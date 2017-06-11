@@ -52,8 +52,7 @@
                                     <div class="col-md-9 col-sm-9 col-xs-12">
                                         {{ field }}
                                     </div>
-                                </div>
-                            {% else %}
+                                </div>                           {% else %}
                                 <div style="display: none">{{ field }}</div>
                             {% endif %}
                         {% endfor %}
@@ -67,8 +66,12 @@
             {% endblock %}
 
             {% block action_buttons %}
-                <button class="submit-button" type="submit"><i class="fa fa-check"></i> Create</button>
+{#                <button class="submit-button" type="submit"><i class="fa fa-check"></i> Create</button>#}
                 <button class="add-block-button" type="button"><i class="fa fa-plus"></i> Add another folder</button>
+            {% endblock %}
+            <div class="clearfix"></div>
+
+            {% block after_actions_buttons %}
             {% endblock %}
 
             <input type="hidden" name="forms_prefixes" value="">

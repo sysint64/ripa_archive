@@ -4,9 +4,19 @@ from ripa_archive.accounts.models import User
 
 
 class Permission(models.Model):
-    name = models.CharField(max_length=60)
-    strict_name = models.CharField(max_length=60)
     code = models.CharField(max_length=60)
+
+    def __str__(self):
+        return self.translations.get(language_code="ru").name
+
+
+class PermissionTranslation(models.Model):
+    class Meta:
+        default_related_name = "translations"
+
+    permission = models.ForeignKey(Permission)
+    language_code = models.CharField(max_length=4)
+    name = models.CharField(max_length=60)
 
 
 class Group(models.Model):
@@ -15,8 +25,8 @@ class Group(models.Model):
     inherit = models.ManyToManyField('Group')
 
 
-class ModelWhichHaveStrictsMixin:
-    strict_model = None
+class ModelWhichHaveCustomPermissionsMixin:
+    custom_permission_model = None
 
     def is_user_has_permission(self, user, permission_name):
         return False
@@ -30,13 +40,11 @@ class PermissionModel(models.Model):
     groups = models.ManyToManyField(Group)
 
 
-class ModelStrict(models.Model):
+class ModelCustomPermission(models.Model):
     class Meta:
         abstract = True
 
     # for_instance = models.ForeignKey("SomeModel")
-    name = models.CharField(max_length=60)
-    code = models.CharField(max_length=60)
-    groups = models.ManyToManyField(Group)
-    users = models.ManyToManyField(User)
-    custom_permissions = models.ManyToManyField(Permission)
+    groups = models.ManyToManyField(Group, blank=True)
+    users = models.ManyToManyField(User, blank=True)
+    permissions = models.ManyToManyField(Permission)
