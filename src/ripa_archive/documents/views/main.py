@@ -1,14 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
-from django.template.context_processors import csrf
 from django.template.response import TemplateResponse
-from django.urls import reverse
-from django.views import View
 
-from ripa_archive.documents.forms import CreateFolderForm, CreateDocumentForm, PermissionsForm
-from ripa_archive.documents.models import Folder, DocumentType
+from ripa_archive.documents.models import Folder
 
 
 def get_folder_or_404(path):

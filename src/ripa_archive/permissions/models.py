@@ -3,8 +3,17 @@ from django.db import models
 from ripa_archive.accounts.models import User
 
 
+class PermissionManager(models.Manager):
+    def for_folders(self):
+        return self.all().filter(code__startswith="folders")
+
+    def for_documents(self):
+        return self.all().filter(code__startswith="documents")
+
+
 class Permission(models.Model):
-    code = models.CharField(max_length=60)
+    code = models.CharField(max_length=60, unique=True)
+    objects = PermissionManager()
 
     def __str__(self):
         return self.translations.get(language_code="ru").name
@@ -23,6 +32,9 @@ class Group(models.Model):
     name = models.CharField(max_length=60)
     permissions = models.ManyToManyField(Permission)
     inherit = models.ManyToManyField('Group')
+
+    def __str__(self):
+        return self.name
 
 
 class ModelWhichHaveCustomPermissionsMixin:
