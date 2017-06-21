@@ -31,7 +31,6 @@
         <table class="table documents-browser-table">
             <thead>
             <tr>
-                <th width="10"></th>
                 <th width="20"></th>
                 <th class="sorting asc">Name</th>
                 <th width="180" class="sorting">Datetime</th>
@@ -46,7 +45,6 @@
             </tr>
             {% for folder in parent_folder.folders.all %}
                 <tr class="selectable context-menu folder" data-folder-id="{{ folder.id }}">
-                    <td><i class="fa fa-drag-handle"></i></td>
                     <td class="data-double-click-link" data-href="{{ folder.permalink }}">
                         <i class="fa fa-folder"></i>
                     </td>
@@ -65,7 +63,6 @@
             {# Documents #}
             {% for document in parent_folder.documents.all %}
                 <tr class="selectable context-menu document" data-document-id="{{ document.id }}">
-                    <td><i class="fa fa-drag-handle"></i></td>
                     <td class="data-link" data-href="#">
                         <i class="fa {{ document.data.icon }}"></i>
                     </td>

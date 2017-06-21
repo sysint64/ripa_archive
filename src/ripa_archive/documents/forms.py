@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from forms.ajax import AjaxModelForm, AjaxForm
+from ripa_archive.accounts.models import User
 from ripa_archive.documents.models import Folder, DocumentData, Status, FolderCustomPermission
 from ripa_archive.permissions.models import Permission, Group
 
@@ -41,10 +42,26 @@ class PermissionsForm(AjaxModelForm):
         model = FolderCustomPermission
         fields = "groups", "users", "permissions",
 
+    users = forms.ModelMultipleChoiceField(
+        label="Users",
+        queryset=User.objects.all(),
+        widget=forms.SelectMultiple(attrs={
+            "class": "selectpicker",
+            "data-actions-box": "true",
+            "data-width": "fit",
+            "data-live-search": "true"
+        })
+    )
+
     groups = forms.ModelMultipleChoiceField(
         label="Groups",
         queryset=Group.objects.all(),
-        widget=forms.CheckboxSelectMultiple()
+        widget=forms.SelectMultiple(attrs={
+            "class": "selectpicker",
+            "data-actions-box": "true",
+            "data-width": "fit",
+            "data-live-search": "true"
+        })
     )
 
     permissions = forms.ModelMultipleChoiceField(

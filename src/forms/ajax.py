@@ -26,7 +26,8 @@ class AjaxFormMixin:
         super().__init__(*args, **kwargs)
 
         for (_, field) in self.fields.items():
-            field.widget.attrs.update({"class": "form-control"})
+            if field.widget.attrs.get("class", "") == "":
+                field.widget.attrs.update({"class": "form-control"})
 
     def __getitem__(self, name):
         item = super().__getitem__(name)

@@ -3,12 +3,14 @@
 
 {% block styles %}
     {{ block.super }}
+    <link rel="stylesheet" href="{% static "vendors/bootstrap-select/dist/css/bootstrap-select.min.css" %}">
     <link rel="stylesheet" href="{% static "styles/multi_form_permissions.sass" %}" type="text/x-sass">
 {% endblock %}
 
 {% block js %}
     {{ block.super }}
-    <script src="{% static 'js/forms/multi_form_permissions.js' %}" charset="utf-8"></script>
+    <script src="{% static "vendors/bootstrap-select/dist/js/bootstrap-select.min.js" %}" charset="utf-8"></script>
+    <script src="{% static "js/forms/multi_form_permissions.js" %}" charset="utf-8"></script>
 {% endblock %}
 
 {% block after_actions_buttons %}
