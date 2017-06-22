@@ -32,6 +32,8 @@ class MultiFormCreation(View):
             "search_places": BROWSER_SEARCH_PLACES,
             "form": self.form_class(initial={"parent": parent_folder}),
             "permissions_form": PermissionsForm(),
+            "form_prefixes_field": self.form_class.prefixes_field("form_prefixes"),
+            "permissions_form_prefixes_field": PermissionsForm.prefixes_field("permissions_form_prefixes"),
         }
         return TemplateResponse(request=request, template="forms/multi-form-permissions.html", context=context)
 

@@ -22,6 +22,15 @@ class AjaxFormMixin:
     error_orient = AjaxFormErrorsLocation.TOP
     generic_errors = safe(_GENERIC_ERRORS_DIV)
 
+    @classmethod
+    def prefixes_field(cls, id=None):
+        field_name = cls.__name__.lower() + "_prefixes"
+
+        if id is None:
+            return "<input type='hidden' name='%s' value=''>" % field_name
+        else:
+            return "<input type='hidden' name='%s' id='%s' value=''>" % (field_name, id)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -80,6 +89,44 @@ class FormAjaxValidator(View):
         for form in forms:
             if not form.is_valid():
                 errors += self.get_errors(form)
+
+        if len(errors) == 0:
+            return JsonResponse({}, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CompositeAjaxFormValidator(View):
+    forms = []
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect('/')
+
+    def get_errors(self, form):
+        errors = []
+        prefix = "" if form.prefix is None else form.prefix + "-"
+
+        for k, v in form._errors.items():
+            text = {'desc': ', '.join(v), 'key': prefix + k}
+            errors.append(text)
+
+        return errors
+
+    def get_forms_errors(self, form_class, ignore_first):
+        forms = get_multi_form(form_class, self.request.POST, ignore_first)
+        errors = []
+
+        for form in forms:
+            if not form.is_valid():
+                errors += self.get_errors(form)
+
+        return errors
+
+    def post(self, request, *args, **kwargs):
+        errors = []
+
+        for form_class in self.forms:
+            errors += self.get_forms_errors(form_class, form_class != self.forms[0])
 
         if len(errors) == 0:
             return JsonResponse({}, status=status.HTTP_200_OK)

@@ -71,10 +71,11 @@
             {% endblock %}
             <div class="clearfix"></div>
 
+            {{ form_prefixes_field|safe }}
+
             {% block after_actions_buttons %}
             {% endblock %}
 
-            <input type="hidden" name="forms_prefixes" value="">
             {% csrf_token %}
 
             <div class="clearfix"></div>

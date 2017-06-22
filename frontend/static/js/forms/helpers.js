@@ -29,14 +29,20 @@ function validateApiForm($form) {
         },
         error: function(info) {
             var json = $.parseJSON(info.responseText);
+            var $errorBlock = null;
 
             $.each(json.errors, function () {
+                if ($errorBlock == null)
+                    $errorBlock = $form.find("[data-name="+this.key+"_error]");
+
                 $form.find("[data-name="+this.key+"_error]").html(this.desc);
                 $form.find("[name="+this.key+"]")
                     .addClass("error")
                     .closest(".form-group")
                     .addClass("error");
             });
+
+            $('html, body').scrollTop($errorBlock.offset().top - 5);
         }
     });
 }

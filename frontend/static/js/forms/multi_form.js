@@ -11,11 +11,20 @@ function bindEvents() {
         console.log(formsPrefixes);
         $(this).closest(".block").remove();
     });
+
+    $("input[type=checkbox].form-control").change(function() {
+        if ($(this).is(":checked")) {
+            $(this).parent("label").addClass("checked");
+        } else {
+            $(this).parent("label").removeClass("checked");
+        }
+    });
 }
 
 function unbindEvents() {
     $(".block").unbind("click");
     $(".remove-block").unbind("click");
+    $("input[type=checkbox].form-control").unbind("change");
 }
 
 function rebindEvents() {
@@ -40,7 +49,7 @@ function rebindEvents() {
         var $block = $("<div/>", {"class": "block", "html": primaryBlockHtml, "data-prefix": prefix});
         const addPrefix = function(index, attr) { return prefix + "-" + attr; };
         $block.find("label").attr("for", addPrefix);
-        $block.find("input").attr("name", addPrefix).attr("id", addPrefix);
+        $block.find("input,select").attr("name", addPrefix).attr("id", addPrefix);
         $block.find(".form-error").attr("data-name", addPrefix);
         $("#block-cursor").before($block);
 
@@ -54,7 +63,10 @@ function rebindEvents() {
     });
 
     $("#multiform").submit(function(event, isValid) {
-        $(this).find("input[name=forms_prefixes]").val(formsPrefixes.join(","));
+        $(this).find("#form_prefixes").val(formsPrefixes.join(","));
+
+        if ($(this).find("#permissions_form_prefixes").length > 0)
+            $(this).find("#permissions_form_prefixes").val(permissionsFormsPrefixes.join(","));
 
         if (isValid)
             return;

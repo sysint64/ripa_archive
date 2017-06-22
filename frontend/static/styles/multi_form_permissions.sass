@@ -1,8 +1,14 @@
 @import "consts"
 
-.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn)
+.bootstrap-select
     min-width: 220px
     max-width: 100%
+
+.error ul.form-control
+    border-color: $error
+
+.error .bootstrap-select .dropdown-toggle
+    border-color: $error
 
 ul.form-control
     position: relative

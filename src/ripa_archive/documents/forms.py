@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from forms.ajax import AjaxModelForm, AjaxForm
+from forms.ajax import AjaxModelForm
 from ripa_archive.accounts.models import User
 from ripa_archive.documents.models import Folder, DocumentData, Status, FolderCustomPermission
 from ripa_archive.permissions.models import Permission, Group
@@ -46,26 +46,37 @@ class PermissionsForm(AjaxModelForm):
         label="Users",
         queryset=User.objects.all(),
         widget=forms.SelectMultiple(attrs={
-            "class": "selectpicker",
             "data-actions-box": "true",
             "data-width": "fit",
             "data-live-search": "true"
-        })
+        }),
+        required=False
     )
 
     groups = forms.ModelMultipleChoiceField(
         label="Groups",
         queryset=Group.objects.all(),
         widget=forms.SelectMultiple(attrs={
-            "class": "selectpicker",
             "data-actions-box": "true",
             "data-width": "fit",
             "data-live-search": "true"
-        })
+        }),
+        required=False
     )
 
     permissions = forms.ModelMultipleChoiceField(
         label="Permissions",
         queryset=Permission.objects.for_folders(),
-        widget=forms.CheckboxSelectMultiple()
+        widget=forms.CheckboxSelectMultiple(),
+        required=True
     )
+
+    def clean(self):
+        users = self.cleaned_data["users"]
+        groups = self.cleaned_data["groups"]
+
+        if users.count() == 0 and groups.count() == 0:
+            self.add_error("groups", "At least one field must be filled in")
+            self.add_error("users", "")
+
+        return self.cleaned_data
