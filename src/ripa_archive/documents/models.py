@@ -7,7 +7,9 @@ from ripa_archive.accounts.models import User
 from ripa_archive.permissions.models import ModelCustomPermission, ModelWhichHaveCustomPermissionsMixin
 
 
-class FolderManager(models.Manager):
+class FoldersManager(models.Manager):
+    ALREADY_EXIST_ERROR = 'Folder with name "%s" already exist in this folder'
+
     def get_by_path(self, path):
         parent_folder = self.filter(name="Root", parent=None).first()
 
@@ -25,8 +27,12 @@ class FolderManager(models.Manager):
         return parent_folder
 
 
+class DocumentsManager(models.Manager):
+    ALREADY_EXIST_ERROR = 'Document with name "%s" already exist in this folder'
+
+
 class FolderCustomPermission(ModelCustomPermission):
-    for_instance = models.ForeignKey("Folder")
+    for_instances = models.ManyToManyField("Folder")
 
 
 # Default folders: root and none
@@ -37,7 +43,7 @@ class Folder(ModelWhichHaveCustomPermissionsMixin, models.Model):
     custom_permission_model = FolderCustomPermission
     parent = models.ForeignKey('Folder', null=True, blank=True)
     name = models.CharField(verbose_name="name", help_text="this is a help text", max_length=60)
-    objects = FolderManager()
+    objects = FoldersManager()
 
     @property
     def permalink(self):
@@ -97,6 +103,8 @@ class Document(models.Model):
 
     folder = models.ForeignKey(Folder)
     status = models.ForeignKey(Status)
+
+    objects = DocumentsManager()
 
     @property
     def data(self):

@@ -20,7 +20,11 @@ urlpatterns = \
 
 # Actions
 urlpatterns += [
-    url(r'^!action:change-folder/$', actions_views.change_folder, name="action-change-folder")
+    url(r'^!action:change-folder/$', actions_views.change_folder, name="action-change-folder"),
+    url(r'^!action:delete/$', actions_views.delete, name="action-delete"),
+    url(r'^!action:copy/$', actions_views.delete, name="action-copy"),
+    url(r'^!action:cut/$', actions_views.delete, name="action-cut"),
+    url(r'^!action:paste/$', actions_views.delete, name="action-paste"),
 ]
 
 # Form validators

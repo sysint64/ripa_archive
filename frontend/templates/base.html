@@ -37,9 +37,12 @@
             {% endblock %}
         </div>
 
-{#        {% include "footer.html" %}#}
+        {% include "footer.html" %}
     </div>
 </div>
+
+{% block dialogs %}
+{% endblock %}
 
 {% block js %}
     <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}" charset="utf-8"></script>

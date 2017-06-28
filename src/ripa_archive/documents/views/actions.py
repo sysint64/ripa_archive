@@ -1,40 +1,58 @@
-from django.views.decorators.http import require_http_methods
+from django.db import transaction
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
-from ripa_archive.documents.models import Folder
+from ripa_archive.documents.views.input_serializers import BulkInputSerializer, \
+    ChangeFolderInputSerializer
 
 
-@require_http_methods(["POST"])
+@api_view(["POST"])
 def copy(request):
-    pass
+    serializer = BulkInputSerializer(data=request.data)
+
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@require_http_methods(["POST"])
+@api_view(["POST"])
 def cut(request):
-    pass
+    serializer = BulkInputSerializer(data=request.data)
+
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@require_http_methods(["POST"])
+@api_view(["POST"])
 def paste(request):
     pass
 
 
-@require_http_methods(["POST"])
+@api_view(["POST"])
 def delete(request):
-    pass
+    serializer = BulkInputSerializer(data=request.data)
+
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    folders = serializer.validated_data["folders"]
+    documents = serializer.validated_data["documents"]
+
+    def delete_all(items):
+        for item in items:
+            item.delete()
+
+    with transaction.atomic():
+        delete_all(folders)
+        delete_all(documents)
+
+    return Response({}, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
 def change_folder(request):
-    class InputSerializer(serializers.Serializer):
-        to_folder = serializers.PrimaryKeyRelatedField(queryset=Folder.objects.all(), required=True)
-        folders = serializers.PrimaryKeyRelatedField(queryset=Folder.objects.all(), many=True, required=False)
-        documents = serializers.PrimaryKeyRelatedField(queryset=Folder.objects.all(), many=True, required=False)
-
-    serializer = InputSerializer(data=request.data)
+    serializer = ChangeFolderInputSerializer(data=request.data)
 
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -43,12 +61,16 @@ def change_folder(request):
     folders = serializer.validated_data["folders"]
     documents = serializer.validated_data["documents"]
 
-    def update_parent(items):
+    def update_parent(items, manager):
         for item in items:
+            if manager.filter(name=item.name).count() > 0:
+                raise ValidationError(manager.ALREADY_EXIST_ERROR % item.name)
+
             item.parent = to_folder
             item.save()
 
-    update_parent(folders)
-    update_parent(documents)
+    with transaction.atomic():
+        update_parent(folders, to_folder.folders)
+        update_parent(documents, to_folder.documents)
 
     return Response({}, status=status.HTTP_200_OK)

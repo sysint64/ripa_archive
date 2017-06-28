@@ -11,6 +11,14 @@ function hideWaitDialog() {
 
 }
 
+function showYesNoDialog() {
+
+}
+
+function showErrorsDialog(errors) {
+
+}
+
 function getFoldersIds() {
 
 }

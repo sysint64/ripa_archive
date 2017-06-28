@@ -50,7 +50,7 @@ class PermissionsForm(AjaxModelForm):
             "data-width": "fit",
             "data-live-search": "true"
         }),
-        required=False
+        required=True
     )
 
     groups = forms.ModelMultipleChoiceField(
@@ -61,7 +61,7 @@ class PermissionsForm(AjaxModelForm):
             "data-width": "fit",
             "data-live-search": "true"
         }),
-        required=False
+        required=True
     )
 
     permissions = forms.ModelMultipleChoiceField(

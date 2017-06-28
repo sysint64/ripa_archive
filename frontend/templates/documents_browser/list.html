@@ -4,6 +4,8 @@
 {% block styles %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static "vendors/jQuery-contextMenu/dist/jquery.contextMenu.min.css" %}">
+    <link rel="stylesheet" href="{% static "styles/loading.css" %}">
+    <link rel="stylesheet" href="{% static "styles/dialogs.sass" %}" type="text/x-sass">
     <link rel="stylesheet" href="{% static "styles/documents_browser.sass" %}" type="text/x-sass">
 {% endblock %}
 
@@ -17,6 +19,12 @@
     <script src="{% static 'js/documents_browser/main.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/documents_browser/select_region.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/documents_browser/drag_and_drop.js' %}" charset="utf-8"></script>
+{% endblock %}
+
+{% block dialogs %}
+{#    {% include "dialogs/progress_dialog.html" %}#}
+    {% include "dialogs/yes_no_dialog.html" %}
+{#    {% include "dialogs/errors_dialog.html" %}#}
 {% endblock %}
 
 {% block content %}

@@ -1,0 +1,62 @@
+@import "consts"
+
+.dialog
+    position: fixed
+    width: 100%
+    height: 100%
+    background: rgba(0, 0, 0, 0.5)
+    z-index: 99999
+    top: 0
+    left: 0
+
+    &.progress-dialog .progress-circle
+        width: 200px
+        height: 200px
+        position: absolute
+        left: 50%
+        top: 50%
+        margin-left: -100px
+        margin-top: -100px
+
+    .inner
+        position: relative
+        margin: 100px auto auto
+        background: #fff
+        width: 500px
+        padding: 5px 20px
+
+    .content
+        padding-bottom: 10px
+        font-size: 16px
+
+        &.error
+            color: #aa0000
+
+    .float-close
+        position: absolute
+        right: 10px
+        top: 5px
+        font-family: FontAwesome
+        background: none
+        border: none
+        opacity: 0.8
+        color: #666
+        font-size: 24px
+
+        &:hover
+            opacity: 1
+
+
+    button
+        display: block
+        float: right
+        border: none
+        background: #ddd
+        padding: 5px 10px
+        margin: 0 10px 10px 10px
+        font-size: 14px
+
+        &.primary
+            background: $green
+            color: #fff
+            margin: 0 0 10px

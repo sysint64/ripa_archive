@@ -56,7 +56,7 @@ class ModelCustomPermission(models.Model):
     class Meta:
         abstract = True
 
-    # for_instance = models.ForeignKey("SomeModel")
+    # for_instances = models.ManyToManyField("SomeModel")
     groups = models.ManyToManyField(Group, blank=True)
     users = models.ManyToManyField(User, blank=True)
     permissions = models.ManyToManyField(Permission)
