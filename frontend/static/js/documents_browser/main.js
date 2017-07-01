@@ -3,31 +3,13 @@ var $selectable = $(".selectable");
 var dragging = false;
 var preventMouseUp = false;
 
-function showWaitDialog() {
-
-}
-
-function hideWaitDialog() {
-
-}
-
-function showYesNoDialog() {
-
-}
-
-function showErrorsDialog(errors) {
-
-}
-
-function getFoldersIds() {
-
-}
-
 function getDocumentsIds() {
 
 }
 
 function executeAction(action, inputData, callback) {
+    showWaitDialog();
+
     $.ajax({
         url: "/documents/!action:" + action + "/",
         data: $.toJSON(inputData),
@@ -38,11 +20,19 @@ function executeAction(action, inputData, callback) {
         method: "POST",
         dataType: "json",
         success: function() {
+            hideWaitDialog();
             callback();
         },
         error: function(info) {
-            console.log("Error", info);
+            hideWaitDialog();
+            showErrorDialog(getAjaxTextError(info));
         }
+    });
+}
+
+function executeActionWithConfirm(action, inputData, message, callback) {
+    showYesNoDialog(message, function() {
+        executeAction(action, inputData, callback);
     });
 }
 

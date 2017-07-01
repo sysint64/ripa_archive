@@ -13,6 +13,15 @@ function ajaxErrorHandler(info, selector) {
     }
 }
 
+function getAjaxTextError(info) {
+    if (info.status >= 500) {
+        return "Unexpected error (server respond with status code " + info.status + ")";
+    } else {
+        var json = $.parseJSON(info.responseText);
+        return json[0];
+    }
+}
+
 function validateApiForm($form) {
     var serialize = $form.serialize()+"&form="+$(this).attr("id");
     $form.find(".form-error").html("");

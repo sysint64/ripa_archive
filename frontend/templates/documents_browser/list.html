@@ -16,15 +16,16 @@
     <script src="{% static 'vendors/jquery-json/dist/jquery.json.min.js' %}" charset="utf-8"></script>
 
     <script src="{% static 'js/forms/helpers.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/dialogs.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/documents_browser/main.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/documents_browser/select_region.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/documents_browser/drag_and_drop.js' %}" charset="utf-8"></script>
 {% endblock %}
 
 {% block dialogs %}
-{#    {% include "dialogs/progress_dialog.html" %}#}
+    {% include "dialogs/progress_dialog.html" %}
     {% include "dialogs/yes_no_dialog.html" %}
-{#    {% include "dialogs/errors_dialog.html" %}#}
+    {% include "dialogs/errors_dialog.html" %}
 {% endblock %}
 
 {% block content %}
