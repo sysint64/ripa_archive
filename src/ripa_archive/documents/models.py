@@ -101,7 +101,7 @@ class Document(models.Model):
     owner = models.ForeignKey(User, null=True, related_name="owner")
     contributors = models.ManyToManyField(User, related_name="contributors")
 
-    folder = models.ForeignKey(Folder)
+    parent = models.ForeignKey(Folder)
     status = models.ForeignKey(Status)
 
     objects = DocumentsManager()

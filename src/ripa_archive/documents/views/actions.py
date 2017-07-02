@@ -61,6 +61,20 @@ def paste(request, path=None):
     documents = request.session.get("copied_documents", [])
     documents.extend(request.session.get("cut_documents", []))
 
+    def copy_content(dst_folder, src_folder_id):
+        def _copy(manager):
+            for item in manager.all():
+                new_src_folder_id = item.id
+                item.pk = None
+                item.parent = dst_folder
+                item.save()
+
+                if isinstance(item, Folder):
+                    copy_content(dst_folder=item, src_folder_id=new_src_folder_id)
+
+        _copy(Folder.objects.filter(parent__id=src_folder_id))
+        _copy(Document.objects.filter(parent__id=src_folder_id))
+
     def do_paste(items, manager, to_folder_manager):
         for item_id in items:
             item = manager.filter(id=item_id).first()
@@ -78,6 +92,9 @@ def paste(request, path=None):
             else:  # make copy
                 item.pk = None
                 item.save()
+
+                if isinstance(item, Folder):
+                    copy_content(dst_folder=item, src_folder_id=item_id)
 
     with transaction.atomic():
         do_paste(folders, Folder.objects, to_folder.folders)
