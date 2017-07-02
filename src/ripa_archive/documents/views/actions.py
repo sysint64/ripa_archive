@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
-from ripa_archive.documents.models import Folder
+from ripa_archive.documents.models import Folder, Document
 from ripa_archive.documents.views.input_serializers import BulkInputSerializer, \
     ChangeFolderInputSerializer
 from ripa_archive.documents.views.main import get_folder_or_404
@@ -50,12 +50,10 @@ def cut(request):
 
 @api_view(["POST"])
 def paste(request, path=None):
-    parent_folder = get_folder_or_404(path)
+    to_folder = get_folder_or_404(path)
 
     do_cut = request.session.get("cut_folders", []) != [] or \
              request.session.get("cut_documents", []) != []
-
-    print(do_cut)
 
     folders = request.session.get("copied_folders", [])
     folders.extend(request.session.get("cut_folders", []))
@@ -63,15 +61,27 @@ def paste(request, path=None):
     documents = request.session.get("copied_documents", [])
     documents.extend(request.session.get("cut_documents", []))
 
+    def do_paste(items, manager, to_folder_manager):
+        for item_id in items:
+            item = manager.filter(id=item_id).first()
+
+            if item is None:
+                continue
+
+            if to_folder_manager.filter(name=item.name).count() > 0:
+                raise ValidationError(to_folder_manager.ALREADY_EXIST_ERROR % item.name)
+
+            item.parent = to_folder
+
+            if do_cut:
+                item.save()
+            else:  # make copy
+                item.pk = None
+                item.save()
+
     with transaction.atomic():
-        if do_cut:
-            Folder.objects.filter(id__in=folders).update(parent=parent_folder)
-        else:
-            for folder_id in folders:
-                folder = Folder.objects.filter(pk=folder_id).first()
-                folder.pk = None
-                folder.parent = parent_folder
-                folder.save()
+        do_paste(folders, Folder.objects, to_folder.folders)
+        do_paste(documents, Document.objects, to_folder.documents)
 
         request.session["copied_folders"] = []
         request.session["copied_documents"] = []
