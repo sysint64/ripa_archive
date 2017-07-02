@@ -18,7 +18,8 @@ INSTALLED_APPS = [
     'easy_thumbnails',
 
     'ripa_archive.accounts.apps.AccountsConfig',
-    'ripa_archive.documents.apps.DocumentsConfig',
+    'ripa_archive.documents',
+    # 'ripa_archive.documents.apps.DocumentsConfig',
     'ripa_archive.permissions.apps.PermissionsConfig'
 ]
 

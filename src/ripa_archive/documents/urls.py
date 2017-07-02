@@ -16,15 +16,15 @@ def browser_url(regex, view, name=None):
 urlpatterns = \
     browser_url(r'', main.document_browser, name="browser") + \
     browser_url(r'!action:create-documents/', forms_views.CreateDocuments.as_view(), name="create-documents") + \
-    browser_url(r'!action:create-folders/', forms_views.CreateFolders.as_view(), name="create-folders")
+    browser_url(r'!action:create-folders/', forms_views.CreateFolders.as_view(), name="create-folders") + \
+    browser_url(r'!action:paste/', actions_views.paste, name="action-paste")
 
 # Actions
 urlpatterns += [
     url(r'^!action:change-folder/$', actions_views.change_folder, name="action-change-folder"),
     url(r'^!action:delete/$', actions_views.delete, name="action-delete"),
-    url(r'^!action:copy/$', actions_views.delete, name="action-copy"),
-    url(r'^!action:cut/$', actions_views.delete, name="action-cut"),
-    url(r'^!action:paste/$', actions_views.delete, name="action-paste"),
+    url(r'^!action:copy/$', actions_views.copy, name="action-copy"),
+    url(r'^!action:cut/$', actions_views.cut, name="action-cut"),
 ]
 
 # Form validators

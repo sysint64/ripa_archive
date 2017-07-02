@@ -3,15 +3,40 @@ var $selectable = $(".selectable");
 var dragging = false;
 var preventMouseUp = false;
 
-function getDocumentsIds() {
+function getSelectedItemsData() {
+    function serialize($items, dataName) {
+        var result = [];
 
+        $items.each(function() {
+            console.log($(this).data(dataName));
+            result.push($(this).data(dataName));
+        });
+
+        return result;
+    }
+
+    const $selected = $(".selected");
+
+    return {
+        "folders": serialize($selected.not(".document"), "folder-id"),
+        "documents": serialize($selected.not(".folder"), "document-id")
+    };
 }
 
 function executeAction(action, inputData, callback) {
     showWaitDialog();
 
+    var url;
+    const relativeActions = ["paste"];
+
+    if (relativeActions.indexOf(action) !== -1) {
+        url = "!action:" + action + "/";
+    } else {
+        url = "/documents/!action:" + action + "/";
+    }
+
     $.ajax({
-        url: "/documents/!action:" + action + "/",
+        url: url,
         data: $.toJSON(inputData),
         headers: {
             "X-CSRFToken": Cookies.get("csrftoken"),
@@ -56,13 +81,44 @@ function executeActionWithConfirm(action, inputData, message, callback) {
     $.contextMenu({
         selector: '.context-menu',
         callback: function (key, options) {
+            switch (key) {
+                case "delete":
+                    executeActionWithConfirm(
+                        "delete",
+                        getSelectedItemsData(),
+                        "Delete selected items?",
+                        function() {
+                            $(".selected").remove();
+                        });
+                    break;
+
+                case "copy":
+                    executeAction(
+                        "copy",
+                        getSelectedItemsData(),
+                        function() {});
+                    break;
+
+                case "cut":
+                    executeAction(
+                        "cut",
+                        getSelectedItemsData(),
+                        function() {
+                            $(".selected").addClass("cut").removeClass("selected");
+                        });
+                    break;
+            }
         },
         items: {
             "edit": {name: "Edit", icon: "edit"},
             "cut": {name: "Cut", icon: "cut"},
             "copy": {name: "Copy", icon: "copy"},
-            "paste": {name: "Paste", icon: "paste"},
             "delete": {name: "Delete", icon: "delete"}
+        },
+        events: {
+            show: function(options) {
+                dragClicked = false;
+            }
         }
     });
 
@@ -70,13 +126,34 @@ function executeActionWithConfirm(action, inputData, message, callback) {
         selector: '.right_col',
         callback: function (key, options) {
             switch (key) {
-                case "create_folders": location.href = "!action:create-folders/"; break;
-                case "create_documents": location.href = "!action:create-documents/"; break;
+                case "create_folders":
+                    location.href = "!action:create-folders/";
+                    break;
+
+                case "create_documents":
+                    location.href = "!action:create-documents/";
+                    break;
+
+                case "paste":
+                    executeAction(
+                        "paste",
+                        {},
+                        function() {
+                            showWaitDialog();
+                            location.reload();
+                        });
+                    break;
             }
         },
         items: {
             "create_folders": {name: "Create folder(s)", icon: "fa-folder"},
-            "create_documents": {name: "Create document(s)", icon: "fa-file-o"}
+            "create_documents": {name: "Create document(s)", icon: "fa-file-o"},
+            "paste": {name: "Paste", icon: "paste"}
+        },
+        events: {
+            show: function(options) {
+                dragClicked = false;
+            }
         }
     });
 

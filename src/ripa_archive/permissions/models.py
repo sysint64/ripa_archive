@@ -16,7 +16,7 @@ class Permission(models.Model):
     objects = PermissionManager()
 
     def __str__(self):
-        return self.translations.get(language_code="ru").name
+        return self.translations.get(language_code="en").name
 
 
 class PermissionTranslation(models.Model):

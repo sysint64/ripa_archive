@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load states %}
 
 {% block styles %}
     {{ block.super }}
@@ -53,7 +54,7 @@
             <tr>
             </tr>
             {% for folder in parent_folder.folders.all %}
-                <tr class="selectable context-menu folder" data-folder-id="{{ folder.id }}">
+                <tr class="selectable context-menu folder{% folder_extra_classes folder %}" data-folder-id="{{ folder.id }}">
                     <td class="data-double-click-link" data-href="{{ folder.permalink }}">
                         <i class="fa fa-folder"></i>
                     </td>

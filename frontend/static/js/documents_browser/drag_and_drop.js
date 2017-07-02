@@ -1,16 +1,17 @@
+var preventDragging = false;
+var dragClicked = false;
+
 (function ($) {
     var delta = 0;
     var clickOffset = 0;
     var $dragRegion = $("#drag-region");
-    var clicked = false;
     var regionHeight = 0;
     var regionPivotOffset = 0;
-    var preventDragging = false;
     var preventAction = false;
 
     $workRegion.mousedown(function(event) {
         clickOffset = event.pageY;
-        clicked = true;
+        dragClicked = true;
         var selectedOffset = 0;
 
         if ($("tr.selected").length > 0) {
@@ -24,7 +25,7 @@
     });
 
     $workRegion.mousemove(function(event) {
-        if (!clicked || preventDragging) {
+        if (!dragClicked || preventDragging) {
             $dragRegion.hide();
             return;
         }
@@ -68,7 +69,7 @@
         const $targeted = $(".targeted");
 
         resetState = function() {
-            clicked = false;
+            dragClicked = false;
             dragging = false;
             $dragRegion.hide();
 
@@ -76,22 +77,9 @@
             $toFolder.removeClass("to_folder");
         };
 
-        function serialize($items, dataName) {
-            var result = [];
-
-            $items.each(function() {
-                result.push($(this).data(dataName));
-            });
-
-            return result;
-        }
-
         if ($toFolder.length == 1) {
-            const inputData = {
-                "to_folder": $toFolder.data("folder-id"),
-                "folders": serialize($targeted.not(".document"), "folder-id"),
-                "documents": serialize($targeted.not(".folder"), "document-id")
-            };
+            var inputData = getSelectedItemsData();
+            inputData["to_folder"] = $toFolder.data("folder-id");
 
             resetState();
 
