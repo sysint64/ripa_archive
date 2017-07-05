@@ -33,8 +33,8 @@ LOCALE_PATHS = (
 )
 
 COMPRESS_PRECOMPILERS = (
-    ('text/x-sass', 'sassc --style compressed {infile} {outfile}'),
-    ('text/x-scss', 'sassc --style compressed {infile} {outfile}'),
+    ('text/x-sass', '{{ project_virtualenv_dir }}/bin/sassc --style compressed {infile} {outfile}'),
+    ('text/x-scss', '{{ project_virtualenv_dir }}/bin/sassc --style compressed {infile} {outfile}'),
 )
 
 TEMPLATES = [

@@ -24,27 +24,10 @@ function getAjaxTextError(info) {
 
 function validateApiForm($form) {
     var serialize;
-
-    if ($form.attr("enctype") == "multipart/form-data") {
-        serialize = new FormData($form[0]);
-    } else {
-        serialize = $form.serialize()+"&form="+$(this).attr("id");
-    }
-
-    $form.find(".form-error").html("");
-    $form.find(".error").removeClass("error");
-    $form.find(".generic-errors").html("");
-
-    $.ajax({
+    var ajaxData = {
         url: $form.data("validation"),
-        data: serialize,
         method: 'POST',
         dataType: "json",
-
-        enctype: 'multipart/form-data',
-        processData: false,
-        contentType: false,
-        cache: false,
 
         success: function() {
             $form.trigger('submit', [true]);
@@ -66,7 +49,27 @@ function validateApiForm($form) {
 
             $('html, body').scrollTop($errorBlock.offset().top - 5);
         }
-    });
+    };
+
+    if ($form.attr("enctype") == "multipart/form-data") {
+        serialize = new FormData($form[0]);
+        ajaxData = Object.assign({
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false
+        }, ajaxData);
+    } else {
+        serialize = $form.serialize()+"&form="+$(this).attr("id");
+    }
+
+    ajaxData["data"] = serialize;
+
+    $form.find(".form-error").html("");
+    $form.find(".error").removeClass("error");
+    $form.find(".generic-errors").html("");
+
+    $.ajax(ajaxData);
 }
 
 function ajaxFormSubmit(event, isValid) {
