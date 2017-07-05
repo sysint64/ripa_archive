@@ -1,0 +1,60 @@
+from {{ project_namespace }}.settings.base import *
+
+VAR_ROOT = "{{ project_dir }}"
+STATIC_ROOT = os.path.join("{{ project_static_media_dir }}", "static")
+MEDIA_ROOT = os.path.join("{{ project_static_media_dir }}", "media")
+FRONTEND_ROOT = os.path.join("{{ project_work_tree }}", 'frontend')
+
+DEBUG = False
+SECRET_KEY = '{{ django_secret_key }}'
+
+ALLOWED_HOSTS = [
+    "{{ allowed_host }}"
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+STATIC_URL = '{{ nginx_scheme }}://{{ nginx_server_full_name }}/static/'
+MEDIA_URL = '{{ nginx_scheme }}://{{ nginx_server_full_name }}/media/'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '{{ db_name }}',
+        'USER': '{{ db_user }}',
+        'PASSWORD': '{{ db_user_passwd }}',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+}
+
+LOCALE_PATHS = (
+    os.path.join(VAR_ROOT, 'locale'),
+)
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-sass', 'sassc --style compressed {infile} {outfile}'),
+    ('text/x-scss', 'sassc --style compressed {infile} {outfile}'),
+)
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(FRONTEND_ROOT, 'templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+STATICFILES_DIRS = (
+    os.path.join(FRONTEND_ROOT, 'static'),
+)

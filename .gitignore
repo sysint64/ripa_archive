@@ -6,6 +6,7 @@ var
 ansible/hosts
 ansible/*.retry
 ansible/vars/secret.yml
+ansible/vars/*_secret.yml
 src/ripa_archive/settings/local.py
 __pycache__/
 gentelella/

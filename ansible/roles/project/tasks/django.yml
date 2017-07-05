@@ -1,0 +1,25 @@
+---
+- name: install requirements.txt
+  pip:
+    virtualenv: "{{ project_virtualenv_dir }}"
+    virtualenv_python: python3.6
+    requirements: "{{ project_work_tree }}/requirements.txt"
+  notify:
+    - restart gunicorn
+
+- name: copy settings config
+  template: src=settings.j2 dest={{ project_work_tree }}/src/{{ project_namespace }}/settings/{{ env_name }}.py
+  notify:
+    - restart gunicorn
+
+- name: migrate
+  command: "{{ project_virtualenv_dir }}/bin/python {{ project_work_tree }}/src/manage.py migrate --noinput"
+  notify:
+    - restart gunicorn
+
+- name: install packages based on bower.json.
+  bower:
+    path: "{{ project_work_tree }}/frontend/static"
+
+- name: collectstatic
+  command: "{{ project_virtualenv_dir }}/bin/python {{ project_work_tree }}/src/manage.py collectstatic --noinput"

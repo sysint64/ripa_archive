@@ -1,0 +1,24 @@
+upstream proxy_{{ env_name }} {
+    server {{ nginx_host }}:{{ nginx_port }} fail_timeout=0;
+}
+
+server {
+    listen {{ nginx_listen_port }};
+    server_name {{ nginx_server_name }};
+
+    location / {
+        proxy_pass http://proxy_{{ env_name }};
+        proxy_set_header Host {{ nginx_host }};
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ~ ^/(static|media)/ {
+        root {{ project_static_media_dir }};
+
+        location ~* \.(eot|ttf|woff|woff2)$ {
+            add_header Access-Control-Allow-Origin '*';
+        }
+    }
+}

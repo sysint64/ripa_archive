@@ -1,0 +1,15 @@
+---
+- name: Depoy application to demo server
+  hosts: staging
+  remote_user: ubuntu
+
+  vars_files:
+    - vars/demo.yml
+    - vars/demo_secret.yml
+
+  environment:
+    DJANGO_SETTINGS_MODULE: "{{ project_namespace }}.settings.demo"
+
+  roles:
+#    - web
+    - project

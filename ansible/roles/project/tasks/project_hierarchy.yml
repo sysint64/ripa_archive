@@ -1,0 +1,34 @@
+---
+- name: create project directory
+  file: path={{ project_dir }} owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
+
+- name: create project work tree directory
+  file: path={{ project_work_tree }} owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
+
+# Static and media
+- name: create static_media directory
+  file: path={{ project_static_media_dir }} owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
+
+- name: create static directory
+  file: path={{ project_static_media_dir }}/static owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
+
+- name: create media directory
+  file: path={{ project_static_media_dir }}/media owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
+
+- name: create media/photos directory
+  file: path={{ project_static_media_dir }}/media/photos owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
+
+- name: create media/qr_codes directory
+  file: path={{ project_static_media_dir }}/media/qr_codes owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
+
+# Git
+- name: get sources
+  become_user: "{{ project_linux_user }}"
+  git:
+    repo: "{{ git_repo }}"
+    version: "{{ git_version }}"
+    dest: "{{ project_work_tree }}"
+    key_file: "{{ git_ssh_key }}"
+    accept_hostkey: yes
+  notify:
+    - restart gunicorn

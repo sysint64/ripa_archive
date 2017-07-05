@@ -1,0 +1,28 @@
+---
+env_name: "demo"
+project_namespace: "ripa_archive"
+
+nginx_host: "localhost"
+nginx_port: "12340"
+nginx_server_name: "13.75.126.239"
+nginx_listen_port: 80
+nginx_server_full_name: "{{ nginx_server_name }}"
+nginx_scheme: "http"
+
+project_linux_user: "www-data"
+project_linux_group: "www-data"
+
+project_dir: "/var/www/demo"
+project_virtualenv_dir: "{{ project_dir }}/venv"
+project_static_media_dir: "{{ project_dir }}/static_media"
+project_work_tree: "{{ project_dir }}/work_tree"
+
+git_repo: "git@bitbucket.org:sys_int64/ripa_archive.git"
+git_version: "master"
+git_ssh_key: "/var/www/.ssh/id_rsa"
+
+# Django
+allowed_host: "*"
+DJANGO_SETTINGS_MODULE: "{{ project_namespace }}.settings.demo"
+luna_vision_faces_list: "user_faces_staging"
+celery_vhost: "/"

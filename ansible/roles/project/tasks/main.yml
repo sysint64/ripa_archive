@@ -1,0 +1,3 @@
+---
+#- include: project_hierarchy.yml
+- include: django.yml
