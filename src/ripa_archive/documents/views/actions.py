@@ -75,6 +75,15 @@ def paste(request, path=None):
         _copy(Folder.objects.filter(parent__id=src_folder_id))
         _copy(Document.objects.filter(parent__id=src_folder_id))
 
+    # TODO: add copy action to log
+    def copy_document_data(dst_document, src_document_id):
+        src_document = Document.objects.filter(pk=src_document_id).first()
+
+        for document_data in src_document.document_data_set.all():
+            document_data.pk = None
+            document_data.document = dst_document
+            document_data.save()
+
     def do_paste(items, manager, to_folder_manager):
         for item_id in items:
             item = manager.filter(id=item_id).first()
@@ -82,7 +91,7 @@ def paste(request, path=None):
             if item is None:
                 continue
 
-            if to_folder_manager.filter(name=item.name).count() > 0:
+            if to_folder_manager.exist_with_name(item.name):
                 raise ValidationError(to_folder_manager.ALREADY_EXIST_ERROR % item.name)
 
             item.parent = to_folder
@@ -95,6 +104,8 @@ def paste(request, path=None):
 
                 if isinstance(item, Folder):
                     copy_content(dst_folder=item, src_folder_id=item_id)
+                elif isinstance(item, Document):
+                    copy_document_data(dst_document=item, src_document_id=item_id)
 
     with transaction.atomic():
         do_paste(folders, Folder.objects, to_folder.folders)
@@ -142,7 +153,7 @@ def change_folder(request):
 
     def update_parent(items, manager):
         for item in items:
-            if manager.filter(name=item.name).count() > 0:
+            if manager.exist_with_name(item.name):
                 raise ValidationError(manager.ALREADY_EXIST_ERROR % item.name)
 
             item.parent = to_folder

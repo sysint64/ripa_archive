@@ -26,13 +26,27 @@ class FoldersManager(models.Manager):
 
         return parent_folder
 
+    def exist_with_name(self, name):
+        return self.get_queryset().filter(name__iexact=name).count() > 0
+
 
 class DocumentsManager(models.Manager):
     ALREADY_EXIST_ERROR = 'Document with name "%s" already exist in this folder'
 
+    def exist_with_name(self, name):
+        for item in self.get_queryset().all():
+            if item.data.name.lower() == name.lower():
+                return True
+
+        return False
+
 
 class FolderCustomPermission(ModelCustomPermission):
-    for_instances = models.ManyToManyField("Folder")
+    for_instances = models.ManyToManyField("Folder")  # TODO: change to FK, cascade delete
+
+
+class DocumentCustomPermission(ModelCustomPermission):
+    for_instances = models.ManyToManyField("Document")  # TODO: change to FK, cascade delete
 
 
 # Default folders: root and none
@@ -107,6 +121,10 @@ class Document(models.Model):
     objects = DocumentsManager()
 
     @property
+    def name(self):
+        return self.data.name
+
+    @property
     def data(self):
         return DocumentData.objects.filter(document=self).order_by("-datetime").last()
 
@@ -156,6 +174,9 @@ class DocumentType:
 
 
 class DocumentData(models.Model):
+    class Meta:
+        default_related_name = "document_data_set"
+
     document = models.ForeignKey(Document)
     file = models.FileField(upload_to="documents/")
     name = models.CharField(max_length=60)

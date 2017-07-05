@@ -23,7 +23,14 @@ function getAjaxTextError(info) {
 }
 
 function validateApiForm($form) {
-    var serialize = $form.serialize()+"&form="+$(this).attr("id");
+    var serialize;
+
+    if ($form.attr("enctype") == "multipart/form-data") {
+        serialize = new FormData($form[0]);
+    } else {
+        serialize = $form.serialize()+"&form="+$(this).attr("id");
+    }
+
     $form.find(".form-error").html("");
     $form.find(".error").removeClass("error");
     $form.find(".generic-errors").html("");
@@ -33,6 +40,12 @@ function validateApiForm($form) {
         data: serialize,
         method: 'POST',
         dataType: "json",
+
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        cache: false,
+
         success: function() {
             $form.trigger('submit', [true]);
         },

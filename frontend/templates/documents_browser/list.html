@@ -43,9 +43,9 @@
             <tr>
                 <th width="20"></th>
                 <th class="sorting asc">Name</th>
+                <th width="100" class="sorting">Status</th>
                 <th width="180" class="sorting">Datetime</th>
-                <th width="100">Status</th>
-                <th width="100">Action</th>
+{#                <th width="100">Action</th>#}
             </tr>
             </thead>
 
@@ -61,12 +61,12 @@
                     <td class="data-double-click-link" data-href="{{ folder.permalink }}">
                         {{ folder }}
                     </td>
-                    <td>{{ folder.documents.last.data.datetime }}</td>
                     <td></td>
-                    <td class="actions">
-                        <a href="#" class="fa fa-trash-o remove"></a>
-                        <a href="#" class="fa fa-pencil edit"></a>
-                    </td>
+                    <td>{{ folder.documents.last.data.datetime }}</td>
+{#                    <td class="actions">#}
+{#                        <a href="#" class="fa fa-trash-o remove"></a>#}
+{#                        <a href="#" class="fa fa-pencil edit"></a>#}
+{#                    </td>#}
                 </tr>
             {% endfor %}
 
@@ -79,13 +79,13 @@
                     <td class="data-link" data-href="#">
                         {{ document }}
                     </td>
-                    <td>{{ document.data.datetime }}</td>
                     <td>{{ document.status }}</td>
-                    <td class="actions">
-                        <a href="#" class="fa fa-trash-o remove"></a>
-                        <a href="#" class="fa fa-pencil edit"></a>
-                        <a href="#" class="fa fa-pencil edit"></a>
-                    </td>
+                    <td>{{ document.data.datetime }}</td>
+{#                    <td class="actions">#}
+{#                        <a href="#" class="fa fa-trash-o remove"></a>#}
+{#                        <a href="#" class="fa fa-pencil edit"></a>#}
+{#                        <a href="#" class="fa fa-pencil edit"></a>#}
+{#                    </td>#}
                 </tr>
             {% endfor %}
             <tr>

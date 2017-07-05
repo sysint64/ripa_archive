@@ -113,7 +113,7 @@ class CompositeAjaxFormValidator(View):
         return errors
 
     def get_forms_errors(self, form_class, ignore_first):
-        forms = get_multi_form(form_class, self.request.POST, ignore_first)
+        forms = get_multi_form(form_class, self.request.POST, self.request.FILES, ignore_first)
         errors = []
 
         for form in forms:

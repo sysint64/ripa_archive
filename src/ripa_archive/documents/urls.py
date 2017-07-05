@@ -1,7 +1,8 @@
 from django.conf.urls import url
 
-from forms.ajax import FormAjaxValidator, CompositeAjaxFormValidator
-from ripa_archive.documents.forms import CreateFolderForm, CreateDocumentForm, PermissionsForm
+from forms.ajax import CompositeAjaxFormValidator
+from ripa_archive.documents.forms import CreateFolderForm, CreateDocumentForm, \
+    DocumentPermissionsForm, FolderPermissionsForm
 from ripa_archive.documents.views import forms as forms_views
 from ripa_archive.documents.views import actions as actions_views
 from ripa_archive.documents.views import main
@@ -30,9 +31,10 @@ urlpatterns += [
 # Form validators
 urlpatterns += [
     url(r'^!validator:create-folders/$',
-        CompositeAjaxFormValidator.as_view(forms=[CreateFolderForm, PermissionsForm]),
+        CompositeAjaxFormValidator.as_view(forms=[CreateFolderForm, FolderPermissionsForm]),
         name="validator-create-folders"),
 
-    url(r'^!validator:create-documents/$', FormAjaxValidator.as_view(form=CreateDocumentForm),
+    url(r'^!validator:create-documents/$',
+        CompositeAjaxFormValidator.as_view(forms=[CreateDocumentForm, DocumentPermissionsForm]),
         name="validator-create-documents"),
 ]

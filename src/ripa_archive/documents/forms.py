@@ -3,7 +3,8 @@ from django.core.exceptions import ValidationError
 
 from forms.ajax import AjaxModelForm
 from ripa_archive.accounts.models import User
-from ripa_archive.documents.models import Folder, DocumentData, Status, FolderCustomPermission
+from ripa_archive.documents.models import Folder, DocumentData, Status, FolderCustomPermission, \
+    DocumentCustomPermission
 from ripa_archive.permissions.models import Permission, Group
 
 
@@ -37,39 +38,37 @@ class CreateDocumentForm(AjaxModelForm):
     status = forms.ModelChoiceField(queryset=Status.objects.all(), label="Status")
 
 
-class PermissionsForm(AjaxModelForm):
-    class Meta:
-        model = FolderCustomPermission
-        fields = "groups", "users", "permissions",
-
-    users = forms.ModelMultipleChoiceField(
-        label="Users",
-        queryset=User.objects.all(),
-        widget=forms.SelectMultiple(attrs={
+class PermissionsFormMixin:
+    users_attrs = {
+        "label": "Users",
+        "queryset": User.objects.all(),
+        "widget": forms.SelectMultiple(attrs={
             "data-actions-box": "true",
             "data-width": "fit",
             "data-live-search": "true"
         }),
-        required=True
-    )
+        "required": False,
+    }
 
-    groups = forms.ModelMultipleChoiceField(
-        label="Groups",
-        queryset=Group.objects.all(),
-        widget=forms.SelectMultiple(attrs={
+    groups_attrs = {
+        "label": "Groups",
+        "queryset": Group.objects.all(),
+        "widget": forms.SelectMultiple(attrs={
             "data-actions-box": "true",
             "data-width": "fit",
             "data-live-search": "true"
         }),
-        required=True
-    )
+        "required": False,
+    }
 
-    permissions = forms.ModelMultipleChoiceField(
-        label="Permissions",
-        queryset=Permission.objects.for_folders(),
-        widget=forms.CheckboxSelectMultiple(),
-        required=True
-    )
+    @staticmethod
+    def permissions_attrs(queryset):
+        return {
+            "label": "Permissions",
+            "widget": forms.CheckboxSelectMultiple(),
+            "required": True,
+            "queryset": queryset,
+        }
 
     def clean(self):
         users = self.cleaned_data["users"]
@@ -80,3 +79,27 @@ class PermissionsForm(AjaxModelForm):
             self.add_error("users", "")
 
         return self.cleaned_data
+
+
+class FolderPermissionsForm(PermissionsFormMixin, AjaxModelForm):
+    class Meta:
+        model = FolderCustomPermission
+        fields = "groups", "users", "permissions",
+
+    users = forms.ModelMultipleChoiceField(**PermissionsFormMixin.users_attrs)
+    groups = forms.ModelMultipleChoiceField(**PermissionsFormMixin.groups_attrs)
+    permissions = forms.ModelMultipleChoiceField(
+        **PermissionsFormMixin.permissions_attrs(Permission.objects.for_folders()),
+    )
+
+
+class DocumentPermissionsForm(PermissionsFormMixin, AjaxModelForm):
+    class Meta:
+        model = DocumentCustomPermission
+        fields = "groups", "users", "permissions",
+
+    users = forms.ModelMultipleChoiceField(**PermissionsFormMixin.users_attrs)
+    groups = forms.ModelMultipleChoiceField(**PermissionsFormMixin.groups_attrs)
+    permissions = forms.ModelMultipleChoiceField(
+        **PermissionsFormMixin.permissions_attrs(Permission.objects.for_documents()),
+    )
