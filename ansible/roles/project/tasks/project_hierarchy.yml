@@ -18,9 +18,6 @@
 - name: create media/photos directory
   file: path={{ project_static_media_dir }}/media/photos owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
 
-- name: create media/qr_codes directory
-  file: path={{ project_static_media_dir }}/media/qr_codes owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
-
 # Git
 - name: get sources
   become_user: "{{ project_linux_user }}"

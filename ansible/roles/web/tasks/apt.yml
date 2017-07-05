@@ -12,6 +12,9 @@
   - name: python3.6-dev
   - name: python3.6-venv
   - name: virtualenv
+  - name: nodejs
+  - name: nodejs-legacy
+  - name: npm
   - name: runit
   - name: git
   - name: gettext
@@ -21,3 +24,7 @@
   - name: postgresql-server-dev-9.5
   - name: postgresql-client-9.5
 
+- name: install bower
+  npm:
+    name: bower
+    global: yes

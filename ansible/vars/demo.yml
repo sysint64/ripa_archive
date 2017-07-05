@@ -8,6 +8,7 @@ nginx_server_name: "13.75.126.239"
 nginx_listen_port: 80
 nginx_server_full_name: "{{ nginx_server_name }}"
 nginx_scheme: "http"
+gunicorn_workers: 2
 
 project_linux_user: "www-data"
 project_linux_group: "www-data"

@@ -4,8 +4,8 @@ GUNICORN={{ project_virtualenv_dir }}/bin/gunicorn
 ROOT={{ project_work_tree }}/src
 PID=/var/run/gunicorn/{{ env_name }}.pid
 
-APP=humaniq.wsgi:application
-WORKERS=4
+APP={{ project_namespace }}.wsgi:application
+WORKERS={{ gunicorn_workers }}
 BIND={{ nginx_host }}:{{ nginx_port }}
 LOG_FORMAT="%(t)s \"%(r)s %(h)s\" %(s)s %(D)s microseconds"
 ERROR_LOGFILE=/var/log/gunicorn/{{ env_name }}.errors.log
@@ -16,4 +16,4 @@ if [ -f $PID ]; then rm $PID; fi
 export DJANGO_SETTINGS_MODULE="{{ DJANGO_SETTINGS_MODULE }}"
 
 cd $ROOT
-exec $GUNICORN --chdir $ROOT --workers=$WORKERS --bind=$BIND --pid=$PID --error-logfile $ERROR_LOGFILE --access-logfile $ACCESS_LOGFILE --access-logformat "$LOG_FORMAT" $APP
+exec chpst -u {{ project_linux_user }}:{{ project_linux_group }} $GUNICORN --chdir $ROOT --workers=$WORKERS --bind=$BIND --pid=$PID --error-logfile $ERROR_LOGFILE --access-logfile $ACCESS_LOGFILE --access-logformat "$LOG_FORMAT" $APP
