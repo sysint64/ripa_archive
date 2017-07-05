@@ -12,7 +12,7 @@ class PermissionManager(models.Manager):
 
 
 class Permission(models.Model):
-    code = models.CharField(max_length=60, unique=True)
+    code = models.CharField(max_length=255, unique=True)
     objects = PermissionManager()
 
     def __str__(self):
@@ -25,11 +25,11 @@ class PermissionTranslation(models.Model):
 
     permission = models.ForeignKey(Permission)
     language_code = models.CharField(max_length=4)
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=255)
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=255)
     permissions = models.ManyToManyField(Permission)
     inherit = models.ManyToManyField('Group')
 

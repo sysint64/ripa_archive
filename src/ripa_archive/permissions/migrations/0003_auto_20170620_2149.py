@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='permission',
             name='code',
-            field=models.CharField(max_length=60, unique=True),
+            field=models.CharField(max_length=255, unique=True),
         ),
     ]

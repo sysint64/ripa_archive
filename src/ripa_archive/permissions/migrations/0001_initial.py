@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='Group',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=60)),
+                ('name', models.CharField(max_length=255)),
                 ('inherit', models.ManyToManyField(to='permissions.Group')),
             ],
         ),
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             name='Permission',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('code', models.CharField(max_length=60)),
+                ('code', models.CharField(max_length=255)),
             ],
         ),
         migrations.CreateModel(
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('language_code', models.CharField(max_length=4)),
-                ('name', models.CharField(max_length=60)),
+                ('name', models.CharField(max_length=255)),
                 ('permission', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='translations', to='permissions.Permission')),
             ],
             options={
