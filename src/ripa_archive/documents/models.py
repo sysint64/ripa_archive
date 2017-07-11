@@ -74,6 +74,7 @@ class Folder(ModelWhichHaveCustomPermissionsMixin, models.Model):
         while current_folder is not None:
             items = [current_folder] + items
             current_folder = current_folder.parent
+            print(current_folder)
 
         return items
 
@@ -115,6 +116,7 @@ class Document(models.Model):
     owner = models.ForeignKey(User, null=True, related_name="owner")
     contributors = models.ManyToManyField(User, related_name="contributors")
 
+    data = models.OneToOneField("DocumentData", null=True, default=None)
     parent = models.ForeignKey(Folder)
     status = models.ForeignKey(Status)
 
@@ -125,8 +127,15 @@ class Document(models.Model):
         return self.data.name
 
     @property
-    def data(self):
+    def last_data(self):
         return DocumentData.objects.filter(document=self).order_by("-datetime").last()
+
+    @property
+    def path(self):
+        if self.parent.path != "":
+            return self.parent.path + "/" + self.name
+        else:
+            return self.name
 
     def __str__(self):
         if self.data is not None:

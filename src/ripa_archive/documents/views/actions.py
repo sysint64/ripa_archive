@@ -84,6 +84,9 @@ def paste(request, path=None):
             document_data.document = dst_document
             document_data.save()
 
+        dst_document.data =  src_document.last_data
+        dst_document.save()
+
     def do_paste(items, manager, to_folder_manager):
         for item_id in items:
             item = manager.filter(id=item_id).first()

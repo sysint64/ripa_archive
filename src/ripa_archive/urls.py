@@ -13,6 +13,7 @@ def redirect_to_browser(request):
 
 urlpatterns = [
     url(r'^$', redirect_to_browser),
+    url(r'^search/', include('haystack.urls')),
     url(r'^documents/', include('ripa_archive.documents.urls', namespace="documents")),
     url(r'^accounts/', include('ripa_archive.accounts.urls', namespace="accounts"))
 ]

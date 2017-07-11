@@ -8,3 +8,5 @@ easy_thumbnails==2.4.1
 psycopg2==2.7.1
 ipython
 gunicorn==19.6.0
+django-haystack==2.6.1
+elasticsearch==2.4.1

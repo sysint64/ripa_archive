@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load highlight %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "styles/search.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block content %}
+    <h3>Search results for: <small>{{ query }}</small></h3>
+
+    {% if query %}
+        {% for result in page.object_list %}
+            <div class="search-item-row">
+                <a class="title" href="{{ result.object.permalink }}">{% highlight result.object.name with query %}</a>
+                <div class="path">/{{ result.object.path }}</div>
+
+                {% if result.object.status %}
+                    <div class="info"><b>Status:</b> {{ result.object.status }}</div>
+                {% endif %}
+
+                {% if result.object.data.file %}
+                    <div class="info">
+                        <b>File:</b>
+                        <a href="{{ result.object.data.file.url }}" target="_blank">{{ result.object.data.file }}</a>
+                    </div>
+                {% endif %}
+
+                <div class="text">{% highlight result.text with query %}</div>
+            </div>
+        {% empty %}
+            No results found.
+        {% endfor %}
+
+            {% if page.has_previous or page.has_next %}
+                <div>
+                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+                </div>
+            {% endif %}
+    {% else %}
+        No results found.
+    {% endif %}
+{% endblock %}

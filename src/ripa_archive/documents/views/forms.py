@@ -108,3 +108,6 @@ class CreateDocuments(MultiFormCreation):
         item = form.save(commit=False)
         item.document = document
         item.save()
+
+        document.data = document.last_data
+        document.save()

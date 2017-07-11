@@ -16,11 +16,12 @@ INSTALLED_APPS = [
 
     'compressor',
     'easy_thumbnails',
+    'haystack',
 
     'ripa_archive.accounts.apps.AccountsConfig',
     'ripa_archive.documents',
     # 'ripa_archive.documents.apps.DocumentsConfig',
-    'ripa_archive.permissions.apps.PermissionsConfig'
+    'ripa_archive.permissions.apps.PermissionsConfig',
 ]
 
 MIDDLEWARE = [
