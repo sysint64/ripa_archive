@@ -45,7 +45,6 @@
                 <th class="sorting asc">Name</th>
                 <th width="100" class="sorting">Status</th>
                 <th width="180" class="sorting">Datetime</th>
-{#                <th width="100">Action</th>#}
             </tr>
             </thead>
 
@@ -63,10 +62,6 @@
                     </td>
                     <td></td>
                     <td>{{ folder.documents.last.data.datetime }}</td>
-{#                    <td class="actions">#}
-{#                        <a href="#" class="fa fa-trash-o remove"></a>#}
-{#                        <a href="#" class="fa fa-pencil edit"></a>#}
-{#                    </td>#}
                 </tr>
             {% endfor %}
 
@@ -81,11 +76,6 @@
                     </td>
                     <td>{{ document.status }}</td>
                     <td>{{ document.data.datetime }}</td>
-{#                    <td class="actions">#}
-{#                        <a href="#" class="fa fa-trash-o remove"></a>#}
-{#                        <a href="#" class="fa fa-pencil edit"></a>#}
-{#                        <a href="#" class="fa fa-pencil edit"></a>#}
-{#                    </td>#}
                 </tr>
             {% endfor %}
             <tr>

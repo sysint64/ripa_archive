@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response
+from haystack.views import SearchView
 
 
 def layout(request, template):

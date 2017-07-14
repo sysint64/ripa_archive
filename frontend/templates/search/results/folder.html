@@ -1,0 +1,7 @@
+{% load highlight %}
+
+<a class="title" href="{{ result.object.permalink }}">
+    <i class="fa fa-folder"></i>
+    {% highlight result.object.name with query %}
+</a>
+<div class="path">/{{ result.object.path }}</div>

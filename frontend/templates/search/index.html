@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% load highlight %}
 
 {% block styles %}
     {{ block.super }}
@@ -11,23 +10,15 @@
     <h3>Search results for: <small>{{ query }}</small></h3>
 
     {% if query %}
-        {% for result in page.object_list %}
+        {% for result in results %}
             <div class="search-item-row">
-                <a class="title" href="{{ result.object.permalink }}">{% highlight result.object.name with query %}</a>
-                <div class="path">/{{ result.object.path }}</div>
-
-                {% if result.object.status %}
-                    <div class="info"><b>Status:</b> {{ result.object.status }}</div>
+                {% if result.content_type == "documents.folder" %}
+                    {% include "search/results/folder.html" %}
                 {% endif %}
 
-                {% if result.object.data.file %}
-                    <div class="info">
-                        <b>File:</b>
-                        <a href="{{ result.object.data.file.url }}" target="_blank">{{ result.object.data.file }}</a>
-                    </div>
+                {% if result.content_type == "documents.document" %}
+                    {% include "search/results/document.html" %}
                 {% endif %}
-
-                <div class="text">{% highlight result.text with query %}</div>
             </div>
         {% empty %}
             No results found.

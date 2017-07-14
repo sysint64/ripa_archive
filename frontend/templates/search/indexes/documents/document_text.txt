@@ -1,0 +1,11 @@
+{{ object.name }}
+{{ object.owner.name }}
+{{ object.status.name }}
+
+{% for k, v in extracted.metadata.items %}
+    {% for val in v %}
+        {{ k }}: {{ val|safe }}
+    {% endfor %}
+{% endfor %}
+
+{{ extracted.contents|striptags|safe }}

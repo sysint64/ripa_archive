@@ -1,0 +1,17 @@
+{% load highlight %}
+
+<a class="title" href="{{ result.object.permalink }}">
+    <i class="fa {{ result.object.data.icon }}"></i>
+    {% highlight result.object.name with query %}
+</a>
+<div class="path">/{{ result.object.path }}</div>
+
+<div class="info"><b>Status:</b> {{ result.object.status }}</div>
+
+<div class="info">
+    <b>File:</b>
+    <a href="{{ result.object.data.file.url }}"
+       target="_blank">{{ result.object.data.file }}</a>
+</div>
+
+<div class="text">{% highlight result.text with query %}</div>

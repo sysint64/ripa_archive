@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.conf.urls import url, include
-from django.contrib import admin
 from django.conf.urls.static import static
 from django.shortcuts import redirect
 
@@ -13,9 +12,8 @@ def redirect_to_browser(request):
 
 urlpatterns = [
     url(r'^$', redirect_to_browser),
-    url(r'^search/', include('haystack.urls')),
     url(r'^documents/', include('ripa_archive.documents.urls', namespace="documents")),
-    url(r'^accounts/', include('ripa_archive.accounts.urls', namespace="accounts"))
+    url(r'^accounts/', include('ripa_archive.accounts.urls', namespace="accounts")),
 ]
 
 

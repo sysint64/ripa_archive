@@ -18,7 +18,8 @@ urlpatterns = \
     browser_url(r'', main.document_browser, name="browser") + \
     browser_url(r'!action:create-documents/', forms_views.CreateDocuments.as_view(), name="create-documents") + \
     browser_url(r'!action:create-folders/', forms_views.CreateFolders.as_view(), name="create-folders") + \
-    browser_url(r'!action:paste/', actions_views.paste, name="action-paste")
+    browser_url(r'!action:paste/', actions_views.paste, name="action-paste") + \
+    browser_url(r'!search/', main.search, name="search")
 
 # Actions
 urlpatterns += [
