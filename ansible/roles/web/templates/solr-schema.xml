@@ -85,7 +85,7 @@
     
     <field name="datetime" type="date" indexed="true" stored="true" multiValued="false" />
 
-    <field name="parent_id" type="string" indexed="true" stored="true" multiValued="false"/>
+    <field name="parent_ids" type="string" indexed="true" stored="true" multiValued="true" />
     
     <uniqueKey>id</uniqueKey>
 

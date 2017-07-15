@@ -71,7 +71,7 @@ def search(request, path=None):
 
     if place == SearchPlaceCode.THIS_FOLDER.value:
         folder = get_folder_or_404(path)
-        results = SearchQuerySet().filter(content=query, parent_id=Exact(folder.id))
+        results = SearchQuerySet().filter(content=query, parent_ids=folder.pk)
 
     context = {
         "back_url": request.path.split("!")[0],

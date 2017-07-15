@@ -4,10 +4,21 @@ from haystack import indexes
 from ripa_archive.documents.models import Folder, Document
 
 
+def _parent_ids(object):
+    parents = []
+    parent = object.parent
+
+    while parent is not None:
+        parents.append(parent.pk)
+        parent = parent.parent
+
+    return parents
+
+
 class FolderIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(model_attr="name", document=True)
-    parent_id = indexes.FacetCharField(model_attr="parent__id")
     suggestions = indexes.FacetCharField()
+    parent_ids = indexes.MultiValueField()
 
     def get_model(self):
         return Folder
@@ -20,11 +31,14 @@ class FolderIndex(indexes.SearchIndex, indexes.Indexable):
         data['suggestions'] = data['text']
         return data
 
+    def prepare_parent_ids(self, obj):
+        return _parent_ids(obj)
+
 
 class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(use_template=True, document=True)
     datetime = indexes.DateTimeField(model_attr="data__datetime")
-    parent_id = indexes.FacetCharField(model_attr="parent__id")
+    parent_ids = indexes.MultiValueField()
     suggestions = indexes.FacetCharField()
 
     def get_model(self):
@@ -32,6 +46,9 @@ class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
 
     def index_queryset(self, using=None):
         return self.get_model().objects.all().exclude(parent=None)
+
+    def prepare_parent_ids(self, obj):
+        return _parent_ids(obj)
 
     def prepare(self, obj):
         data = super().prepare(obj)
