@@ -7,6 +7,10 @@
 {% endblock %}
 
 {% block content %}
+    <a href="{{ up_action_url }}" class="go-back">
+        <i class="fa fa-long-arrow-left"></i>
+        Go back
+    </a>
     <h3>Search results for: <small>{{ query }}</small></h3>
 
     {% if query %}

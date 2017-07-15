@@ -1,1 +1,21 @@
-pass
+from ripa_archive.documents.views.main import SearchPlaceCode
+
+
+def search(request):
+    search_place = SearchPlaceCode.get_from_code(request.GET.get("place"))
+
+    if search_place is None:
+        search_place = SearchPlaceCode.THIS_FOLDER
+
+    return {
+        "search_url": request.path.split("!")[0] + "!search/",
+        "search_place": search_place.value,
+        "search_place_name": search_place.get_name()
+    }
+
+
+def url(request):
+    return {
+        "up_action_url": request.path.split("!")[0],
+        "up_url": request.path.split("/")[0],
+    }

@@ -13,6 +13,10 @@
 {% endblock %}
 
 {% block content %}
+    <a href="{{ up_action_url }}" class="go-back">
+        <i class="fa fa-long-arrow-left"></i>
+        Go back
+    </a>
     <h3>{{ form_title }}:
         <small>{% include "documents_browser/breadcrumbs.html" %}</small>
     </h3>

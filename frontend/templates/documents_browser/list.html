@@ -33,6 +33,12 @@
     <div id="select-region"></div>
     <div id="drag-region"></div>
 
+    {% if parent_folder_url != "" %}
+        <a href="{{ parent_folder_url }}" class="go-back">
+            <i class="fa fa-long-arrow-up"></i>
+            Go to parent folder
+        </a>
+    {% endif %}
     <h3>Documents: <small>{% include "documents_browser/breadcrumbs.html" %}</small></h3>
 
     {% if parent_folder.folders.all.count == 0 and parent_folder.documents.all.count == 0 %}
