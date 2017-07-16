@@ -9,6 +9,7 @@ def _parent_ids(object):
     parent = object.parent
 
     while parent is not None:
+
         parents.append(parent.pk)
         parent = parent.parent
 

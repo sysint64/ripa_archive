@@ -1,0 +1,5 @@
+{% for breadcrumb in parent_folder.breadcrumbs %}
+    <a href="{{ breadcrumb.permalink }}">{{ breadcrumb.name }}</a> /
+{% endfor %}
+
+{{ document.name }}

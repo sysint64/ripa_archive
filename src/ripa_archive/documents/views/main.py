@@ -2,12 +2,13 @@ from enum import Enum
 
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from haystack.generic_views import SearchView
 from haystack.inputs import Exact
 from haystack.query import SearchQuerySet
 
-from ripa_archive.documents.models import Folder
+from ripa_archive.documents.models import Folder, Document
 
 
 def get_folder_or_404(path):
@@ -60,6 +61,18 @@ def document_browser(request, path=None):
     return TemplateResponse(template="documents_browser/list.html", request=request, context=context)
 
 
+def document(request, name, path=None):
+    parent_folder = get_folder_or_404(path)
+    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
+    context = {
+        "document": document,
+        "parent_folder": parent_folder,
+        "search_places": BROWSER_SEARCH_PLACES
+    }
+    return TemplateResponse(template="documents_browser/single.html", request=request,
+                            context=context)
+
+
 def search(request, path=None):
     place = request.GET.get("place", SearchPlaceCode.EVERYWHERE)
     query = request.GET.get("q", "")
@@ -71,7 +84,7 @@ def search(request, path=None):
 
     if place == SearchPlaceCode.THIS_FOLDER.value:
         folder = get_folder_or_404(path)
-        results = SearchQuerySet().filter(content=query, parent_ids=folder.pk)
+        results = SearchQuerySet().filter(content=query, parent_ids=Exact(folder.pk))
 
     context = {
         "back_url": request.path.split("!")[0],

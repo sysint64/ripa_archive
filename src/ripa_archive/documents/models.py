@@ -123,6 +123,13 @@ class Document(models.Model):
     objects = DocumentsManager()
 
     @property
+    def permalink(self):
+        if self.parent.path != "":
+            return reverse("documents:document", kwargs={"path": self.parent.path, "name": self.data.name})
+        else:
+            return reverse("documents:document", kwargs={"name": self.data.name})
+
+    @property
     def name(self):
         return self.data.name
 
@@ -193,6 +200,10 @@ class DocumentData(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def filename(self):
+        return self.file.name.split("/")[-1]
 
     @property
     def type(self):

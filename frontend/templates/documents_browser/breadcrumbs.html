@@ -1,6 +1,0 @@
-{% for breadcrumb in parent_folder.breadcrumbs %}
-    <a href="{{ breadcrumb.permalink }}">{{ breadcrumb.name }}</a>
-    {% if not forloop.last %}
-        /
-    {% endif %}
-{% endfor %}
