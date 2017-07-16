@@ -6,6 +6,8 @@ from django.utils import timezone
 
 from easy_thumbnails.fields import ThumbnailerImageField
 
+from ripa_archive.permissions.models import Group
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -42,6 +44,7 @@ class User(AbstractBaseUser):
     avatar_image = ThumbnailerImageField(blank=True)
     first_name = models.CharField("first name", max_length=30, blank=True)
     last_name = models.CharField("last name", max_length=30, blank=True)
+    group = models.ForeignKey(Group, null=True)
 
     is_active = models.BooleanField(
         _('active'),

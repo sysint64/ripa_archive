@@ -4,7 +4,7 @@ from django.db import models
 from django.urls import reverse
 
 from ripa_archive.accounts.models import User
-from ripa_archive.permissions.models import ModelCustomPermission, ModelWhichHaveCustomPermissionsMixin
+from ripa_archive.permissions.models_abstract import ModelCustomPermission, ModelWhichHaveCustomPermissionsMixin
 
 
 class FoldersManager(models.Manager):
@@ -29,6 +29,23 @@ class FoldersManager(models.Manager):
     def exist_with_name(self, name):
         return self.get_queryset().filter(name__iexact=name).count() > 0
 
+    def for_user(self, user, folder=None):
+        queryset = self.get_queryset()
+
+        if user is None or user.group is None:
+            return queryset.none()
+
+        if folder is not None:
+            if not folder.is_user_has_permission(user, "folders_can_read"):
+                return queryset.none()
+
+            return queryset.filter(parent=folder)
+        else:
+            if not user.group.has_permission("folders_can_read"):
+                return queryset.none()
+
+        return queryset
+
 
 class DocumentsManager(models.Manager):
     ALREADY_EXIST_ERROR = 'Document with name "%s" already exist in this folder'
@@ -39,6 +56,10 @@ class DocumentsManager(models.Manager):
                 return True
 
         return False
+
+    def for_user(self, user):
+        queryset = self.get_queryset()
+        return queryset
 
 
 class FolderCustomPermission(ModelCustomPermission):

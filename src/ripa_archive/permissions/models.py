@@ -1,7 +1,5 @@
 from django.db import models
 
-from ripa_archive.accounts.models import User
-
 
 class PermissionManager(models.Manager):
     def for_folders(self):
@@ -36,27 +34,10 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+    def has_permission(self, permission):
+        has_perm = self.permissions.filter(code=permission).count() > 0
 
-class ModelWhichHaveCustomPermissionsMixin:
-    custom_permission_model = None
+        for inherit_group in self.inherit.all():
+            has_perm = has_perm or inherit_group.has_permission(permission)
 
-    def is_user_has_permission(self, user, permission_name):
-        return False
-
-
-class PermissionModel(models.Model):
-    class Meta:
-        abstract = True
-
-    users = models.ManyToManyField(User)
-    groups = models.ManyToManyField(Group)
-
-
-class ModelCustomPermission(models.Model):
-    class Meta:
-        abstract = True
-
-    # for_instances = models.ManyToManyField("SomeModel")
-    groups = models.ManyToManyField(Group, blank=True)
-    users = models.ManyToManyField(User, blank=True)
-    permissions = models.ManyToManyField(Permission)
+        return has_perm

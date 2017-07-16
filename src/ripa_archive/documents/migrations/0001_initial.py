@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
             options={
                 'default_related_name': 'folders',
             },
-            bases=(ripa_archive.permissions.models.ModelWhichHaveCustomPermissionsMixin, models.Model),
+            bases=(ripa_archive.permissions.models_abstract.ModelWhichHaveCustomPermissionsMixin, models.Model),
         ),
         migrations.CreateModel(
             name='FolderCustomPermission',
