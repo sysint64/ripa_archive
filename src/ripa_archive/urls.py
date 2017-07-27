@@ -7,13 +7,14 @@ from ripa_archive import views
 
 
 def redirect_to_browser(request):
-    return redirect("documents:browser")
+    return redirect("documents:index")
 
 
 urlpatterns = [
     url(r'^$', redirect_to_browser),
     url(r'^documents/', include('ripa_archive.documents.urls', namespace="documents")),
     url(r'^accounts/', include('ripa_archive.accounts.urls', namespace="accounts")),
+    url(r'^permissions/', include('ripa_archive.permissions.urls', namespace="permissions")),
 ]
 
 

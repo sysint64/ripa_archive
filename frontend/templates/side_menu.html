@@ -26,12 +26,41 @@
         <div class="menu_section">
 {#            <h3>General</h3>#}
             <ul class="nav side-menu">
-                <li><a><i class="fa fa-bar-chart-o"></i> Statistics</a></li>
-                <li class="active"><a><i class="fa fa-files-o"></i> Documents</a></li>
-                <li><a><i class="fa fa-users"></i> Users</a></li>
-                <li><a><i class="fa fa-key"></i> Permissions</a></li>
-                <li><a><i class="fa fa-history"></i> Activity</a></li>
-                <li><a><i class="fa fa-cogs"></i> Settings</a></li>
+                <li{% if active_url_name == "statistics" %} class="active"{% endif %}>
+                    <a>
+                        <i class="fa fa-bar-chart-o"></i> Statistics
+                    </a>
+                </li>
+
+                <li{% if active_url_name == "documents" %} class="active"{% endif %}>
+                    <a href="{% url "documents:index" %}">
+                        <i class="fa fa-files-o"></i> Documents
+                    </a>
+                </li>
+
+                <li{% if active_url_name == "users" %} class="active"{% endif %}>
+                    <a href="{% url "accounts:index" %}">
+                        <i class="fa fa-users"></i> Users
+                    </a>
+                </li>
+
+                <li{% if active_url_name == "permissions" %} class="active"{% endif %}>
+                    <a href="{% url "permissions:index" %}">
+                        <i class="fa fa-key"></i> Permissions
+                    </a>
+                </li>
+
+                <li{% if active_url_name == "activity" %} class="active"{% endif %}>
+                    <a>
+                        <i class="fa fa-history"></i> Activity
+                    </a>
+                </li>
+
+                <li{% if active_url_name == "settings" %} class="active"{% endif %}>
+                    <a>
+                        <i class="fa fa-cogs"></i> Settings
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

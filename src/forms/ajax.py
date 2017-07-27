@@ -1,6 +1,7 @@
 from django import forms
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import safe
 from django.views import View
 from django.views.generic import FormView
@@ -98,6 +99,8 @@ class FormAjaxValidator(View):
 
 class CompositeAjaxFormValidator(View):
     forms = []
+    instance_cls = None
+    instance_query_field = None
 
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect('/')
@@ -112,8 +115,9 @@ class CompositeAjaxFormValidator(View):
 
         return errors
 
-    def get_forms_errors(self, form_class, ignore_first):
-        forms = get_multi_form(form_class, self.request.POST, self.request.FILES, ignore_first)
+    def get_forms_errors(self, form_class, instance, ignore_first):
+        forms = get_multi_form(form_class, self.request.POST, self.request.FILES, instance,
+                               ignore_first)
         errors = []
 
         for form in forms:
@@ -123,10 +127,18 @@ class CompositeAjaxFormValidator(View):
         return errors
 
     def post(self, request, *args, **kwargs):
+        if self.instance_query_field is not None:
+            query_kwargs = {
+                self.instance_query_field: kwargs[self.instance_query_field]
+            }
+            instance = get_object_or_404(self.instance_cls, **query_kwargs)
+        else:
+            instance = None
+
         errors = []
 
         for form_class in self.forms:
-            errors += self.get_forms_errors(form_class, form_class != self.forms[0])
+            errors += self.get_forms_errors(form_class, instance, form_class != self.forms[0])
 
         if len(errors) == 0:
             return JsonResponse({}, status=status.HTTP_200_OK)

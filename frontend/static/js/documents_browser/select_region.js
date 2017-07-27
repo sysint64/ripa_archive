@@ -5,7 +5,11 @@
     $workRegion.mousedown(function(event) {
         console.log($(event.target).is("td"));
 
-        if ($(event.target).is("td") || $(event.target).is("tr")) {
+        var exludeSelectRegion = $(event.target).is("td") || $(event.target).is("tr");
+        exludeSelectRegion = exludeSelectRegion || $(event.target).hasClass("exclude-select-region");
+        exludeSelectRegion = exludeSelectRegion || $(event.target).closest(".exclude-select-region").length > 0;
+
+        if (exludeSelectRegion) {
             selectRegionCoords = null;
             return;
         }
@@ -22,7 +26,8 @@
                 return Math.min(selectRegionCoords.y1, selectRegionCoords.y2);
             },
             width: function() {
-                return Math.abs(selectRegionCoords.x2 - selectRegionCoords.x1);
+                const width = Math.abs(selectRegionCoords.x2 - selectRegionCoords.x1);
+                return Math.min(width, $workRegion.width() - this.left() + 110 - selectRegionPadding.right);
             },
             height: function() {
                 return Math.abs(selectRegionCoords.y2 - selectRegionCoords.y1);
@@ -38,6 +43,9 @@
 
         selectRegionCoords.x2 = event.pageX;
         selectRegionCoords.y2 = event.pageY;
+
+        selectRegionCoords.x1 = Math.max(selectRegionCoords.x1, $workRegion.offset().left + selectRegionPadding.left);
+        selectRegionCoords.x2 = Math.max(selectRegionCoords.x2, $workRegion.offset().left + selectRegionPadding.left);
 
         if (selectRegionCoords.width() < 10 && selectRegionCoords.height() < 10)
             return;
@@ -59,6 +67,9 @@
                 $(this).removeClass("selected").removeClass("selected-by-region");
             }
         });
+
+        if (onSelectChange != null)
+            onSelectChange();
     });
 
     $(window).mouseup(function() {

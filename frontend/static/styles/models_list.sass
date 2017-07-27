@@ -1,0 +1,133 @@
+@import "consts"
+
+#select-region
+    z-index: 9999
+    position: absolute
+    display: none
+    border: 1px solid #1ABB9C
+    background: rgba(26, 187, 156, 0.2)
+    cursor: default
+
+.right_col
+    cursor: default
+
+#tool-edit-item, #tool-delete-item
+    display: none
+
+.object-tools
+    list-style-type: none
+    padding-left: 0
+    font-size: 10px
+    font-weight: bold
+    float: right
+    position: relative
+    margin-top: -35px
+
+    li
+        display: block
+        float: left
+        margin-left: 5px
+        height: 16px
+
+    a
+        display: block
+        float: left
+        padding: 5px 12px 3px
+        background: #999
+        font-weight: 400
+        font-size: 11px
+        text-transform: uppercase
+        letter-spacing: 0.5px
+        color: #fff
+        border-radius: 15px
+
+        &:hover
+            background: $green
+
+.module
+    position: relative
+    margin-top: 10px
+
+    &.filtered .results
+        margin-right: 265px
+
+    tbody
+        cursor: default
+        tr:hover
+            background: #f0f0f0
+
+        tr.selected, tr.to_folder
+            background: #1ABB9C
+            color: #fff
+
+            .edit, .remove
+                color: #fff
+
+        tr.targeted
+            opacity: 0
+
+        tr.cut
+            opacity: 0.5
+
+        .edit
+            color: #b96e00
+            margin: 0 5px
+
+        .remove
+            color: #b90d00
+            margin: 0 5px
+
+
+.filter
+    position: absolute
+    top: 0
+    right: 0
+    z-index: 1000
+    width: 240px
+    background: #fff
+    border-left: none
+    margin: 0
+
+    h2
+        font-size: 14px
+        text-transform: uppercase
+        letter-spacing: 0.5px
+        padding: 7px 15px 5px
+        border-bottom: none
+        background-color: $green
+        text-align: left
+        color: #fff
+        font-weight: 400
+        margin: 0
+
+    h3
+        font-weight: 400
+        font-size: 14px
+        padding: 0 15px
+        margin-bottom: 10px
+
+    ul
+        margin: 5px 0
+        padding: 0 15px 15px
+        list-style-type: none
+        border-bottom: 1px solid #eee
+
+        &:last-child
+            border-bottom: none
+
+
+        li
+            a
+                display: block
+                color: #999
+
+                &:hover
+                    color: $green
+
+            &.active
+                border-left: 5px solid #eee
+                padding-left: 10px
+                margin: 0 0 0 -15px
+
+                a
+                    color: $green

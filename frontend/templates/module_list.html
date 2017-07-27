@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load states %}
+{% load i18n %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "styles/loading.css" %}">
+    <link rel="stylesheet" href="{% static "styles/dialogs.sass" %}" type="text/x-sass">
+    <link rel="stylesheet" href="{% static "styles/models_list.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'vendors/jQuery-contextMenu/dist/jquery.contextMenu.min.js' %}" charset="utf-8"></script>
+
+    <script src="{% static 'js/module_list.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/dialogs.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/documents_browser/handle_select.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/documents_browser/select_region.js' %}" charset="utf-8"></script>
+{% endblock %}
+
+{% block dialogs %}
+    {% include "dialogs/progress_dialog.html" %}
+    {% include "dialogs/yes_no_dialog.html" %}
+    {% include "dialogs/errors_dialog.html" %}
+{% endblock %}
+
+{% block content %}
+    <div id="select-region"></div>
+    <h3>{{ title }}</h3>
+
+    <ul class="object-tools">
+        <li id="tool-add-item">
+            <a href="!action:create">
+                {% trans "Add "|add:module_name %}
+                <i class="fa fa-plus"></i>
+            </a>
+        </li>
+        <li id="tool-edit-item">
+            <a href="">
+                {% trans "Edit "|add:module_name %}
+                <i class="fa fa-pencil"></i>
+            </a>
+        </li>
+        <li id="tool-delete-item">
+            <a href="">
+                {% trans "Delete "|add:module_name|add:"(s)" %}
+                <i class="fa fa-times"></i>
+            </a>
+        </li>
+    </ul>
+
+    <div class="module{% block module_classes %}{% endblock %}">
+        {% block before_results %}
+        {% endblock %}
+
+        <div class="results">
+            <table class="table">
+                <thead>
+                <tr>
+                    {% block table_header %}
+                        <th>Name</th>
+                    {% endblock %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                    <tr class="selectable context-menu" data-id="{{ item.id }}" data-group="{{ module_name }}s">
+                        {% block table_detail %}
+                            <td>
+                                {{ item }}
+                            </td>
+                        {% endblock %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

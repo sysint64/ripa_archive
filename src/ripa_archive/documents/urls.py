@@ -15,7 +15,7 @@ def browser_url(regex, view, name=None):
     ]
 
 urlpatterns = \
-    browser_url(r'', main.document_browser, name="browser") + \
+    browser_url(r'', main.document_browser, name="index") + \
     browser_url(r'!document:(?P<name>[0-9a-zA-ZА-Яа-я ]+)', main.document, name="document") + \
     browser_url(r'!action:create-documents/', forms_views.CreateDocuments.as_view(), name="create-documents") + \
     browser_url(r'!action:create-folders/', forms_views.CreateFolders.as_view(), name="create-folders") + \

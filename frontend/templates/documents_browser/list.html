@@ -19,6 +19,7 @@
     <script src="{% static 'js/forms/helpers.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/dialogs.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/documents_browser/main.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/documents_browser/handle_select.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/documents_browser/select_region.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/documents_browser/drag_and_drop.js' %}" charset="utf-8"></script>
 {% endblock %}
@@ -59,7 +60,7 @@
             <tr>
             </tr>
             {% for folder in parent_folder.folders.all %}
-                <tr class="selectable context-menu folder{% folder_extra_classes folder %}" data-folder-id="{{ folder.id }}">
+                <tr class="selectable context-menu folder{% folder_extra_classes folder %}" data-id="{{ folder.id }}" data-group="folders">
                     <td class="data-double-click-link" data-href="{{ folder.permalink }}">
                         <i class="fa fa-folder"></i>
                     </td>
@@ -73,7 +74,7 @@
 
             {# Documents #}
             {% for document in parent_folder.documents.all %}
-                <tr class="selectable context-menu document" data-document-id="{{ document.id }}">
+                <tr class="selectable context-menu document" data-id="{{ document.id }}" data-group="documents">
                     <td class="data-double-click-link" data-href="{{ document.permalink }}">
                         <i class="fa {{ document.data.icon }}"></i>
                     </td>

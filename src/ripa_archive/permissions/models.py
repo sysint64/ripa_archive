@@ -8,6 +8,12 @@ class PermissionManager(models.Manager):
     def for_documents(self):
         return self.all().filter(code__startswith="documents")
 
+    def for_generic_folders(self):
+        return self.all().filter(code__startswith="folders").exclude(code__contains="this")
+
+    def for_generic_documents(self):
+        return self.all().filter(code__startswith="documents").exclude(code__contains="this")
+
 
 class Permission(models.Model):
     code = models.CharField(max_length=255, unique=True)
@@ -27,7 +33,7 @@ class PermissionTranslation(models.Model):
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     permissions = models.ManyToManyField(Permission)
     inherit = models.ManyToManyField('Group')
 

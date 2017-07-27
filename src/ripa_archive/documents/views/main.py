@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
-from haystack.generic_views import SearchView
 from haystack.inputs import Exact
 from haystack.query import SearchQuerySet
 
@@ -44,6 +43,19 @@ BROWSER_SEARCH_PLACES = (
     {"name": "Everywhere", "code": SearchPlaceCode.EVERYWHERE.value},
 )
 
+BROWSER_ADD_MENU = (
+    {"name": "Folder(s)", "permalink": "!action:create-folders"},
+    {"name": "Document(s)", "permalink": "!action:create-documents"},
+)
+
+
+def browser_base_context(request):
+    return {
+        "active_url_name": "documents",
+        "search_places": BROWSER_SEARCH_PLACES,
+        "add_menu": BROWSER_ADD_MENU
+    }
+
 
 @login_required(login_url="accounts:login")
 def document_browser(request, path=None):
@@ -53,22 +65,25 @@ def document_browser(request, path=None):
     if parent_folder.parent is not None:
         parent_folder_url = parent_folder.parent.permalink
 
-    context = {
+    context = browser_base_context(request)
+    context.update({
         "parent_folder": parent_folder,
         "parent_folder_url": parent_folder_url,
-        "search_places": BROWSER_SEARCH_PLACES
-    }
+    })
+
     return TemplateResponse(template="documents_browser/list.html", request=request, context=context)
 
 
 def document(request, name, path=None):
     parent_folder = get_folder_or_404(path)
     document = get_object_or_404(Document, parent=parent_folder, data__name=name)
-    context = {
+
+    context = browser_base_context(request)
+    context.update({
         "document": document,
         "parent_folder": parent_folder,
-        "search_places": BROWSER_SEARCH_PLACES
-    }
+    })
+
     return TemplateResponse(template="documents_browser/single.html", request=request,
                             context=context)
 
@@ -86,11 +101,11 @@ def search(request, path=None):
         folder = get_folder_or_404(path)
         results = SearchQuerySet().filter(content=query, parent_ids=Exact(folder.pk))
 
-    context = {
+    context = browser_base_context(request)
+    context.update({
         "back_url": request.path.split("!")[0],
         "query": query,
         "results": results,
-        "search_places": BROWSER_SEARCH_PLACES
-    }
+    })
     return TemplateResponse(template="search/index.html", request=request,
                             context=context)

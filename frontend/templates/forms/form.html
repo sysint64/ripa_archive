@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "vendors/bootstrap-select/dist/css/bootstrap-select.min.css" %}">
+    <link rel="stylesheet" href="{% static "styles/multi_form.sass" %}" type="text/x-sass">
+    <link rel="stylesheet" href="{% static "styles/forms.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static "vendors/bootstrap-select/dist/js/bootstrap-select.min.js" %}" charset="utf-8"></script>
+    <script src="{% static 'js/forms/helpers.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/forms/form.js' %}" charset="utf-8"></script>
+{% endblock %}
+
+{% block content %}
+    <a href="{{ up_action_url }}" class="go-back">
+        <i class="fa fa-long-arrow-left"></i>
+        Go back
+    </a>
+    <h3>{{ form_title }}:
+        <small>{% include "documents_browser/folder_breadcrumbs.html" %}</small>
+    </h3>
+
+    {# Display non ajax messages #}
+    {% if messages %}
+        <ul class="notification-messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="multi-form">
+        <form method="post"
+              enctype="multipart/form-data"
+              class="ajax-form form-horizontal form-label-left input_mask"
+              data-validation="{{ validator_url }}"
+        >
+            {% block form_content %}
+                {# Primary block #}
+                <div class="block" id="block-primary">
+                    <div class="header">
+                        New item
+                    </div>
+                    <div class="form-wrapper">
+                        {% for field, field_meta in form %}
+                            {% if not field_meta.hidden %}
+                                <div class="form-group">
+                                    <label for="id_{{ field_meta.name }}"
+                                           class="control-label col-md-3 col-sm-3 col-xs-12{% if field_meta.help_text != "" %} with-help-text{% endif %}">
+                                        {{ field_meta.label }}
+                                        {% if field_meta.help_text != "" %}
+                                            <div class="help-text">{{ field_meta.help_text }}</div>
+                                        {% endif %}
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        {{ field }}
+                                    </div>
+                                </div>                           {% else %}
+                                <div style="display: none">{{ field }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endblock %}
+
+            <div id="block-cursor"></div>
+
+            {% block after_cursor %}
+            {% endblock %}
+
+            {% block action_buttons %}
+                <button class="submit-button" type="submit">
+                    <i class="fa fa-check"></i> {{ submit_title }}
+                </button>
+            {% endblock %}
+            <div class="clearfix"></div>
+
+            {{ form_prefixes_field|safe }}
+
+            {% block after_actions_buttons %}
+            {% endblock %}
+
+            {% csrf_token %}
+
+            <div class="clearfix"></div>
+        </form>
+    </div>
+{% endblock %}

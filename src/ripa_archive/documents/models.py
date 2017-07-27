@@ -83,9 +83,9 @@ class Folder(ModelWhichHaveCustomPermissionsMixin, models.Model):
     @property
     def permalink(self):
         if self.path != "":
-            return reverse("documents:browser", kwargs={"path": self.path})
+            return reverse("documents:index", kwargs={"path": self.path})
         else:
-            return reverse("documents:browser")
+            return reverse("documents:index")
 
     @property
     def path_folders(self):

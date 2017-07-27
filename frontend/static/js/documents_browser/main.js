@@ -1,78 +1,9 @@
-var $workRegion = $(".right_col");
-var $selectable = $(".selectable");
 var dragging = false;
 var preventMouseUp = false;
-
-function getSelectedItemsData() {
-    function serialize($items, dataName) {
-        var result = [];
-
-        $items.each(function() {
-            console.log($(this).data(dataName));
-            result.push($(this).data(dataName));
-        });
-
-        return result;
-    }
-
-    const $selected = $(".selected");
-
-    return {
-        "folders": serialize($selected.not(".document"), "folder-id"),
-        "documents": serialize($selected.not(".folder"), "document-id")
-    };
-}
-
-function executeAction(action, inputData, callback) {
-    showWaitDialog();
-
-    var url;
-    const relativeActions = ["paste"];
-
-    if (relativeActions.indexOf(action) !== -1) {
-        url = "!action:" + action + "/";
-    } else {
-        url = "/documents/!action:" + action + "/";
-    }
-
-    $.ajax({
-        url: url,
-        data: $.toJSON(inputData),
-        headers: {
-            "X-CSRFToken": Cookies.get("csrftoken"),
-            "Content-Type": "application/json"
-        },
-        method: "POST",
-        dataType: "json",
-        success: function() {
-            hideWaitDialog();
-            callback();
-        },
-        error: function(info) {
-            hideWaitDialog();
-            showErrorDialog(getAjaxTextError(info));
-        }
-    });
-}
-
-function executeActionWithConfirm(action, inputData, message, callback) {
-    showYesNoDialog(message, function() {
-        executeAction(action, inputData, callback);
-    });
-}
+var selectRegionPadding = {"left": 20, "right": 20};
+var onSelectChange = null;
 
 (function ($) {
-    $.fn.disableSelection = function() {
-        return this.attr('unselectable', 'on').css('user-select', 'none').on('selectstart', false);
-    };
-
-    $.fn.isBefore = function (elem) {
-        if (typeof(elem) == "string")
-            elem = $(elem);
-
-        return this.add(elem).index(elem) > 0;
-    };
-
     $selectable.disableSelection();
     $workRegion.disableSelection();
 
@@ -89,14 +20,16 @@ function executeActionWithConfirm(action, inputData, message, callback) {
                         "Delete selected items?",
                         function() {
                             $(".selected").remove();
-                        });
+                        }
+                    );
                     break;
 
                 case "copy":
                     executeAction(
                         "copy",
                         getSelectedItemsData(),
-                        function() {});
+                        function() {}
+                    );
                     break;
 
                 case "cut":
@@ -105,7 +38,8 @@ function executeActionWithConfirm(action, inputData, message, callback) {
                         getSelectedItemsData(),
                         function() {
                             $(".selected").addClass("cut").removeClass("selected");
-                        });
+                        }
+                    );
                     break;
             }
         },
@@ -164,41 +98,6 @@ function executeActionWithConfirm(action, inputData, message, callback) {
         }
     });
 
-    // TODO: need to refactor
-    function handleSelect($this, event) {
-        if (event.ctrlKey) {
-            $this.toggleClass("selected");
-        } else if (event.shiftKey) {
-            if ($lastSelected == null) {
-                $selectable.removeClass("selected");
-                $this.addClass("selected");
-            } else {
-                var $firstElement, $lastElement;
-
-                if ($lastSelected.isBefore($this)) {
-                    $firstElement = $lastSelected;
-                    $lastElement = $this;
-                } else {
-                    $firstElement = $this;
-                    $lastElement = $lastSelected;
-                }
-
-                $firstElement.nextUntil($lastElement).andSelf().add($lastElement).addClass("selected");
-                $this.addClass("selected");
-            }
-        } else {
-            $selectable.removeClass("selected");
-            $this.addClass("selected");
-        }
-
-        if ($this.hasClass("selected")) {
-            $lastSelected = $this;
-        } else {
-            $selectable.removeClass("selected");
-            $lastSelected = null;
-        }
-    }
-
     $selectable.click(function(event) {
         if ($("tr.selected").length > 0)
             handleSelect($(this), event);
@@ -228,5 +127,8 @@ function executeActionWithConfirm(action, inputData, message, callback) {
         $selectable.not(".selected-by-region").removeClass("selected");
         $selectable.removeClass("selected-by-region");
         $lastSelected = null;
+
+        if (onSelectChange != null)
+            onSelectChange();
     });
 })(jQuery);

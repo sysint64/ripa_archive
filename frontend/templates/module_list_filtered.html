@@ -1,0 +1,18 @@
+{% extends "module_list.html" %}
+
+{% block module_classes %} filtered{% endblock %}
+
+{% block before_results %}
+    <div class="filter exclude-select-region">
+        <h2>Filter</h2>
+
+        {% block filter %}
+            <h3>Field</h3>
+            <ul>
+                <li class="selected"><a href="?">All</a></li>
+                <li><a href="?is_staff__exact=1">Yes</a></li>
+                <li><a href="?is_staff__exact=0">No</a></li>
+            </ul>
+        {% endblock %}
+    </div>
+{% endblock %}
