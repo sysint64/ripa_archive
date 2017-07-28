@@ -40,6 +40,10 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def ref(self):
+        return self.name
+
     def has_permission(self, permission):
         has_perm = self.permissions.filter(code=permission).count() > 0
 

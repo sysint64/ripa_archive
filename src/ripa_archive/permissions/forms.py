@@ -5,7 +5,7 @@ from forms.ajax import AjaxModelForm
 from ripa_archive.permissions.models import Group, Permission
 
 
-class CreateGroupForm(AjaxModelForm):
+class GroupForm(AjaxModelForm):
     class Meta:
         model = Group
         fields = "inherit", "name"

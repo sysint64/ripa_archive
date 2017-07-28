@@ -11,9 +11,6 @@
 .right_col
     cursor: default
 
-#tool-edit-item, #tool-delete-item
-    display: none
-
 .object-tools
     list-style-type: none
     padding-left: 0
@@ -28,6 +25,9 @@
         float: left
         margin-left: 5px
         height: 16px
+
+        &.one-selected-tools, &.at-least-one-selected-tools
+            display: none
 
     a
         display: block

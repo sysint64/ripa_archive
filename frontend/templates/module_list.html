@@ -7,15 +7,18 @@
     {{ block.super }}
     <link rel="stylesheet" href="{% static "styles/loading.css" %}">
     <link rel="stylesheet" href="{% static "styles/dialogs.sass" %}" type="text/x-sass">
-    <link rel="stylesheet" href="{% static "styles/models_list.sass" %}" type="text/x-sass">
+    <link rel="stylesheet" href="{% static "styles/module_list.sass" %}" type="text/x-sass">
 {% endblock %}
 
 {% block js %}
     {{ block.super }}
     <script src="{% static 'vendors/jQuery-contextMenu/dist/jquery.contextMenu.min.js' %}" charset="utf-8"></script>
+    <script src="{% static 'vendors/js-cookie/src/js.cookie.js' %}" charset="utf-8"></script>
+    <script src="{% static 'vendors/jquery-json/dist/jquery.json.min.js' %}" charset="utf-8"></script>
 
-    <script src="{% static 'js/module_list.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/forms/helpers.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/dialogs.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/module_list.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/documents_browser/handle_select.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/documents_browser/select_region.js' %}" charset="utf-8"></script>
 {% endblock %}
@@ -31,24 +34,32 @@
     <h3>{{ title }}</h3>
 
     <ul class="object-tools">
-        <li id="tool-add-item">
-            <a href="!action:create">
-                {% trans "Add "|add:module_name %}
-                <i class="fa fa-plus"></i>
-            </a>
-        </li>
-        <li id="tool-edit-item">
-            <a href="">
-                {% trans "Edit "|add:module_name %}
-                <i class="fa fa-pencil"></i>
-            </a>
-        </li>
-        <li id="tool-delete-item">
-            <a href="">
-                {% trans "Delete "|add:module_name|add:"(s)" %}
-                <i class="fa fa-times"></i>
-            </a>
-        </li>
+        {% block one_selected_tools %}
+            <li class="one-selected-tools" id="edit-tool">
+                <a href="">
+                    {% trans "Edit "|add:module_name %}
+                    <i class="fa fa-pencil"></i>
+                </a>
+            </li>
+        {% endblock %}
+
+        {% block at_least_one_selected_tools %}
+            <li class="at-least-one-selected-tools">
+                <a href="">
+                    {% trans "Delete "|add:module_name|add:"(s)" %}
+                    <i class="fa fa-times"></i>
+                </a>
+            </li>
+        {% endblock %}
+
+        {% block fix_tools %}
+            <li class="fix-tools">
+                <a href="!action:create/">
+                    {% trans "Add "|add:module_name %}
+                    <i class="fa fa-plus"></i>
+                </a>
+            </li>
+        {% endblock %}
     </ul>
 
     <div class="module{% block module_classes %}{% endblock %}">
@@ -66,7 +77,7 @@
                 </thead>
                 <tbody>
                 {% for item in items %}
-                    <tr class="selectable context-menu" data-id="{{ item.id }}" data-group="{{ module_name }}s">
+                    <tr class="selectable context-menu" data-id="{{ item.id }}" data-ref="{{ item.ref }}" data-group="{{ module_name }}s">
                         {% block table_detail %}
                             <td>
                                 {{ item }}

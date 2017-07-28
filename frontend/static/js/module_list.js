@@ -1,19 +1,23 @@
 const selectRegionPadding = {"left": 20, "right": 265 + 20};
-const $editItem = $("#tool-edit-item");
-const $deleteItem = $("#tool-delete-item");
+const $oneSelectedTools = $(".one-selected-tools");
+const $atLeastOneSelectedTools = $(".at-least-one-selected-tools");
+const $editTool = $("#edit-tool");
 
 var onSelectChange = function() {
-    const selectedCount = $(".selected").length;
+    const $selected = $(".selected");
+    const selectedCount = $selected.length;
 
     if (selectedCount == 0) {
-        $editItem.hide();
-        $deleteItem.hide();
+        $oneSelectedTools.hide();
+        $atLeastOneSelectedTools.hide();
     } else if (selectedCount == 1) {
-        $editItem.show();
-        $deleteItem.show();
+        $oneSelectedTools.show();
+        $atLeastOneSelectedTools.show();
+
+        $editTool.find("a").attr("href", "!action:update/" + $selected.data("ref") + "/");
     } else if (selectedCount > 1) {
-        $editItem.hide();
-        $deleteItem.show();
+        $oneSelectedTools.hide();
+        $atLeastOneSelectedTools.show();
     }
 };
 
@@ -31,16 +35,17 @@ var onSelectChange = function() {
             handleSelect($(this), event);
     });
 
-    $deleteItem.click(function(event) {
+    $atLeastOneSelectedTools.click(function(event) {
         console.log(getSelectedItemsData());
-        // executeActionWithConfirm(
-        //     "delete",
-        //     getSelectedItemsData(),
-        //     "Delete selected items?",
-        //     function() {
-        //         $(".selected").remove();
-        //     }
-        // );
+        executeActionWithConfirm(
+            null,
+            "delete",
+            getSelectedItemsData(),
+            "Delete selected items?",
+            function() {
+                $(".selected").remove();
+            }
+        );
         event.preventDefault();
     });
 

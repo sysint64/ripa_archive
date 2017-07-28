@@ -31,16 +31,16 @@ function getSelectedItemsData() {
     return results;
 }
 
-function executeAction(action, inputData, callback) {
+function executeAction(path, action, inputData, callback) {
     showWaitDialog();
 
     var url;
     const relativeActions = ["paste"];
 
-    if (relativeActions.indexOf(action) !== -1) {
+    if (relativeActions.indexOf(action) !== -1 || path === null || path === "") {
         url = "!action:" + action + "/";
     } else {
-        url = "/documents/!action:" + action + "/";
+        url = "/" + path + "/!action:" + action + "/";
     }
 
     $.ajax({
@@ -63,9 +63,9 @@ function executeAction(action, inputData, callback) {
     });
 }
 
-function executeActionWithConfirm(action, inputData, message, callback) {
+function executeActionWithConfirm(path, action, inputData, message, callback) {
     showYesNoDialog(message, function() {
-        executeAction(action, inputData, callback);
+        executeAction(path, action, inputData, callback);
     });
 }
 

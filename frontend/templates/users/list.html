@@ -1,18 +1,19 @@
 {% extends "module_list_filtered.html" %}
+{% load i18n %}
 
 {% block filter %}
-    <h3>статус персонала</h3>
+    <h3>Is active</h3>
     <ul>
-        <li class="active"><a href="?">Все</a></li>
-        <li><a href="?is_staff__exact=1">Да</a></li>
-        <li><a href="?is_staff__exact=0">Нет</a></li>
+        <li class="active"><a href="?">All</a></li>
+        <li><a href="?is_active__exact=1">Yes</a></li>
+        <li><a href="?is_active__exact=0">No</a></li>
     </ul>
 
-    <h3>Фейковый пользователь</h3>
+    <h3>Is staff</h3>
     <ul>
-        <li class="active"><a href="?">Все</a></li>
-        <li><a href="?is_fake__exact=1">Да</a></li>
-        <li><a href="?is_fake__exact=0">Нет</a></li>
+        <li class="active"><a href="?">All</a></li>
+        <li><a href="?is_staff__exact=1">Yes</a></li>
+        <li><a href="?is_staff__exact=0">No</a></li>
     </ul>
 {% endblock %}
 
@@ -23,79 +24,18 @@
 {% endblock %}
 
 {% block table_detail %}
-    <td>{{ user.get_full_name }}</td>
-    <td>{{ user.email }}</td>
+    <td>{{ item.get_full_name }}</td>
+    <td>{{ item.email }}</td>
     <td><i class="fa fa-check-circle"></i></td>
 {% endblock %}
 
-{#{% block content %}#}
-{#    <div id="select-region"></div>#}
-{#    <h3>Users</h3>#}
-{##}
-{#    <ul class="object-tools">#}
-{#        <li>#}
-{#            <a href="">#}
-{#                Add user#}
-{#                <i class="fa fa-plus"></i>#}
-{#            </a>#}
-{#        </li>#}
-{#        <li>#}
-{#            <a href="">#}
-{#                Edit user#}
-{#                <i class="fa fa-pencil"></i>#}
-{#            </a>#}
-{#        </li>#}
-{#        <li>#}
-{#            <a href="">#}
-{#                Delete user#}
-{#                <i class="fa fa-times"></i>#}
-{#            </a>#}
-{#        </li>#}
-{#    </ul>#}
-{##}
-{#    <div class="module filtered">#}
-{#        <div class="filter exclude-select-region">#}
-{#            <h2>Фильтр</h2>#}
-{#            <h3>статус персонала</h3>#}
-{#            <ul>#}
-{#                <li class="selected"><a href="?">Все</a></li>#}
-{#                <li><a href="?is_staff__exact=1">Да</a></li>#}
-{#                <li><a href="?is_staff__exact=0">Нет</a></li>#}
-{#            </ul>#}
-{##}
-{#            <h3>Фейковый пользователь</h3>#}
-{#            <ul>#}
-{#                <li class="selected"><a href="?">Все</a></li>#}
-{#                <li><a href="?is_fake__exact=1">Да</a></li>#}
-{#                <li><a href="?is_fake__exact=0">Нет</a></li>#}
-{#            </ul>#}
-{#        </div>#}
-{##}
-{#        <div class="results">#}
-{#            <table class="table">#}
-{#                <thead>#}
-{#                <tr>#}
-{#                    <th>Full name</th>#}
-{#                    <th>Email</th>#}
-{#                    <th>Active</th>#}
-{#                </tr>#}
-{#                </thead>#}
-{#                <tbody>#}
-{#                {% for user in users %}#}
-{#                    <tr class="selectable context-menu">#}
-{#                        <td>#}
-{#                            {{ user.get_full_name }}#}
-{#                        </td>#}
-{#                        <td>#}
-{#                            {{ user.email }}#}
-{#                        </td>#}
-{#                        <td>#}
-{#                            <i class="fa fa-check-circle"></i>#}
-{#                        </td>#}
-{#                    </tr>#}
-{#                {% endfor %}#}
-{#                </tbody>#}
-{#            </table>#}
-{#        </div>#}
-{#    </div>#}
-{#{% endblock %}#}
+{% block one_selected_tools %}
+    <li class="one-selected-tools">
+        <a href="">
+            {% trans "View profile" %}
+            <i class="fa fa-user"></i>
+        </a>
+    </li>
+
+    {{ block.super }}
+{% endblock %}

@@ -1,7 +1,10 @@
 from django import forms
 from django.contrib.auth import authenticate
 
-from forms.ajax import AjaxForm
+from forms.ajax import AjaxForm, AjaxModelForm
+from forms.consts import YES_NO_CHOICES
+from ripa_archive.accounts.models import User
+from ripa_archive.permissions.models import Group
 
 
 class LoginForm(AjaxForm):
@@ -34,3 +37,36 @@ class LoginForm(AjaxForm):
                 code='invalid_login',
                 params={'username': "email"},
             )
+
+
+class UserForm(AjaxModelForm):
+    class Meta:
+        model = User
+        fields = "email", "first_name", "last_name", "gender", "group", "is_active", "avatar_image"
+
+    gender = forms.ChoiceField(
+        label="Gender",
+        required=False,
+        choices=User.Gender.CHOICES,
+        widget=forms.Select(attrs={
+            "data-width": "fit",
+        }),
+    )
+
+    group = forms.ModelChoiceField(
+        label="Group",
+        required=False,
+        empty_label=None,
+        queryset=Group.objects.all(),
+        widget=forms.Select(attrs={
+            "data-width": "fit",
+        }),
+    )
+
+    is_active = forms.ChoiceField(
+        choices=YES_NO_CHOICES,
+        label="Is active",
+        widget=forms.Select(attrs={
+            "data-width": "fit",
+        }),
+    )

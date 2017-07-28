@@ -5,8 +5,12 @@ from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-from ripa_archive.permissions.forms import CreateGroupForm
+from ripa_archive.permissions.forms import GroupForm
+from ripa_archive.permissions.input_serializers import BulkInputSerializer
 from ripa_archive.permissions.models import Group
 
 PERMISSIONS_ADD_MENU = (
@@ -35,14 +39,14 @@ def permissions(request):
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
 def create_group(request):
-    form = CreateGroupForm(request.POST)
+    form = GroupForm(request.POST)
 
     context = permissions_base_context(request)
     context.update({
         "form_title": "Create group",
         "form": form,
         "submit_title": "Create",
-        "validator_url": reverse("permissions:validator-create-group"),
+        "validator_url": reverse("permissions:validator-create"),
     })
 
     if request.method == "POST" and form.is_valid():
@@ -62,9 +66,9 @@ def update_group(request, name):
     instance = get_object_or_404(Group, name=name)
 
     if request.method == "POST":
-        form = CreateGroupForm(request.POST, instance=instance)
+        form = GroupForm(request.POST, instance=instance)
     else:
-        form = CreateGroupForm(
+        form = GroupForm(
             instance=instance,
             initial={
                 "folder_permissions": instance.permissions.all(),
@@ -77,7 +81,7 @@ def update_group(request, name):
         "form_title": "Update group",
         "form": form,
         "submit_title": "Update",
-        "validator_url": reverse("permissions:validator-update-group", kwargs={"name": name}),
+        "validator_url": reverse("permissions:validator-update", kwargs={"name": name}),
     })
 
     if request.method == "POST" and form.is_valid():
@@ -89,3 +93,19 @@ def update_group(request, name):
         return redirect("permissions:index")
 
     return TemplateResponse(template="forms/form.html", request=request, context=context)
+
+
+@api_view(["POST"])
+def delete_group(request):
+    serializer = BulkInputSerializer(data=request.data)
+
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    groups = serializer.validated_data["groups"]
+
+    with transaction.atomic():
+        for group in groups:
+            group.delete()
+
+    return Response({}, status=status.HTTP_200_OK)

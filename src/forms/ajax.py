@@ -35,7 +35,7 @@ class AjaxFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for (_, field) in self.fields.items():
+        for _, field in self.fields.items():
             if field.widget.attrs.get("class", "") == "":
                 field.widget.attrs.update({"class": "form-control"})
 
@@ -49,13 +49,14 @@ class AjaxFormMixin:
             return safe(_BOTTOM_ERRORS_WRAPPER_DIV % (item, prefix + name))
 
     def __iter__(self):
-        for (field_name, field) in self.fields.items():
+        for field_name, field in self.fields.items():
             yield (self[field_name], {
                 "label": field.label,
                 "help_text": field.help_text,
                 "required": field.required,
                 "name": field_name,
-                "hidden": isinstance(field.widget, forms.HiddenInput)
+                "hidden": isinstance(field.widget, forms.HiddenInput),
+                "is_file": isinstance(field.widget, forms.FileInput)
             })
 
 

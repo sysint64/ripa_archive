@@ -15,6 +15,7 @@ var onSelectChange = null;
             switch (key) {
                 case "delete":
                     executeActionWithConfirm(
+                        "documents",
                         "delete",
                         getSelectedItemsData(),
                         "Delete selected items?",
@@ -26,6 +27,7 @@ var onSelectChange = null;
 
                 case "copy":
                     executeAction(
+                        "documents",
                         "copy",
                         getSelectedItemsData(),
                         function() {}
@@ -34,6 +36,7 @@ var onSelectChange = null;
 
                 case "cut":
                     executeAction(
+                        "documents",
                         "cut",
                         getSelectedItemsData(),
                         function() {
@@ -70,6 +73,7 @@ var onSelectChange = null;
 
                 case "paste":
                     executeAction(
+                        "documents",
                         "paste",
                         {},
                         function() {

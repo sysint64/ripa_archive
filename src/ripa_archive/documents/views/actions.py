@@ -1,3 +1,4 @@
+from django.core.exceptions import SuspiciousOperation
 from django.db import transaction
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -129,8 +130,11 @@ def delete(request):
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    folders = serializer.validated_data["folders"]
-    documents = serializer.validated_data["documents"]
+    folders = serializer.validated_data.get("folders", [])
+    documents = serializer.validated_data.get("documents", [])
+
+    if len(folders) == 0 and len(documents) == 0:
+        raise SuspiciousOperation("No selected items")
 
     def delete_all(items):
         for item in items:

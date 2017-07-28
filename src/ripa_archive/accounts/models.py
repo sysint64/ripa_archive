@@ -67,6 +67,10 @@ class User(AbstractBaseUser):
         else:
             return self.get_full_name().strip()
 
+    @property
+    def ref(self):
+        return self.email
+
     def get_short_name(self):
         return self.first_name
 
