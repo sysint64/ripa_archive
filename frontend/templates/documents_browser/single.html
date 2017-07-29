@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "styles/loading.css" %}">
+    <link rel="stylesheet" href="{% static "styles/dialogs.sass" %}" type="text/x-sass">
+    <link rel="stylesheet" href="{% static "styles/document_single.sass" %}" type="text/x-sass">
+{% endblock %}
+
 {% block content %}
     <a href="{{ up_action_url }}" class="go-back">
         <i class="fa fa-long-arrow-up"></i>
@@ -18,49 +25,104 @@
         </div>
         <div class="document-content xcontent">
             <div class="col-md-9 col-sm-9 col-xs-12">
-                <div>
-                    <h4>Recent Activity</h4>
-                    <ul class="messages">
-                        <li>
-                            <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
-                            <div class="message_date">
-                                <h3 class="date text-info">24</h3>
-                                <p class="month">May</p>
-                            </div>
-                            <div class="message_wrapper">
-                                <h4 class="heading">Andrey Kabylin</h4>
-                                <blockquote class="message">
-                                    Rename document from "SPICE" to "SPICE like simulation"
-                                </blockquote>
-                                <br>
-                            </div>
-                        </li>
+{#                <h4>Now under edition</h4>#}
+{#                <div class="project_detail">#}
+{#                    <p class="title">Editor</p>#}
+{#                    <p>{{ user }} ({{ user.email }})</p>#}
+{#                </div>#}
+{#                <div class="project_detail">#}
+{#                    <p class="title">Datetime</p>#}
+{#                    <p>04.04.1993 15:05</p>#}
+{#                </div>#}
 
-                        <li>
-                            <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
-                            <div class="message_date">
-                                <h3 class="date text-info">24</h3>
-                                <p class="month">May</p>
-                            </div>
-                            <div class="message_wrapper">
-                                <h4 class="heading">Andrey Kabylin</h4>
-                                <blockquote class="message">
-                                    Make some changes on demand #1102
-                                </blockquote>
-                                <br>
-                                <p class="url">
-                                    <span class="fs1 text-info" aria-hidden="true"
-                                          data-icon=""></span>
-                                    Document version:
-                                    <a href="#">
-                                        <i class="fa fa-paperclip"></i>
-                                        User Acceptance Test.doc
-                                    </a>
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                <h4>Remarks</h4>
+                <ul class="messages">
+                    <li>
+                        <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
+                        <div class="message_wrapper">
+                            <h4 class="heading">Andrey Kabylin <span class="email">(andrey@kabylin.ru)</span> <span class="datetime">04.04.1993 15:05</span></h4>
+                            <blockquote class="message remark">
+                                Rename document from "SPICE" to "SPICE like simulation"
+                            </blockquote>
+                            <ul class="editor-tools">
+                                <li>
+                                    <a href="">Commit <i class="fa fa-paper-plane"></i></a>
+                                </li>
+                            </ul>
+                            <br>
+                        </div>
+                    </li>
+
+                    <li>
+                        <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
+                        <div class="message_wrapper">
+                            <h4 class="heading">Andrey Kabylin <span class="email">(andrey@kabylin.ru)</span> <span class="datetime">04.04.1993 15:05</span></h4>
+                            <blockquote class="message remark">
+                                Rename document from "SPICE" to "SPICE like simulation"
+                            </blockquote>
+                            <ul class="reviewer-tools">
+                                <li>
+                                    <a href="">Accept <i class="fa fa-check"></i></a>
+                                </li>
+
+                                <li>
+                                    <a href="">Reject <i class="fa fa-times"></i></a>
+                                </li>
+                            </ul>
+                            <br>
+                        </div>
+                    </li>
+
+                    <li>
+                        <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
+                        <div class="message_wrapper">
+                            <h4 class="heading">Andrey Kabylin <span class="email">(andrey@kabylin.ru)</span> <span class="datetime">04.04.1993 15:05</span></h4>
+                            <blockquote class="message remark accepted">
+                                Rename document from "SPICE" to "SPICE like simulation"
+                            </blockquote>
+                            <ul class="reviewer-tools">
+                                <li>
+                                    <a href="">Reject <i class="fa fa-times"></i></a>
+                                </li>
+                            </ul>
+                            <br>
+                        </div>
+                    </li>
+                </ul>
+
+                <h4>Commits</h4>
+                <ul class="messages">
+                    <li>
+                        <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
+                        <div class="message_wrapper">
+                            <h4 class="heading">Andrey Kabylin <span class="email">(andrey@kabylin.ru)</span> <span class="datetime">04.04.1993 15:05</span></h4>
+                            <blockquote class="message">
+                                Rename document from "SPICE" to "SPICE like simulation"
+                            </blockquote>
+                            <br>
+                        </div>
+                    </li>
+
+                    <li>
+                        <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
+                        <div class="message_wrapper">
+                            <h4 class="heading">Andrey Kabylin <span class="email">(andrey@kabylin.ru)</span> <span class="datetime">04.04.1993 15:05</span></h4>
+                            <blockquote class="message">
+                                Make some changes on demand #1102
+                            </blockquote>
+                            <br>
+                            <p class="url">
+                                <span class="fs1 text-info" aria-hidden="true"
+                                      data-icon=""></span>
+                                Document version:
+                                <a href="#">
+                                    <i class="fa fa-paperclip"></i>
+                                    User Acceptance Test.doc
+                                </a>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12">
                 <section class="panel">
@@ -69,6 +131,15 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-body">
+                        <div class="project_detail">
+                            <p class="title">Editor</p>
+                            <p>{{ user }} ({{ user.email }})</p>
+                        </div>
+
+                        <div class="project_detail">
+                            <p class="title">Start edition datetime</p>
+                            <p>04.04.1993 15:05</p>
+                        </div>
 
                         <div class="project_detail">
                             <p class="title">Status</p>
@@ -84,15 +155,16 @@
                                 </a>
                             </p>
                         </div>
-
                         <br>
 
                         <div class="text-center mtop20">
+                            <a href="#" class="btn btn-sm btn-primary">Upload new version</a>
                             <a href="#" class="btn btn-sm btn-primary">Take for revision</a>
+                            <a href="#" class="btn btn-sm btn-primary">Write remark</a>
+                            <a href="#" class="btn btn-sm btn-success">Accept</a>
                         </div>
                     </div>
                 </section>
-
             </div>
         </div>
     </div>

@@ -1,0 +1,80 @@
+@import "consts"
+
+.project_detail
+    .title .datetime
+        display: inline-block
+        margin-left: 5px
+        color: #aaa
+        font-weight: normal
+
+ul.messages
+    li .message_wrapper
+        margin-right: 0
+
+        h4.heading
+            font-size: 14px
+            cursor: inherit
+
+            .datetime
+                float: right
+                display: block
+                margin-top: 5px
+                color: #aaa
+                font-weight: normal
+
+            .email
+                font-weight: normal
+
+        blockquote
+            font-size: 14px
+
+            &.remark
+                border-color: #aa0000
+
+                &.accepted
+                    //border-color: $green
+                    border-color: #eee
+                    color: #aaa
+
+.reviewer-tools, .editor-tools
+    list-style-type: none
+    padding-left: 0
+    font-size: 10px
+    font-weight: bold
+    float: right
+    position: relative
+    margin-top: -15px
+
+    li
+        display: block
+        float: left
+        margin-left: 5px
+        height: 16px
+
+        &.one-selected-tools, &.at-least-one-selected-tools
+            display: none
+
+    a
+        display: block
+        float: left
+        padding: 5px 12px 3px
+        background: #999
+        font-weight: 400
+        font-size: 11px
+        text-transform: uppercase
+        letter-spacing: 0.5px
+        color: #fff
+        border-radius: 15px
+
+        &:hover
+            background: $green
+
+//.remark
+//    border-bottom: 1px solid #eee
+//    padding-bottom: 10px
+//
+//    &.accepted
+//        color: #aaa
+//
+//    &:last-child
+//        border-bottom: none
