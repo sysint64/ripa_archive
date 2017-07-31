@@ -58,3 +58,13 @@ TEMPLATES = [
 STATICFILES_DIRS = (
     os.path.join(FRONTEND_ROOT, 'static'),
 )
+
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 10
+HAYSTACK_DEFAULT_OPERATOR = 'OR'
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': '{{ solr_endpoint }}/ripa_archive',
+        'INCLUDE_SPELLING': True,
+    },
+}

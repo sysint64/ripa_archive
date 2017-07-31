@@ -1,29 +1,29 @@
 ---
-#- name: create solr directory
-#  file: path=/opt/solr owner={{ solr_linux_user }} group={{ solr_linux_group }} state=directory
-#
-#- name: download and unarchive solr
-#  unarchive: src={{ solr_archive_url }} dest=/opt/solr remote_src=True
-#  become_user: "{{ solr_linux_user }}"
-#
-#- name: create runit solr directory
-#  file: path=/etc/sv/{{ env_name }}_solr state=directory
-#
-#- name: copy runit solr config
-#  template: src=runit_solr.j2 dest=/etc/sv/{{ env_name }}_solr/run mode=0755
-#  notify:
-#    - restart solr
-#
-#- name: create symlink runit solr config
-#  file: src=/etc/sv/{{ env_name }}_solr dest=/etc/service/{{ env_name }}_solr state=link
+- name: create solr directory
+  file: path=/opt/solr owner={{ solr_linux_user }} group={{ solr_linux_group }} state=directory
+
+- name: download and unarchive solr
+  unarchive: src={{ solr_archive_url }} dest=/opt/solr remote_src=True
+  become_user: "{{ solr_linux_user }}"
+
+- name: create runit solr directory
+  file: path=/etc/sv/{{ env_name }}_solr state=directory
+
+- name: copy runit solr config
+  template: src=runit_solr.j2 dest=/etc/sv/{{ env_name }}_solr/run mode=0755
+  notify:
+    - restart solr
+
+- name: create symlink runit solr config
+  file: src=/etc/sv/{{ env_name }}_solr dest=/etc/service/{{ env_name }}_solr state=link
 
 # Solr config core
-#- name: create solr core directory
-#  file:
-#    path: "/opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}"
-#    owner: "{{ solr_linux_user }}"
-#    group: "{{ solr_linux_group }}"
-#    state: "directory"
+- name: create solr core directory
+  file:
+    path: "/opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}"
+    owner: "{{ solr_linux_user }}"
+    group: "{{ solr_linux_group }}"
+    state: "directory"
 
 - name: check current list of solr cores
   uri:
@@ -35,7 +35,7 @@
   shell: "git archive --remote={{ git_repo }} --format=zip {{ git_version }} solr > /opt/solr/solr-{{ solr_version }}/server/solr/configset.zip"
   become_user: "{{ project_linux_user }}"
 
-- name: unarchive solr core config
+- name: unarchive solr core configset
   become_user: "{{ project_linux_user }}"
   unarchive:
     src: /opt/solr/solr-{{ solr_version }}/server/solr/configset.zip
@@ -44,4 +44,21 @@
 
 - name: copy configs
   become_user: "{{ project_linux_user }}"
-  shell: "mv /opt/solr/solr-{{ solr_version }}/server/solr/solr /opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}"
+  shell: "cp -r /opt/solr/solr-{{ solr_version }}/server/solr/solr/* /opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}/"
+  notify:
+    - restart solr
+
+- name: rm solr configset.zip
+  file:
+    path: "/opt/solr/solr-{{ solr_version }}/server/solr/configset.zip"
+    state: absent
+
+- name: rm solr temporary folder
+  file:
+    path: "/opt/solr/solr-{{ solr_version }}/server/solr/solr"
+    state: absent
+
+- name: create configured core
+  shell: "/opt/solr/solr-{{ solr_version }}/bin/solr create -c {{ solr_core }}"
+  when: "solr_core not in solr_cores_current.content"
+  become_user: "{{ project_linux_user }}"

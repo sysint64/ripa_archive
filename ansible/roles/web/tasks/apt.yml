@@ -1,6 +1,6 @@
 ---
 - apt_repository:
-  repo: "ppa:jonathonf/python-3.6"
+    repo: "ppa:jonathonf/python-3.6"
 
 - name: install packages
   when: ansible_os_family == "Debian"
