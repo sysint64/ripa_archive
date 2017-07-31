@@ -18,16 +18,25 @@
 #  file: src=/etc/sv/{{ env_name }}_solr dest=/etc/service/{{ env_name }}_solr state=link
 
 # Solr config core
-- name: create solr core directory
-  file:
-    path: "/opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}"
-    owner: "{{ solr_linux_user }}"
-    group: "{{ solr_linux_group }}"
-    state: "directory"
+#- name: create solr core directory
+#  file:
+#    path: "/opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}"
+#    owner: "{{ solr_linux_user }}"
+#    group: "{{ solr_linux_group }}"
+#    state: "directory"
 
-- name: check current list of solr cores.
+- name: check current list of solr cores
   uri:
     url: "{{ solr_endpoint }}/admin/cores"
     return_content: yes
   register: solr_cores_current
 
+- name: copy solr core config
+  shell: "git archive --remote={{ git_repo }} --format=zip {{ git_version }} solr/{{ solr_core }} > /opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}.zip"
+  become_user: "{{ project_linux_user }}"
+
+#- name: unarchive solr core config
+#- unarchive:
+#    src: /opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}/solr_core.zip
+#    dest: /opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}/
+#    become_user: "{{ project_linux_user }}"
