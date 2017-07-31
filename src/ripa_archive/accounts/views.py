@@ -75,7 +75,10 @@ def create(request):
     })
 
     if request.method == "POST" and form.is_valid():
-        form.save()
+        user = form.save(commit=False)
+        user.set_password("123321")  # TODO: send email with generated password
+        user.save()
+
         messages.success(request, "Success added")
         return redirect("accounts:index")
 
