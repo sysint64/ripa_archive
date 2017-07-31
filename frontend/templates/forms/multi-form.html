@@ -5,13 +5,21 @@
     {{ block.super }}
     <link rel="stylesheet" href="{% static "styles/multi_form.sass" %}" type="text/x-sass">
     <link rel="stylesheet" href="{% static "styles/forms.sass" %}" type="text/x-sass">
+    <link rel="stylesheet" href="{% static "styles/dialogs.sass" %}" type="text/x-sass">
+    <link rel="stylesheet" href="{% static "styles/loading.css" %}">
 {% endblock %}
 
 {% block js %}
     {{ block.super }}
+    <script src="{% static 'js/dialogs.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/forms/helpers.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/forms/multi_form.js' %}" charset="utf-8"></script>
 {% endblock %}
+
+{% block dialogs %}
+    {% include "dialogs/progress_dialog.html" %}
+{% endblock %}
+
 
 {% block content %}
     <a href="{{ up_action_url }}" class="go-back">

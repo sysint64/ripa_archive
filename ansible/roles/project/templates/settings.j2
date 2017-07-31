@@ -5,7 +5,7 @@ STATIC_ROOT = os.path.join("{{ project_static_media_dir }}", "static")
 MEDIA_ROOT = os.path.join("{{ project_static_media_dir }}", "media")
 FRONTEND_ROOT = os.path.join("{{ project_work_tree }}", 'frontend')
 
-DEBUG = False
+DEBUG = True
 SECRET_KEY = '{{ django_secret_key }}'
 
 ALLOWED_HOSTS = [

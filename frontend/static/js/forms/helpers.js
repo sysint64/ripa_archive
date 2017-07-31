@@ -48,6 +48,7 @@ function validateApiForm($form) {
             });
 
             $('html, body').scrollTop($errorBlock.offset().top - 5);
+            $form.trigger('validation_error');
         }
     };
 

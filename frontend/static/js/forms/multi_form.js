@@ -63,16 +63,22 @@ function rebindEvents() {
     });
 
     $("#multiform").submit(function(event, isValid) {
+        showWaitDialog();
         $(this).find("#form_prefixes").val(formsPrefixes.join(","));
 
         if ($(this).find("#permissions_form_prefixes").length > 0)
             $(this).find("#permissions_form_prefixes").val(permissionsFormsPrefixes.join(","));
 
-        if (isValid)
+        if (isValid) {
             return;
+        }
 
         event.preventDefault();
         validateApiForm($(this));
+    });
+
+    $("#multiform").on("validation_error", function() {
+        hideWaitDialog();
     });
 
     bindEvents();
