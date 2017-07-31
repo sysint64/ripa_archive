@@ -31,12 +31,17 @@
     return_content: yes
   register: solr_cores_current
 
-- name: copy solr core config
-  shell: "git archive --remote={{ git_repo }} --format=zip {{ git_version }} solr/{{ solr_core }} > /opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}.zip"
+- name: get solr core config
+  shell: "git archive --remote={{ git_repo }} --format=zip {{ git_version }} solr > /opt/solr/solr-{{ solr_version }}/server/solr/configset.zip"
   become_user: "{{ project_linux_user }}"
 
-#- name: unarchive solr core config
-#- unarchive:
-#    src: /opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}/solr_core.zip
-#    dest: /opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}/
-#    become_user: "{{ project_linux_user }}"
+- name: unarchive solr core config
+  become_user: "{{ project_linux_user }}"
+  unarchive:
+    src: /opt/solr/solr-{{ solr_version }}/server/solr/configset.zip
+    dest: /opt/solr/solr-{{ solr_version }}/server/solr/
+    copy: no
+
+- name: copy configs
+  become_user: "{{ project_linux_user }}"
+  shell: "mv /opt/solr/solr-{{ solr_version }}/server/solr/solr /opt/solr/solr-{{ solr_version }}/server/solr/{{ solr_core }}"
