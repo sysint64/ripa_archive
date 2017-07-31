@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import django.utils.timezone
-import easy_thumbnails.fields
 
 
 class Migration(migrations.Migration):
@@ -23,7 +22,7 @@ class Migration(migrations.Migration):
                 ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
                 ('email', models.EmailField(max_length=254, unique=True)),
                 ('gender', models.CharField(choices=[('0', 'Незадан'), ('m', 'Мужской'), ('f', 'Женский')], default='0', max_length=1, verbose_name='gender')),
-                ('avatar_image', easy_thumbnails.fields.ThumbnailerImageField(blank=True, upload_to='')),
+                ('avatar_image', models.ImageField(blank=True, upload_to='')),
                 ('first_name', models.CharField(blank=True, max_length=30, verbose_name='first name')),
                 ('last_name', models.CharField(blank=True, max_length=30, verbose_name='last name')),
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),

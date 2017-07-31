@@ -15,7 +15,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'compressor',
-    'easy_thumbnails',
+    'sorl.thumbnail',
     'haystack',
 
     'ripa_archive.accounts.apps.AccountsConfig',

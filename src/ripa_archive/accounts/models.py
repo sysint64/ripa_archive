@@ -4,8 +4,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
-from easy_thumbnails.fields import ThumbnailerImageField
-
 from ripa_archive.permissions.models import Group
 
 
@@ -41,7 +39,7 @@ class User(AbstractBaseUser):
         max_length=1,
     )
 
-    avatar_image = ThumbnailerImageField(blank=True)
+    avatar_image = models.ImageField(blank=True)
     first_name = models.CharField("first name", max_length=30, blank=True)
     last_name = models.CharField("last name", max_length=30, blank=True)
     group = models.ForeignKey(Group, null=True)

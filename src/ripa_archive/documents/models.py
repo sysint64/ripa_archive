@@ -157,6 +157,9 @@ class Document(models.Model):
 
     @property
     def permalink(self):
+        if self.data is None:
+            return ""
+
         if self.parent.path != "":
             return reverse("documents:document", kwargs={"path": self.parent.path, "name": self.data.name})
         else:
