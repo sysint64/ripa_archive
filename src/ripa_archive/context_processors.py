@@ -1,8 +1,6 @@
 from ripa_archive.documents.views.main import SearchPlaceCode
 
 
-
-
 def search(request):
     search_place = SearchPlaceCode.get_from_code(request.GET.get("place"))
 
@@ -17,8 +15,9 @@ def search(request):
 
 
 def url(request):
-    exclamation_split = request.path.split("!")
+    # exclamation_split = request.path.split("!")
     return {
-        "up_action_url": "!".join(x for i, x in enumerate(exclamation_split) if i < len(exclamation_split) - 1),
+        # "up_action_url": "!".join(x for i, x in enumerate(exclamation_split) if i < len(exclamation_split) - 1),
+        "up_action_url": request.path.split("!")[0],
         "up_url": request.path.split("/")[0],
     }

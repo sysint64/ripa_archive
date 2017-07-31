@@ -7,12 +7,14 @@ class BulkInputSerializer(serializers.Serializer):
     folders = serializers.PrimaryKeyRelatedField(
         queryset=Folder.objects.all(),
         many=True,
-        required=False
+        required=False,
+        default=[]
     )
     documents = serializers.PrimaryKeyRelatedField(
         queryset=Document.objects.all(),
         many=True,
-        required=False
+        required=False,
+        default=[]
     )
 
 

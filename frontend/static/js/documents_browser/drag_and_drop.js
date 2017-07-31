@@ -79,7 +79,7 @@ var dragClicked = false;
 
         if ($toFolder.length == 1) {
             var inputData = getSelectedItemsData();
-            inputData["to_folder"] = $toFolder.data("folder-id");
+            inputData["to_folder"] = $toFolder.data("id");
 
             resetState();
 
@@ -88,7 +88,7 @@ var dragClicked = false;
                 return;
             }
 
-            executeAction("change-folder", inputData, function() {
+            executeAction("documents", "change-folder", inputData, function() {
                 $targeted.remove();
             });
         } else {
