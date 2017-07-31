@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+if [ -f $PID ]; then rm $PID; fi
+
+exec chpst -u {{ solr_linux_user }}:{{ solr_linux_group }} /opt/solr/solr-{{ solr_version }}/bin/solr start -p {{ solr_port }}

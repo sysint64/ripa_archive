@@ -10,3 +10,4 @@ ipython
 gunicorn==19.6.0
 git+https://github.com/django-haystack/django-haystack
 pysolr
+celery==4.1.0

@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.db import transaction
 
-from ripa_archive.documents.forms import CreateFolderForm, CreateDocumentForm, \
+from ripa_archive.documents.forms.browser import CreateFolderForm, CreateDocumentForm, \
     FolderPermissionsForm, DocumentPermissionsForm
 from ripa_archive.documents.models import Document
 from ripa_archive.documents.views.main import get_folder_or_404

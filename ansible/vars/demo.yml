@@ -27,3 +27,13 @@ allowed_host: "*"
 DJANGO_SETTINGS_MODULE: "{{ project_namespace }}.settings.demo"
 luna_vision_faces_list: "user_faces_staging"
 celery_vhost: "/"
+
+# Solr
+solr_archive_url: "http://apache-mirror.rbc.ru/pub/apache/lucene/solr/6.6.0/solr-6.6.0.zip"
+
+solr_version: "6.6.0"
+solr_linux_user: "www-data"
+solr_linux_group: "www-data"
+solr_port: "8983"
+solr_core: "{{ project_namespace }}"
+solr_endpoint: "{{ nginx_scheme }}://{{ nginx_server_name }}:{{ solr_port }}"

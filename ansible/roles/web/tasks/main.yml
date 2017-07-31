@@ -1,4 +1,5 @@
 ---
-- include: apt.yml
-- include: db.yml
+#- include: apt.yml
+#- include: db.yml
 - include: http.yml
+#- include: solr.yml

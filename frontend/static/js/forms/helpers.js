@@ -14,7 +14,7 @@ function ajaxErrorHandler(info, selector) {
 }
 
 function getAjaxTextError(info) {
-    if (info.status >= 500) {
+    if (info.status != 400) {
         return "Unexpected error (server respond with status code " + info.status + ")";
     } else {
         var json = $.parseJSON(info.responseText);

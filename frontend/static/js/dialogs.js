@@ -1,5 +1,7 @@
 const $errorDialog = $("#error-dialog");
 const $errorDialogText = $errorDialog.find(".content");
+const $successDialog = $("#success-dialog");
+const $successDialogText = $successDialog.find(".content");
 const $waitDialog = $("#wait-dialog");
 const $yesNoDialog = $("#yes-no-dialog");
 const $yesNoDialogYesButton = $yesNoDialog.find("button.primary");
@@ -8,6 +10,11 @@ const $yesNoDialogText = $yesNoDialog.find(".content");
 function showErrorDialog(message) {
     $errorDialog.show();
     $errorDialogText.html(message);
+}
+
+function showSuccessDialog(message) {
+    $successDialog.show();
+    $successDialogText.html(message);
 }
 
 function showWaitDialog() {

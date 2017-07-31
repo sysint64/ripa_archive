@@ -4,3 +4,6 @@
 
 - name: restart gunicorn
   runit: name={{ env_name }}_gunicorn state=restarted
+
+- name: restart solr
+  runit: name={{ env_name }}_solr state=restarted

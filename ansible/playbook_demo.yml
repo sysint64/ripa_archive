@@ -12,4 +12,4 @@
 
   roles:
     - web
-    - project
+#    - project

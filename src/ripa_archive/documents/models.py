@@ -122,6 +122,18 @@ class Folder(ModelWhichHaveCustomPermissionsMixin, models.Model):
         return self.name
 
 
+class DocumentEditMeta(models.Model):
+    editor = models.ForeignKey(User)
+    start_datetime = models.DateTimeField(auto_now_add=True)
+    end_datetime = models.DateTimeField(null=True, default=None)
+
+
+class Remark(models.Model):
+    edit_meta = models.ForeignKey(DocumentEditMeta)
+    from_user = models.ForeignKey(User)
+    text = models.TextField()
+
+
 class Status(models.Model):
     name = models.CharField(max_length=20)
     allow_delete = models.BooleanField()
