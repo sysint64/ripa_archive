@@ -122,18 +122,6 @@ class Folder(ModelWhichHaveCustomPermissionsMixin, models.Model):
         return self.name
 
 
-class DocumentEditMeta(models.Model):
-    editor = models.ForeignKey(User)
-    start_datetime = models.DateTimeField(auto_now_add=True)
-    end_datetime = models.DateTimeField(null=True, default=None)
-
-
-class Remark(models.Model):
-    edit_meta = models.ForeignKey(DocumentEditMeta)
-    from_user = models.ForeignKey(User)
-    text = models.TextField()
-
-
 class Status(models.Model):
     name = models.CharField(max_length=20)
     allow_delete = models.BooleanField()
@@ -155,15 +143,31 @@ class Document(models.Model):
 
     objects = DocumentsManager()
 
-    @property
-    def permalink(self):
+    def _reverse(self, urlname, kwargs=None):
         if self.data is None:
             return ""
 
+        if kwargs is None:
+            kwargs = {}
+
         if self.parent.path != "":
-            return reverse("documents:document", kwargs={"path": self.parent.path, "name": self.data.name})
+            kwargs.update({"path": self.parent.path, "name": self.data.name})
         else:
-            return reverse("documents:document", kwargs={"name": self.data.name})
+            kwargs.update({"name": self.data.name})
+
+        return reverse("documents:" + urlname, kwargs=kwargs)
+
+    @property
+    def permalink(self):
+        return self._reverse("document")
+
+    @property
+    def last_version_file_permalink(self):
+        return self._reverse("last-version-file")
+
+    @property
+    def upload_new_version_permalink(self):
+        return self._reverse("upload-new-version")
 
     @property
     def name(self):
@@ -179,6 +183,14 @@ class Document(models.Model):
             return self.parent.path + "/" + self.name
         else:
             return self.name
+
+    @property
+    def current_edit_meta(self):
+        return DocumentEditMeta.objects.filter(closed=False, document=self).first()
+
+    @property
+    def is_under_edition(self):
+        return self.current_edit_meta is not None
 
     def __str__(self):
         if self.data is not None:
@@ -259,3 +271,17 @@ class DocumentData(models.Model):
             DocumentType.VIDEO: "fa-file-video-o",
             DocumentType.POWERPOINT: "fa-file-powerpoint-o",
         }.get(self.type, "fa-file-o")
+
+
+class DocumentEditMeta(models.Model):
+    editor = models.ForeignKey(User)
+    start_datetime = models.DateTimeField(auto_now_add=True)
+    end_datetime = models.DateTimeField(null=True, default=None)
+    document = models.ForeignKey(Document)
+    closed = models.BooleanField(default=False)
+
+
+class Remark(models.Model):
+    edit_meta = models.ForeignKey(DocumentEditMeta)
+    from_user = models.ForeignKey(User)
+    text = models.TextField()

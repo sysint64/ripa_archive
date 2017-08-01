@@ -1,13 +1,16 @@
 (function ($) {
-    $("#take-for-revision").click(function () {
+    $("#take-for-revision").click(function (event) {
         executeActionWithConfirm(
             null,
             "take-for-revision",
             {"id": 0},
             "Take this document for revision?",
             function () {
-                showSuccessDialog("Took successfully");
+                showWaitDialog();
+                location.reload();
             }
         );
+
+        event.preventDefault();
     });
 })(jQuery);

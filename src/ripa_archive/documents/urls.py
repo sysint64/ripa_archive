@@ -3,6 +3,7 @@ from django.conf.urls import url
 from forms.ajax import CompositeAjaxFormValidator
 from ripa_archive.documents.forms.browser import CreateFolderForm, CreateDocumentForm, \
     DocumentPermissionsForm, FolderPermissionsForm
+from ripa_archive.documents.forms.single import UploadNewVersionForm
 from ripa_archive.documents.views import forms as forms_views
 from ripa_archive.documents.views import actions as actions_views
 from ripa_archive.documents.views import main
@@ -29,6 +30,8 @@ urlpatterns = \
 
 urlpatterns += \
     document_url(r'', main.document, name="document") + \
+    document_url(r'!file:last-version/', single.last_version_file, name="last-version-file") + \
+    document_url(r'!file:(?P<version>[0-9]+)/', single.get_file, name="get-file") + \
     document_url(r'!action:take-for-revision/', single.take_for_revision, name="take-for-revision") + \
     document_url(r'!action:upload-new-version/', single.upload_new_version, name="upload-new-version") + \
     document_url(r'!action:write-remark/', single.take_for_revision, name="write-remark") + \
@@ -54,4 +57,8 @@ urlpatterns += [
     url(r'^!validator:create-documents/$',
         CompositeAjaxFormValidator.as_view(forms=[CreateDocumentForm, DocumentPermissionsForm]),
         name="validator-create-documents"),
+
+    url(r'^validator:upload-new-version/$',
+        CompositeAjaxFormValidator.as_view(forms=[UploadNewVersionForm]),
+        name="validator-upload-new-version")
 ]

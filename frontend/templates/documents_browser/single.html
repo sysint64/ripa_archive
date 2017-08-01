@@ -139,15 +139,23 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-body">
-                        <div class="project_detail">
-                            <p class="title">Editor</p>
-                            <p>{{ user }} ({{ user.email }})</p>
-                        </div>
+                        {% if document.is_under_edition %}
+                            <div class="project_detail">
+                                <p class="title">Editor</p>
+                                <p>
+                                    <a href="{{ document.current_edit_meta.editor.permalink }}">
+                                        <i class="fa fa-user"></i>
+                                        {{ document.current_edit_meta.editor }}
+                                        ({{ document.current_edit_meta.editor.email }})
+                                    </a>
+                                </p>
+                            </div>
 
-                        <div class="project_detail">
-                            <p class="title">Start edition datetime</p>
-                            <p>04.04.1993 15:05</p>
-                        </div>
+                            <div class="project_detail">
+                                <p class="title">Start edition datetime</p>
+                                <p><i class="fa fa-clock-o"></i> {{ document.current_edit_meta.start_datetime }}</p>
+                            </div>
+                        {% endif %}
 
                         <div class="project_detail">
                             <p class="title">Status</p>
@@ -156,6 +164,13 @@
 
                         <div class="project_detail">
                             <p class="title">Last version</p>
+                            <p>
+                                <a href="{{ document.last_version_file_permalink }}" target="_blank">
+                                    <i class="fa {{ document.data.icon }}"></i>
+                                    {{ document.data.filename }}
+                                </a>
+                            </p>
+                            <p class="title">Raw link (debug)</p>
                             <p>
                                 <a href="{{ document.data.file.url }}" target="_blank">
                                     <i class="fa {{ document.data.icon }}"></i>
@@ -166,7 +181,7 @@
                         <br>
 
                         <div class="text-center mtop20">
-                            <a href="#" class="btn btn-sm btn-primary" id="upload-new-version">Upload new version</a>
+                            <a href="{{ document.upload_new_version_permalink }}" class="btn btn-sm btn-primary" id="upload-new-version">Upload new version</a>
                             <a href="#" class="btn btn-sm btn-primary" id="take-for-revision">Take for revision</a>
                             <a href="#" class="btn btn-sm btn-primary" id="write-remark">Write remark</a>
                             <a href="#" class="btn btn-sm btn-success" id="accept">Accept</a>

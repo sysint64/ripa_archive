@@ -1,11 +1,18 @@
+import os
+
+from django.conf import settings
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.utils.encoding import smart_bytes, smart_text, smart_str
 from django.views import View
 from django.contrib import messages
+from django.views.static import serve
 
 from forms.multi_form import get_multi_form
+from urllib.parse import quote
 
 
 def layout(request, template):
@@ -115,3 +122,35 @@ class MultiFormCreationWithPermissions(MultiFormCreation):
             permission.for_instances.add(instance)
 
         return permission
+
+
+def sendfile(request, filename, force_download=False):
+    def _convert_file_to_url(filename):
+        relpath = os.path.relpath(filename, settings.PROTECTED_FILES_ROOT)
+        url = [settings.PROTECTED_FILES_URL]
+
+        while relpath:
+            relpath, head = os.path.split(relpath)
+            url.insert(1, head)
+
+        url = [smart_bytes(url_component) for url_component in url]
+        return smart_text(quote(b'/'.join(url)))
+
+    dirname = os.path.dirname(filename)
+    basename = os.path.basename(filename)
+
+    if settings.DEBUG:
+        response = serve(request, basename, dirname)
+    else:
+        # TODO: X-Accel
+        response = HttpResponse()
+        url = _convert_file_to_url(filename)
+        response["X-Accel-Redirect"] = url.encode("utf-8")
+
+    if force_download:
+        response["Content-Type"] = "application/force-download"
+        response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(basename)
+    else:
+        response['Content-Disposition'] = 'filename=%s' % smart_str(basename)
+
+    return response

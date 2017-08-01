@@ -1,5 +1,8 @@
-from forms.ajax import AjaxForm
+from forms.ajax import AjaxModelForm
+from ripa_archive.documents.models import DocumentData
 
 
-class TakeForRevisionForm(AjaxForm):
-    pass
+class UploadNewVersionForm(AjaxModelForm):
+    class Meta:
+        model = DocumentData
+        fields = "name", "file",

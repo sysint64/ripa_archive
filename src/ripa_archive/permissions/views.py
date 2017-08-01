@@ -13,6 +13,7 @@ from ripa_archive.permissions.forms import GroupForm
 from ripa_archive.permissions.input_serializers import BulkInputSerializer
 from ripa_archive.permissions.models import Group
 
+
 PERMISSIONS_ADD_MENU = (
     {"name": "Group", "permalink": "!action:create-group"},
 )
