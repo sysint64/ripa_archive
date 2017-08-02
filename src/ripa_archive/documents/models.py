@@ -138,6 +138,7 @@ class Document(models.Model):
     contributors = models.ManyToManyField(User, related_name="contributors")
 
     data = models.OneToOneField("DocumentData", null=True, default=None)
+    current_edit_meta = models.ForeignKey("DocumentEditMeta", null=True, default=None)
     parent = models.ForeignKey(Folder)
     status = models.ForeignKey(Status)
 
@@ -186,10 +187,6 @@ class Document(models.Model):
             return self.parent.path + "/" + self.name
         else:
             return self.name
-
-    @property
-    def current_edit_meta(self):
-        return DocumentEditMeta.objects.filter(closed=False, document=self).first()
 
     @property
     def is_under_edition(self):

@@ -1,6 +1,6 @@
 from django import forms
 from forms.ajax import AjaxModelForm
-from ripa_archive.documents.models import DocumentData
+from ripa_archive.documents.models import DocumentData, Folder
 
 
 class UploadNewVersionForm(AjaxModelForm):
@@ -19,3 +19,15 @@ class UploadNewVersionForm(AjaxModelForm):
         label="File",
         help_text="New version of document"
     )
+
+
+class RenameFolder(AjaxModelForm):
+    class Meta:
+        model = Folder
+        fields = "name",
+
+
+class RenameDocument(AjaxModelForm):
+    class Meta:
+        model = DocumentData
+        fields = "name",
