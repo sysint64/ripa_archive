@@ -169,6 +169,9 @@ class Document(models.Model):
     def upload_new_version_permalink(self):
         return self._reverse("upload-new-version")
 
+    def data_permalink(self, data):
+        return self._reverse("get-file", kwargs={"version": data.pk})
+
     @property
     def name(self):
         return self.data.name
@@ -272,6 +275,9 @@ class DocumentData(models.Model):
             DocumentType.POWERPOINT: "fa-file-powerpoint-o",
         }.get(self.type, "fa-file-o")
 
+    @property
+    def permalink(self):
+        return self.document.data_permalink(self)
 
 class DocumentEditMeta(models.Model):
     editor = models.ForeignKey(User)

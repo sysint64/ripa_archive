@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load thumbnail %}
 
 {% block styles %}
     {{ block.super }}
@@ -98,38 +99,45 @@
                     </li>
                 </ul>
 
-                <h4>Commits</h4>
+                <h4>Activity</h4>
                 <ul class="messages">
-                    <li>
-                        <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
-                        <div class="message_wrapper">
-                            <h4 class="heading">Andrey Kabylin <span class="email">(andrey@kabylin.ru)</span> <span class="datetime">04.04.1993 15:05</span></h4>
-                            <blockquote class="message">
-                                Rename document from "SPICE" to "SPICE like simulation"
-                            </blockquote>
-                            <br>
-                        </div>
-                    </li>
+                    {% for activity in activities %}
+                        <li>
+                            {% thumbnail activity.user.avatar_image "50x50" crop="center" as im %}
+                                <img src="{{ im.url }}" class="avatar">
+                            {% empty %}
+                                <img src="{% static "images/noavatar.png" %}" class="avatar">
+                            {% endthumbnail %}
 
-                    <li>
-                        <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
-                        <div class="message_wrapper">
-                            <h4 class="heading">Andrey Kabylin <span class="email">(andrey@kabylin.ru)</span> <span class="datetime">04.04.1993 15:05</span></h4>
-                            <blockquote class="message">
-                                Make some changes on demand #1102
-                            </blockquote>
-                            <br>
-                            <p class="url">
-                                <span class="fs1 text-info" aria-hidden="true"
-                                      data-icon=""></span>
-                                Document version:
-                                <a href="#">
-                                    <i class="fa fa-paperclip"></i>
-                                    User Acceptance Test.doc
-                                </a>
-                            </p>
-                        </div>
-                    </li>
+                            <div class="message_wrapper">
+                                <h4 class="heading">
+                                    <a href="{{ activity.user.permalink }}">
+                                        {{ activity.user }}
+                                        <span class="email">({{ activity.user.email }})</span>
+                                    </a>
+
+                                    <span class="datetime">{{ activity.datetime }}</span>
+                                </h4>
+
+                                <blockquote class="message">
+                                    {{ activity.details }}
+                                </blockquote>
+                                <br>
+
+                                {% if activity.document_data is not None %}
+                                    <p class="url">
+                                        <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                        Document version:
+                                        <a href="{{ activity.document_data.permalink }}">
+                                            <i class="fa fa-paperclip"></i>
+{#                                            <i class="fa {{ activity.document_data.icon }}"></i>#}
+                                            {{ activity.document_data.filename }}
+                                        </a>
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12">
@@ -184,6 +192,7 @@
                             <a href="{{ document.upload_new_version_permalink }}" class="btn btn-sm btn-primary" id="upload-new-version">Upload new version</a>
                             <a href="#" class="btn btn-sm btn-primary" id="take-for-revision">Take for revision</a>
                             <a href="#" class="btn btn-sm btn-primary" id="write-remark">Write remark</a>
+                            <a href="#" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
                             <a href="#" class="btn btn-sm btn-success" id="accept">Accept</a>
                         </div>
                     </div>

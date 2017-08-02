@@ -10,6 +10,7 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
+from ripa_archive.activity.models import Activity
 from ripa_archive.documents.forms.single import UploadNewVersionForm
 from ripa_archive.documents.models import Document, DocumentEditMeta, DocumentData
 from ripa_archive.documents.views.main import get_folder_or_404, browser_base_context
@@ -80,6 +81,25 @@ def upload_new_version(request, name, path=None):
         data = form.save(commit=False)
         data.document = document
         data.save()
+
+        Activity.objects.create(
+            user=request.user,
+            content_type="documents.Document",
+            target_id=document.pk,
+            document_data=data,
+            details=form.cleaned_data["message"]
+        )
+
+        if document.name != form.cleaned_data["name"]:
+            Activity.objects.create(
+                user=request.user,
+                content_type="documents.Document",
+                target_id=document.pk,
+                details="Rename document from \"{old_name}\" to \"{new_name}\"".format(
+                    old_name=document.name,
+                    new_name=form.cleaned_data["name"]
+                )
+            )
 
         document.data = data
         document.current_edit_meta.end_datetime = timezone.now()

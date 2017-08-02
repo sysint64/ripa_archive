@@ -7,6 +7,7 @@ from django.template.response import TemplateResponse
 from haystack.inputs import Exact
 from haystack.query import SearchQuerySet
 
+from ripa_archive.activity.models import Activity
 from ripa_archive.documents.models import Folder, Document
 
 
@@ -82,6 +83,11 @@ def document(request, name, path=None):
     context.update({
         "document": document,
         "parent_folder": parent_folder,
+        "activities":
+            Activity.objects.filter(
+                content_type="documents.Document",
+                target_id=document.pk
+            )[:20]
     })
 
     return TemplateResponse(template="documents_browser/single.html", request=request,

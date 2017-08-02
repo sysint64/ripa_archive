@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'ripa_archive.documents',
     # 'ripa_archive.documents.apps.DocumentsConfig',
     'ripa_archive.permissions.apps.PermissionsConfig',
+    'ripa_archive.activity.apps.ActivityConfig',
 ]
 
 MIDDLEWARE = [
