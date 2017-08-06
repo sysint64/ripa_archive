@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "styles/notifications.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block content %}
+    <h3>Notifications</h3>
+    {% for notification in notifications %}
+        <div class="notification">
+            <a href="{{ notification.permalink }}"><b>{{ notification.title }}</b></a>
+            <div class="content">{{ notification.text|linebreaksbr }}</div>
+            <div class="details">
+                {{ notification.detail|linebreaksbr }}
+            </div>
+        </div>
+    {% empty %}
+        No new notifications
+    {% endfor %}
+{% endblock %}

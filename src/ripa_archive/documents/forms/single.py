@@ -1,6 +1,6 @@
 from django import forms
 from forms.ajax import AjaxModelForm
-from ripa_archive.documents.models import DocumentData, Folder
+from ripa_archive.documents.models import DocumentData, Folder, Remark
 
 
 class UploadNewVersionForm(AjaxModelForm):
@@ -31,3 +31,15 @@ class RenameDocument(AjaxModelForm):
     class Meta:
         model = DocumentData
         fields = "name",
+
+
+class RemarkForm(AjaxModelForm):
+    class Meta:
+        model = Remark
+        fields = "text",
+
+    text = forms.CharField(
+        label="Remark",
+        required=True,
+        widget=forms.Textarea(attrs={"rows": 2})
+    )

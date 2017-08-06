@@ -1,4 +1,5 @@
 from ripa_archive.documents.views.main import SearchPlaceCode
+from ripa_archive.notifications.models import Notification
 
 
 def search(request):
@@ -14,10 +15,18 @@ def search(request):
     }
 
 
-def url(request):
+def common(request):
     # exclamation_split = request.path.split("!")
-    return {
+
+    context = {
         # "up_action_url": "!".join(x for i, x in enumerate(exclamation_split) if i < len(exclamation_split) - 1),
         "up_action_url": request.path.split("!")[0],
         "up_url": request.path.split("/")[0],
     }
+
+    if not request.user.is_anonymous:
+        context.update({
+            "have_notifications": Notification.objects.filter(to=request.user).count() > 0
+        })
+
+    return context

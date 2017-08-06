@@ -31,6 +31,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('text', models.TextField()),
+                ('datetime', models.DateTimeField(auto_now_add=True)),
                 ('edit_meta', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='documents.DocumentEditMeta')),
                 ('from_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],

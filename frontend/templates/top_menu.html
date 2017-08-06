@@ -51,10 +51,11 @@
             {% endif %}
 
             <li role="presentation">
-                <a href="" class="info-number"
-                   data-toggle="dropdown" aria-expanded="false">
+                <a href="{% url "notifications" %}" class="info-number">
                     <i class="fa fa-bell"></i>
-                    <span class="badge bg-green"></span>
+                    {% if have_notifications %}
+                        <span class="badge bg-green"></span>
+                    {% endif %}
                 </a>
             </li>
         </ul>

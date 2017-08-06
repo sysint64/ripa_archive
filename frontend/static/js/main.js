@@ -34,6 +34,9 @@ function getSelectedItemsData() {
 function executeAction(path, action, inputData, callback) {
     showWaitDialog();
 
+    if (inputData == null)
+        inputData = {};
+
     var url;
     const relativeActions = ["paste"];
 

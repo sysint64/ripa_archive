@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 
 from ripa_archive import views
+from ripa_archive.notifications.views import notifications
 
 
 def redirect_to_browser(request):
@@ -15,6 +16,7 @@ urlpatterns = [
     url(r'^documents/', include('ripa_archive.documents.urls', namespace="documents")),
     url(r'^accounts/', include('ripa_archive.accounts.urls', namespace="accounts")),
     url(r'^permissions/', include('ripa_archive.permissions.urls', namespace="permissions")),
+    url(r'^notifications/$', notifications, name="notifications"),
 ]
 
 

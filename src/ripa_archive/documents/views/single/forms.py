@@ -1,66 +1,19 @@
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
-from django.utils import timezone
 from django.views.decorators.http import require_http_methods
-from django.core.exceptions import PermissionDenied
-
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.exceptions import ValidationError
-from rest_framework.response import Response
 
 from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
-from ripa_archive.documents.forms.single import UploadNewVersionForm, RenameDocument, RenameFolder
-from ripa_archive.documents.models import Document, DocumentEditMeta, DocumentData, Folder
+from ripa_archive.documents.forms.single import UploadNewVersionForm, RemarkForm, RenameDocument, \
+    RenameFolder
+from ripa_archive.documents.models import Document, Folder, Remark
 from ripa_archive.documents.views.main import get_folder_or_404, browser_base_context
-from ripa_archive.permissions.decorators import require_permissions
-from ripa_archive.views import sendfile
-
-
-def get_document(*args, **kwargs):
-    path, name = kwargs.get("path"), kwargs["name"]
-    parent_folder = get_folder_or_404(path)
-    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
-    return document
-
-
-@api_view(["POST"])
-@transaction.atomic
-@require_permissions(["documents_can_take_for_revision"], get_instance_functor=get_document)
-def take_for_revision(request, name, path=None):
-    document = get_document(name=name, path=path)
-
-    if document.is_under_edition:
-        raise ValidationError("Already under edition")
-
-    # Attach editor to document
-    edit_meta = DocumentEditMeta.objects.create(editor=request.user, document=document)
-    document.current_edit_meta = edit_meta
-    document.save()
-
-    messages.success(request._request, "Successfully took")
-    return Response({}, status=status.HTTP_200_OK)
-
-
-@require_http_methods(["GET"])
-def last_version_file(request, name, path=None):
-    parent_folder = get_folder_or_404(path)
-    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
-
-    return sendfile(request, str(document.data.file.file), force_download=True)
-
-
-@require_http_methods(["GET"])
-def get_file(request, name, version, path=None):
-    parent_folder = get_folder_or_404(path)
-    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
-    data = get_object_or_404(DocumentData, document=document, pk=version)
-
-    return sendfile(request, str(data.file.file), force_download=True)
+from ripa_archive.notifications import notifications_factory
 
 
 @require_http_methods(["GET", "POST"])
@@ -91,18 +44,22 @@ def upload_new_version(request, name, path=None):
         data.document = document
         data.save()
 
-        Activity.objects.create(
+        Activity.objects.create_for_document(
+            request.user,
+            document,
             user=request.user,
-            content_type="documents.Document",
+            content_type=Document.content_type,
             target_id=document.pk,
             document_data=data,
             details=form.cleaned_data["message"]
         )
 
         if document.name != form.cleaned_data["name"]:
-            Activity.objects.create(
+            Activity.objects.create_for_document(
+                request.user,
+                document,
                 user=request.user,
-                content_type="documents.Document",
+                content_type=Document.content_type,
                 target_id=document.pk,
                 details=strings.ACTIVITY_RENAME_DOCUMENT.format(
                     old_name=document.name,
@@ -124,13 +81,76 @@ def upload_new_version(request, name, path=None):
 
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
+def write_remark(request, name, path=None):
+    parent_folder = get_folder_or_404(path)
+    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
+    reject_remark_id = request.GET.get("reject_remark_id")
+    remark_to_reject = None
+
+    try:
+        reject_remark_id = int(reject_remark_id)
+    except ValueError:
+        raise Http404()
+
+    if reject_remark_id is not None:
+        remark_to_reject = get_object_or_404(Remark, id=reject_remark_id)
+
+        if remark_to_reject.is_rejected:
+            raise PermissionDenied()
+
+    if document.current_edit_meta is None:
+        raise PermissionDenied()
+
+    form = RemarkForm(request.POST)
+
+    context = browser_base_context(request)
+    context.update({
+        "form_title": "Write remark",
+        "form": form,
+        "submit_title": "Submit",
+        "validator_url": reverse("documents:validator-write-remark"),
+    })
+
+    if request.method == "POST" and form.is_valid():
+        remark = form.save(commit=False)
+        remark.edit_meta = document.current_edit_meta
+        remark.user = request.user
+        remark.save()
+
+        # Reject remark
+        if remark_to_reject is not None:
+            remark_to_reject.status = Remark.Status.REJECTED
+            remark_to_reject.save()
+
+            notifications_factory.notification_remark(
+                request.user,
+                document,
+                remark_to_reject,
+                strings.NOTIFICATION_REMARK_REJECTED
+            )
+
+        notifications_factory.notification_remark(
+            request.user,
+            document,
+            remark,
+            strings.NOTIFICATION_REMARK_WROTE
+        )
+
+        messages.success(request, "Successfully submitted remark")
+        return redirect(document.permalink)
+
+    return TemplateResponse(template="forms/form.html", request=request, context=context)
+
+
+@require_http_methods(["GET", "POST"])
+@transaction.atomic
 def rename_document(request, name, path=None):
     parent_folder = get_folder_or_404(path)
     document = get_object_or_404(Document, parent=parent_folder, data__name=name)
     old_name = document.name
 
     if request.method == "POST":
-        form = RenameDocument(request.POST, request.FILES, instance=document.data)
+        form = RenameDocument(request.POST, instance=document.data)
     else:
         form = RenameDocument(instance=document.data)
 
@@ -146,9 +166,11 @@ def rename_document(request, name, path=None):
         redirect_next = request.GET.get("next", "single")
 
         if old_name != form.cleaned_data["name"]:
-            Activity.objects.create(
+            Activity.objects.create_for_document(
+                request.user,
+                document,
                 user=request.user,
-                content_type="documents.Document",
+                content_type=Document.content_type,
                 target_id=document.pk,
                 details=strings.ACTIVITY_RENAME_DOCUMENT.format(
                     old_name=old_name,
@@ -175,7 +197,7 @@ def rename_folder(request, name, path=None):
     old_name = folder.name
 
     if request.method == "POST":
-        form = RenameFolder(request.POST, request.FILES, instance=folder)
+        form = RenameFolder(request.POST, instance=folder)
     else:
         form = RenameDocument(instance=folder)
 
@@ -193,7 +215,7 @@ def rename_folder(request, name, path=None):
         if old_name != form.cleaned_data["name"]:
             Activity.objects.create(
                 user=request.user,
-                content_type="documents.Folder",
+                content_type=Folder.content_type,
                 target_id=folder.pk,
                 details=strings.ACTIVITY_RENAME_FOLDER.format(
                     old_name=old_name,

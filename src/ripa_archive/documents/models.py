@@ -75,6 +75,8 @@ class Folder(ModelWhichHaveCustomPermissionsMixin, models.Model):
     class Meta:
         default_related_name = "folders"
 
+    content_type = "documents.Folder"
+
     custom_permission_model = FolderCustomPermission
     parent = models.ForeignKey('Folder', null=True, blank=True)
     name = models.CharField(verbose_name="name", help_text="this is a help text", max_length=60)
@@ -134,8 +136,11 @@ class Document(models.Model):
     class Meta:
         default_related_name = "documents"
 
+    content_type = "documents.Document"
+
     owner = models.ForeignKey(User, null=True, related_name="owner")
     contributors = models.ManyToManyField(User, related_name="contributors")
+    followers = models.ManyToManyField(User, related_name="followers")
 
     data = models.OneToOneField("DocumentData", null=True, default=None)
     current_edit_meta = models.ForeignKey("DocumentEditMeta", null=True, default=None)
@@ -276,6 +281,7 @@ class DocumentData(models.Model):
     def permalink(self):
         return self.document.data_permalink(self)
 
+
 class DocumentEditMeta(models.Model):
     editor = models.ForeignKey(User)
     start_datetime = models.DateTimeField(auto_now_add=True)
@@ -285,6 +291,44 @@ class DocumentEditMeta(models.Model):
 
 
 class Remark(models.Model):
+    class Status:
+        ACTIVE = '0'
+        ACCEPTED = '1'
+        REJECTED = '2'
+        FINISHED = '3'
+
+        CHOICES = (
+            (ACTIVE, "Active"),
+            (ACCEPTED, "Accepted"),
+            (REJECTED, "Rejected"),
+            (FINISHED, "Finished"),
+        )
+
+    class Meta:
+        ordering = ["-datetime"]
+
     edit_meta = models.ForeignKey(DocumentEditMeta)
-    from_user = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     text = models.TextField()
+    datetime = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=1, choices=Status.CHOICES, default=Status.ACTIVE)
+
+    @property
+    def is_accepted(self):
+        return self.status == Remark.Status.ACCEPTED
+
+    @property
+    def is_rejected(self):
+        return self.status == Remark.Status.REJECTED
+
+    @property
+    def is_finished(self):
+        return self.status == Remark.Status.FINISHED
+
+    @property
+    def css_class(self):
+        return {
+            Remark.Status.ACCEPTED: " accepted",
+            Remark.Status.REJECTED: " rejected",
+            Remark.Status.FINISHED: " finished",
+        }.get(self.status, "")

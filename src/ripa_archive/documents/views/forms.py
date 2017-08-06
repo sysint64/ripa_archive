@@ -5,8 +5,8 @@ from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.forms.browser import CreateFolderForm, CreateDocumentForm, \
     FolderPermissionsForm, DocumentPermissionsForm
-from ripa_archive.documents.models import Document
-from ripa_archive.documents.views.main import get_folder_or_404
+from ripa_archive.documents.models import Document, Folder
+from ripa_archive.documents.views.main import get_folder_or_404, browser_base_context
 from ripa_archive.views import MultiFormCreationWithPermissions
 
 
@@ -16,6 +16,7 @@ class BrowserMultiFormCreation(MultiFormCreationWithPermissions):
         parent_folder = get_folder_or_404(path)
 
         context = super().get_context_data(**kwargs)
+        context.update(browser_base_context(self.request))
         context.update({
             "parent_folder": parent_folder,
             "form": self.form_class(initial={"parent": parent_folder}),
@@ -55,7 +56,7 @@ class CreateFolders(BrowserMultiFormCreation):
         folder = super().perform_create(form)
         Activity.objects.create(
             user=self.request.user,
-            content_type="documents.Folder",
+            content_type=Folder.content_type,
             target_id=folder.pk,
             details=strings.ACTIVITY_CREATE_FOLDER.format(
                 name=folder.name,
@@ -83,11 +84,13 @@ class CreateDocuments(BrowserMultiFormCreation):
         data.save()
 
         document.data = document.last_data
+        document.owner = self.request.user
+        document.followers.add(self.request.user)
         document.save()
 
         Activity.objects.create(
             user=self.request.user,
-            content_type="documents.Document",
+            content_type=Document.content_type,
             target_id=document.pk,
             document_data=document.data,
             details=strings.ACTIVITY_CREATE_DOCUMENT.format(

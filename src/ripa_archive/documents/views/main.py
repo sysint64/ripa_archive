@@ -8,7 +8,7 @@ from haystack.inputs import Exact
 from haystack.query import SearchQuerySet
 
 from ripa_archive.activity.models import Activity
-from ripa_archive.documents.models import Folder, Document
+from ripa_archive.documents.models import Folder, Document, Remark
 
 
 def get_folder_or_404(path):
@@ -73,25 +73,6 @@ def document_browser(request, path=None):
     })
 
     return TemplateResponse(template="documents_browser/list.html", request=request, context=context)
-
-
-def document(request, name, path=None):
-    parent_folder = get_folder_or_404(path)
-    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
-
-    context = browser_base_context(request)
-    context.update({
-        "document": document,
-        "parent_folder": parent_folder,
-        "activities":
-            Activity.objects.filter(
-                content_type="documents.Document",
-                target_id=document.pk
-            )[:20]
-    })
-
-    return TemplateResponse(template="documents_browser/single.html", request=request,
-                            context=context)
 
 
 def search(request, path=None):

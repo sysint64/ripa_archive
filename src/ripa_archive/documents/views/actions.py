@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
+from ripa_archive.activity.models import Activity
+from ripa_archive.documents import strings
 from ripa_archive.documents.models import Folder, Document
 from ripa_archive.documents.views.input_serializers import BulkInputSerializer, \
     ChangeFolderInputSerializer
@@ -54,7 +56,7 @@ def paste(request, path=None):
     to_folder = get_folder_or_404(path)
 
     do_cut = request.session.get("cut_folders", []) != [] or \
-             request.session.get("cut_documents", []) != []
+        request.session.get("cut_documents", []) != []
 
     folders = request.session.get("copied_folders", [])
     folders.extend(request.session.get("cut_folders", []))
@@ -85,7 +87,7 @@ def paste(request, path=None):
             document_data.document = dst_document
             document_data.save()
 
-        dst_document.data =  src_document.last_data
+        dst_document.data = src_document.last_data
         dst_document.save()
 
     def do_paste(items, manager, to_folder_manager):
@@ -98,10 +100,37 @@ def paste(request, path=None):
             if to_folder_manager.exist_with_name(item.name):
                 raise ValidationError(to_folder_manager.ALREADY_EXIST_ERROR % item.name)
 
+            old_path = item.path
             item.parent = to_folder
 
             if do_cut:
                 item.save()
+
+                if isinstance(item, Folder):
+                    Activity.objects.create(
+                        user=request.user,
+                        content_type=Folder.content_type,
+                        target_id=item.pk,
+                        details=strings.ACTIVITY_MOVE_FOLDER.format(
+                            old_path=old_path,
+                            new_path=item.path
+                        )
+                    )
+                elif isinstance(item, Document):
+                    Activity.objects.create_for_document(
+                        request.user,
+                        item,
+                        user=request.user,
+                        content_type=Document.content_type,
+                        target_id=item.pk,
+                        details=strings.ACTIVITY_MOVE_DOCUMENT.format(
+                            old_path=old_path,
+                            new_path=item.path
+                        )
+                    )
+                else:
+                    raise SuspiciousOperation()
+
             else:  # make copy
                 item.pk = None
                 item.save()

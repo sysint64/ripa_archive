@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     # 'ripa_archive.documents.apps.DocumentsConfig',
     'ripa_archive.permissions.apps.PermissionsConfig',
     'ripa_archive.activity.apps.ActivityConfig',
+    'ripa_archive.notifications.apps.NotificationsConfig',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'ripa_archive.context_processors.search',
-                'ripa_archive.context_processors.url',
+                'ripa_archive.context_processors.common',
             ],
         },
     },

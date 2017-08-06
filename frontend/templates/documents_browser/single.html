@@ -40,64 +40,78 @@
     <div class="x_panel">
         <div class="x_title">
             <h2>{{ document.name }}</h2>
+            {% if user_is_follow %}
+                <a href="#" id="toggle-follow" title="Do not follow">
+                    <i class="fa fa-eye-slash"></i>
+                </a>
+            {% else %}
+                <a href="#" id="toggle-follow" title="Follow">
+                    <i class="fa fa-eye"></i>
+                </a>
+            {% endif %}
             <div class="clearfix"></div>
         </div>
         <div class="document-content xcontent">
             <div class="col-md-9 col-sm-9 col-xs-12">
-                <h4>Remarks</h4>
-                <ul class="messages">
-                    <li>
-                        <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
-                        <div class="message_wrapper">
-                            <h4 class="heading">Andrey Kabylin <span class="email">(andrey@kabylin.ru)</span> <span class="datetime">04.04.1993 15:05</span></h4>
-                            <blockquote class="message remark">
-                                Rename document from "SPICE" to "SPICE like simulation"
-                            </blockquote>
-                            <ul class="editor-tools">
-                                <li>
-                                    <a href="">Commit <i class="fa fa-paper-plane"></i></a>
-                                </li>
-                            </ul>
-                            <br>
-                        </div>
-                    </li>
+                {% if document.is_under_edition and remarks.count > 0 %}
+                    <h4>Remarks</h4>
+                    <ul class="messages">
+                        {% for remark in remarks %}
+                            <li class="remark-li">
+                                {% thumbnail remark.user.avatar_image "50x50" crop="center" as im %}
+                                    <img src="{{ im.url }}" class="avatar">
+                                {% empty %}
+                                    <img src="{% static "images/noavatar.png" %}" class="avatar">
+                                {% endthumbnail %}
+                                <div class="message_wrapper">
+                                    <h4 class="heading">
+                                        <a href="{{ remark.user.permalink }}">
+                                            {{ remark.user }}
+                                            <span class="email">({{ remark.user.email }})</span>
+                                        </a>
 
-                    <li>
-                        <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
-                        <div class="message_wrapper">
-                            <h4 class="heading">Andrey Kabylin <span class="email">(andrey@kabylin.ru)</span> <span class="datetime">04.04.1993 15:05</span></h4>
-                            <blockquote class="message remark">
-                                Rename document from "SPICE" to "SPICE like simulation"
-                            </blockquote>
-                            <ul class="reviewer-tools">
-                                <li>
-                                    <a href="">Accept <i class="fa fa-check"></i></a>
-                                </li>
+                                        <span class="datetime">{{ remark.datetime }}</span>
+                                    </h4>
 
-                                <li>
-                                    <a href="">Reject <i class="fa fa-times"></i></a>
-                                </li>
-                            </ul>
-                            <br>
-                        </div>
-                    </li>
+                                    <blockquote class="message remark{{ remark.css_class }}">
+                                        {{ remark.text }}
+                                    </blockquote>
 
-                    <li>
-                        <img src="{% static "images/mock/img.jpg" %}" class="avatar" alt="Avatar">
-                        <div class="message_wrapper">
-                            <h4 class="heading">Andrey Kabylin <span class="email">(andrey@kabylin.ru)</span> <span class="datetime">04.04.1993 15:05</span></h4>
-                            <blockquote class="message remark accepted">
-                                Rename document from "SPICE" to "SPICE like simulation"
-                            </blockquote>
-                            <ul class="reviewer-tools">
-                                <li>
-                                    <a href="">Reject <i class="fa fa-times"></i></a>
-                                </li>
-                            </ul>
-                            <br>
-                        </div>
-                    </li>
-                </ul>
+                                    {% if not remark.is_accepted %}
+                                        {% if user_is_editor %}
+                                            <ul class="editor-tools">
+                                                {% if not remark.is_finished %}
+                                                    <li>
+                                                        <a href="#" class="mark-as-finished" data-remark-id="{{ remark.pk }}">
+                                                            Mark as finished <i class="fa fa-check"></i>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                            </ul>
+                                        {% else %}
+                                            <ul class="reviewer-tools">
+                                                <li>
+                                                    <a href="#" class="accept-remark" data-remark-id="{{ remark.pk }}">
+                                                        Accept <i class="fa fa-check"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="!action:write-remark/?reject_remark_id={{ remark.pk }}"
+                                                       class="reject-remark"
+                                                    >
+                                                        Reject <i class="fa fa-times"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        {% endif %}
+                                    {% endif %}
+                                    <br>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
 
                 <h4>Activity</h4>
                 <ul class="messages">
@@ -122,6 +136,16 @@
                                 <blockquote class="message">
                                     {{ activity.details }}
                                 </blockquote>
+
+                                {% if activity.document_data is not None and activity.document_data.id != document.data.id %}
+                                    <ul class="reviewer-tools">
+                                        <li>
+                                            <a href="" class="revert-document" data-activity-id="{{ activity.pk }}">
+                                                Revert <i class="fa fa-undo"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                {% endif %}
                                 <br>
 
                                 {% if activity.document_data is not None %}
@@ -191,8 +215,8 @@
                         <div class="text-center mtop20">
                             <a href="{{ document.upload_new_version_permalink }}" class="btn btn-sm btn-primary" id="upload-new-version">Upload new version</a>
                             <a href="#" class="btn btn-sm btn-primary" id="take-for-revision">Take for revision</a>
-                            <a href="#" class="btn btn-sm btn-primary" id="write-remark">Write remark</a>
-                            <a href="#" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
+                            <a href="!action:write-remark/" class="btn btn-sm btn-primary" id="write-remark">Write remark</a>
+                            <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
                             <a href="#" class="btn btn-sm btn-success" id="accept">Accept</a>
                         </div>
                     </div>

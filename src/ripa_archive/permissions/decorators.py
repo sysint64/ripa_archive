@@ -9,7 +9,7 @@ def require_permissions(permissions, get_instance_functor=None):
             if instance is not None:
                 pass  # TODO: implement
 
-            func(request, *args, **kwargs)
+            return func(request, *args, **kwargs)
 
         return inner
 
