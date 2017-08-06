@@ -1,6 +1,7 @@
 import os
 
 from django.db import models
+from django.db.models import Q
 from django.urls import reverse
 
 from ripa_archive.accounts.models import User
@@ -144,6 +145,7 @@ class Document(models.Model):
 
     data = models.OneToOneField("DocumentData", null=True, default=None)
     current_edit_meta = models.ForeignKey("DocumentEditMeta", null=True, default=None)
+    accepted_edit_meta = models.ForeignKey("DocumentEditMeta", null=True, default=None, related_name="accepted_edit_meta")
     parent = models.ForeignKey(Folder)
     status = models.ForeignKey(Status)
 
@@ -283,11 +285,42 @@ class DocumentData(models.Model):
 
 
 class DocumentEditMeta(models.Model):
+    class Status:
+        ACTIVE = '0'
+        ACCEPTED = '1'
+        REJECTED = '2'
+
     editor = models.ForeignKey(User)
+    closed_by = models.ForeignKey(User, related_name="accepted_by", null=True)
     start_datetime = models.DateTimeField(auto_now_add=True)
     end_datetime = models.DateTimeField(null=True, default=None)
     document = models.ForeignKey(Document)
-    closed = models.BooleanField(default=False)
+    previous_document_data = models.ForeignKey(DocumentData, null=True)
+    status = models.CharField(max_length=1, default=Status.ACTIVE)
+
+    @property
+    def is_accepted(self):
+        return self.status == DocumentEditMeta.Status.ACCEPTED
+
+    @property
+    def is_rejected(self):
+        return self.status == DocumentEditMeta.Status.REJECTED
+
+    @property
+    def is_active(self):
+        return self.status == DocumentEditMeta.Status.ACTIVE
+
+    @property
+    def css_class(self):
+        return {
+            DocumentEditMeta.Status.ACCEPTED: " accepted",
+            DocumentEditMeta.Status.REJECTED: " rejected",
+        }.get(self.status, "")
+
+
+class ActiveRemarkManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(edit_meta__status=DocumentEditMeta.Status.ACTIVE)
 
 
 class Remark(models.Model):
@@ -297,13 +330,6 @@ class Remark(models.Model):
         REJECTED = '2'
         FINISHED = '3'
 
-        CHOICES = (
-            (ACTIVE, "Active"),
-            (ACCEPTED, "Accepted"),
-            (REJECTED, "Rejected"),
-            (FINISHED, "Finished"),
-        )
-
     class Meta:
         ordering = ["-datetime"]
 
@@ -311,7 +337,10 @@ class Remark(models.Model):
     user = models.ForeignKey(User)
     text = models.TextField()
     datetime = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=1, choices=Status.CHOICES, default=Status.ACTIVE)
+    status = models.CharField(max_length=1, default=Status.ACTIVE)
+
+    objects = models.Manager()
+    active_objects = ActiveRemarkManager()
 
     @property
     def is_accepted(self):
@@ -324,6 +353,10 @@ class Remark(models.Model):
     @property
     def is_finished(self):
         return self.status == Remark.Status.FINISHED
+
+    @property
+    def is_active(self):
+        return self.status == Remark.Status.ACTIVE
 
     @property
     def css_class(self):

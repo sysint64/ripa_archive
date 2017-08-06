@@ -14,6 +14,36 @@
         event.preventDefault();
     });
 
+    $("#accept-document").click(function(event) {
+        executeActionWithConfirm(
+            null,
+            "accept-document",
+            null,
+            "Accept new version of document?",
+            function () {
+                showWaitDialog();
+                location.reload();
+            }
+        );
+
+        event.preventDefault();
+    });
+
+    $("#reject-document").click(function(event) {
+        executeActionWithConfirm(
+            null,
+            "reject-document",
+            null,
+            "Reject new version of document and revert previous?",
+            function () {
+                showWaitDialog();
+                location.reload();
+            }
+        );
+
+        event.preventDefault();
+    });
+
     const $toggleFollow = $("#toggle-follow");
     $toggleFollow.click(function(event) {
         executeAction(
@@ -63,7 +93,7 @@
             "Accept this remark?",
             function () {
                 $conteiner.find(".reviewer-tools, .editor-tools").hide();
-                $conteiner.find(".remark").addClass("accepted");
+                $conteiner.find(".remark").removeClass("finished").removeClass("rejected").addClass("accepted");
             }
         );
 
@@ -91,7 +121,7 @@
             "Mark this remark as \"finished\" and send notification to reviewer?",
             function () {
                 $conteiner.find(".reviewer-tools, .editor-tools").hide();
-                $conteiner.find(".remark").addClass("finished");
+                $conteiner.find(".remark").removeClass("rejected").addClass("finished");
             }
         );
 

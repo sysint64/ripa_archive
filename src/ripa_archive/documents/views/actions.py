@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
+from ripa_archive.activity import activity_factory
 from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.models import Folder, Document
@@ -107,23 +108,19 @@ def paste(request, path=None):
                 item.save()
 
                 if isinstance(item, Folder):
-                    Activity.objects.create(
-                        user=request.user,
-                        content_type=Folder.content_type,
-                        target_id=item.pk,
-                        details=strings.ACTIVITY_MOVE_FOLDER.format(
+                    activity_factory.for_folder(
+                        request.user,
+                        item,
+                        strings.ACTIVITY_MOVE_FOLDER.format(
                             old_path=old_path,
                             new_path=item.path
                         )
                     )
                 elif isinstance(item, Document):
-                    Activity.objects.create_for_document(
+                    activity_factory.for_document(
                         request.user,
                         item,
-                        user=request.user,
-                        content_type=Document.content_type,
-                        target_id=item.pk,
-                        details=strings.ACTIVITY_MOVE_DOCUMENT.format(
+                        strings.ACTIVITY_MOVE_DOCUMENT.format(
                             old_path=old_path,
                             new_path=item.path
                         )

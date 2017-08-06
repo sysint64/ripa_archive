@@ -75,7 +75,8 @@ urlpatterns += \
     document_url(r'!action:revert-document/', single_actions_views.revert_document, name="revert-document") + \
     document_url(r'!action:accept-remark/', single_actions_views.accept_remark, name="accept-remark") + \
     document_url(r'!action:mark-as-finished-remark/', single_actions_views.mark_as_finished_remark, name="mark-as-finished-remark") + \
-    document_url(r'!action:accept-document/', None, name="accept-document")
+    document_url(r'!action:accept-document/', single_actions_views.accept_document, name="accept-document") + \
+    document_url(r'!action:reject-document/', single_actions_views.reject_document, name="reject-document")
 
 # Single document validators
 urlpatterns += [

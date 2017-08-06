@@ -7,6 +7,8 @@ from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
+from request_helper import get_request_int_or_404
+from ripa_archive.activity import activity_factory
 from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.forms.single import UploadNewVersionForm, RemarkForm, RenameDocument, \
@@ -44,34 +46,25 @@ def upload_new_version(request, name, path=None):
         data.document = document
         data.save()
 
-        Activity.objects.create_for_document(
+        document.data = data
+        document.save()
+
+        activity_factory.for_document(
             request.user,
             document,
-            user=request.user,
-            content_type=Document.content_type,
-            target_id=document.pk,
-            document_data=data,
-            details=form.cleaned_data["message"]
+            form.cleaned_data["message"],
+            document_data=data
         )
 
         if document.name != form.cleaned_data["name"]:
-            Activity.objects.create_for_document(
+            activity_factory.for_document(
                 request.user,
                 document,
-                user=request.user,
-                content_type=Document.content_type,
-                target_id=document.pk,
-                details=strings.ACTIVITY_RENAME_DOCUMENT.format(
+                strings.ACTIVITY_RENAME_DOCUMENT.format(
                     old_name=document.name,
                     new_name=form.cleaned_data["name"]
                 )
             )
-
-        document.data = data
-        # document.current_edit_meta.end_datetime = timezone.now()
-        # document.current_edit_meta.closed = True
-        # document.current_edit_meta.save()
-        document.save()
 
         messages.success(request, "Successfully uploaded")
         return redirect(document.permalink)
@@ -87,12 +80,8 @@ def write_remark(request, name, path=None):
     reject_remark_id = request.GET.get("reject_remark_id")
     remark_to_reject = None
 
-    try:
-        reject_remark_id = int(reject_remark_id)
-    except ValueError:
-        raise Http404()
-
     if reject_remark_id is not None:
+        reject_remark_id = get_request_int_or_404(request, "GET", "reject_remark_id")
         remark_to_reject = get_object_or_404(Remark, id=reject_remark_id)
 
         if remark_to_reject.is_rejected:
@@ -166,13 +155,10 @@ def rename_document(request, name, path=None):
         redirect_next = request.GET.get("next", "single")
 
         if old_name != form.cleaned_data["name"]:
-            Activity.objects.create_for_document(
+            activity_factory.for_document(
                 request.user,
                 document,
-                user=request.user,
-                content_type=Document.content_type,
-                target_id=document.pk,
-                details=strings.ACTIVITY_RENAME_DOCUMENT.format(
+                strings.ACTIVITY_RENAME_DOCUMENT.format(
                     old_name=old_name,
                     new_name=form.cleaned_data["name"]
                 )
@@ -213,11 +199,10 @@ def rename_folder(request, name, path=None):
         redirect_next = request.GET.get("next", "list")
 
         if old_name != form.cleaned_data["name"]:
-            Activity.objects.create(
-                user=request.user,
-                content_type=Folder.content_type,
-                target_id=folder.pk,
-                details=strings.ACTIVITY_RENAME_FOLDER.format(
+            activity_factory.for_folder(
+                request.user,
+                folder,
+                strings.ACTIVITY_RENAME_FOLDER.format(
                     old_name=old_name,
                     new_name=form.cleaned_data["name"]
                 )

@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 from django.db import transaction
 
+from ripa_archive.activity import activity_factory
 from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.forms.browser import CreateFolderForm, CreateDocumentForm, \
@@ -54,15 +55,15 @@ class CreateFolders(BrowserMultiFormCreation):
 
     def perform_create(self, form):
         folder = super().perform_create(form)
-        Activity.objects.create(
-            user=self.request.user,
-            content_type=Folder.content_type,
-            target_id=folder.pk,
-            details=strings.ACTIVITY_CREATE_FOLDER.format(
+        activity_factory.for_folder(
+            self.request.user,
+            folder,
+            strings.ACTIVITY_CREATE_FOLDER.format(
                 name=folder.name,
                 path=folder.path
             )
         )
+
         return folder
 
 
@@ -88,13 +89,12 @@ class CreateDocuments(BrowserMultiFormCreation):
         document.followers.add(self.request.user)
         document.save()
 
-        Activity.objects.create(
-            user=self.request.user,
-            content_type=Document.content_type,
-            target_id=document.pk,
-            document_data=document.data,
-            details=strings.ACTIVITY_CREATE_DOCUMENT.format(
+        activity_factory.for_document(
+            self.request.user,
+            document,
+            strings.ACTIVITY_CREATE_DOCUMENT.format(
                 name=document.data.name,
                 path=document.path
-            )
+            ),
+            document_data=document.last_data
         )

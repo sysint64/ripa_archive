@@ -89,21 +89,25 @@
                                                 {% endif %}
                                             </ul>
                                         {% else %}
-                                            <ul class="reviewer-tools">
-                                                <li>
-                                                    <a href="#" class="accept-remark" data-remark-id="{{ remark.pk }}">
-                                                        Accept <i class="fa fa-check"></i>
-                                                    </a>
-                                                </li>
+                                            {% if not remark.is_active %}
+                                                <ul class="reviewer-tools">
+                                                    <li>
+                                                        <a href="#" class="accept-remark" data-remark-id="{{ remark.pk }}">
+                                                            Accept <i class="fa fa-check"></i>
+                                                        </a>
+                                                    </li>
 
-                                                <li>
-                                                    <a href="!action:write-remark/?reject_remark_id={{ remark.pk }}"
-                                                       class="reject-remark"
-                                                    >
-                                                        Reject <i class="fa fa-times"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                                    {% if not remark.is_rejected %}
+                                                        <li>
+                                                            <a href="!action:write-remark/?reject_remark_id={{ remark.pk }}"
+                                                               class="reject-remark"
+                                                            >
+                                                                Reject <i class="fa fa-times"></i>
+                                                            </a>
+                                                        </li>
+                                                    {% endif %}
+                                                </ul>
+                                            {% endif %}
                                         {% endif %}
                                     {% endif %}
                                     <br>
@@ -133,9 +137,15 @@
                                     <span class="datetime">{{ activity.datetime }}</span>
                                 </h4>
 
-                                <blockquote class="message">
-                                    {{ activity.details }}
-                                </blockquote>
+                                {% if activity.document_edit_meta is None %}
+                                    <blockquote class="message activity">
+                                        {{ activity.details }}
+                                    </blockquote>
+                                {% else %}
+                                    <blockquote class="message activity{{ activity.document_edit_meta.css_class }}">
+                                        {{ activity.details }}
+                                    </blockquote>
+                                {% endif %}
 
                                 {% if activity.document_data is not None and activity.document_data.id != document.data.id %}
                                     <ul class="reviewer-tools">
@@ -158,6 +168,16 @@
                                             {{ activity.document_data.filename }}
                                         </a>
                                     </p>
+                                {% endif %}
+
+                                {% if activity.document_edit_meta.closed_by is not None and activity.document_edit_meta.is_accepted %}
+                                    <div class="accepted_by">
+                                        Accepted by: {{ activity.document_edit_meta.closed_by }}
+                                    </div>
+                                {% elif activity.document_edit_meta.closed_by is not None and activity.document_edit_meta.is_rejected %}
+                                    <div class="accepted_by">
+                                        Rejected by: {{ activity.document_edit_meta.closed_by }}
+                                    </div>
                                 {% endif %}
                             </div>
                         </li>
@@ -213,11 +233,21 @@
                         <br>
 
                         <div class="text-center mtop20">
-                            <a href="{{ document.upload_new_version_permalink }}" class="btn btn-sm btn-primary" id="upload-new-version">Upload new version</a>
-                            <a href="#" class="btn btn-sm btn-primary" id="take-for-revision">Take for revision</a>
-                            <a href="!action:write-remark/" class="btn btn-sm btn-primary" id="write-remark">Write remark</a>
-                            <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
-                            <a href="#" class="btn btn-sm btn-success" id="accept">Accept</a>
+                            {% if user_is_editor %}
+                                <a href="{{ document.upload_new_version_permalink }}" class="btn btn-sm btn-primary" id="upload-new-version">Upload new version</a>
+                                <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
+                            {% endif %}
+
+                            {% if not document.is_under_edition %}
+                                <a href="#" class="btn btn-sm btn-primary" id="take-for-revision">Take for revision</a>
+                                <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
+                            {% endif %}
+
+                            {% if not user_is_editor and document.is_under_edition %}
+                                <a href="!action:write-remark/" class="btn btn-sm btn-primary" id="write-remark">Write remark</a>
+                                <a href="#" class="btn btn-sm btn-success" id="accept-document">Accept</a>
+                                <a href="#" class="btn btn-sm btn-danger" id="reject-document">Reject</a>
+                            {% endif %}
                         </div>
                     </div>
                 </section>

@@ -21,9 +21,9 @@ def document_view(request, name, path=None):
                 content_type="documents.Document",
                 target_id=document.pk
             )[:20],
-        "remarks": Remark.objects.filter(edit_meta__document=document),
+        "remarks": Remark.active_objects.filter(edit_meta__document=document),
         "user_is_follow": request.user in document.followers.all(),
-        "user_is_editor": document.current_edit_meta.editor == request.user
+        "user_is_editor": document.current_edit_meta is not None and document.current_edit_meta.editor == request.user
     })
 
     return TemplateResponse(template="documents_browser/single.html", request=request,

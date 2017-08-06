@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
+from django.utils import timezone
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -9,6 +10,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from request_helper import get_request_int_or_404
+from ripa_archive.activity import activity_factory
 from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.models import Document, DocumentEditMeta, Remark
@@ -35,7 +37,12 @@ def take_for_revision(request, name, path=None):
         raise ValidationError("Already under edition")
 
     # Attach editor to document
-    edit_meta = DocumentEditMeta.objects.create(editor=request.user, document=document)
+    edit_meta = DocumentEditMeta.objects.create(
+        editor=request.user,
+        document=document,
+        previous_document_data=document.data
+    )
+
     document.current_edit_meta = edit_meta
     document.save()
 
@@ -127,14 +134,75 @@ def revert_document(request, name, path=None):
     document.data = activity.document_data
     document.save()
 
-    Activity.objects.create_for_document(
+    activity_factory.for_document(
         request.user,
         document,
-        user=request.user,
-        content_type=Document.content_type,
-        target_id=document.pk,
-        document_data=activity.document_data,
-        details=strings.ACTIVITY_REVERT_DOCUMENT.format(datetime=activity.datetime)
+        strings.ACTIVITY_REVERT_DOCUMENT.format(datetime=activity.datetime),
+        document_data=activity.document_data
+    )
+
+    return Response({}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@transaction.atomic
+def accept_document(request, name, path=None):
+    document = get_document(name=name, path=path)
+
+    if document.current_edit_meta is None:
+        raise PermissionDenied()
+
+    notifications_factory.notification_document(
+        request.user,
+        document,
+        strings.NOTIFICATION_DOCUMENT_ACCEPTED
+    )
+
+    edit_meta = document.current_edit_meta
+    edit_meta.end_datetime = timezone.now()
+    edit_meta.status = DocumentEditMeta.Status.ACCEPTED
+    edit_meta.closed_by = request.user
+    edit_meta.save()
+
+    document.accepted_edit_meta = document.current_edit_meta
+    document.current_edit_meta = None
+    document.save()
+
+    return Response({}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@transaction.atomic
+def reject_document(request, name, path=None):
+    document = get_document(name=name, path=path)
+
+    if document.current_edit_meta is None:
+        raise PermissionDenied()
+
+    notifications_factory.notification_document(
+        request.user,
+        document,
+        strings.NOTIFICATION_DOCUMENT_REJECTED
+    )
+
+    edit_meta = document.current_edit_meta
+    edit_meta.end_datetime = timezone.now()
+    edit_meta.status = DocumentEditMeta.Status.REJECTED
+    edit_meta.closed_by = request.user
+    edit_meta.save()
+
+    document.accepted_edit_meta = document.current_edit_meta
+    document.current_edit_meta = None
+    document.data = edit_meta.previous_document_data
+    document.save()
+
+    activity_factory.for_document(
+        request.user,
+        document,
+        strings.ACTIVITY_REVERT_DOCUMENT.format(
+            datetime=edit_meta.previous_document_data.datetime
+        ),
+        document_data=edit_meta.previous_document_data
     )
 
     return Response({}, status=status.HTTP_200_OK)
