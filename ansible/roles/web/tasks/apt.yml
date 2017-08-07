@@ -7,7 +7,6 @@
   apt: pkg={{ item.name }} state=present
   with_items:
   - name: unzip
-  - name: gtar
   - name: nginx-full
   - name: python-pip
   - name: python3.6

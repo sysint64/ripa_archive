@@ -12,12 +12,15 @@
   notify:
     - restart gunicorn
 
+- name: make migrations for thumbnail
+  command: "{{ project_virtualenv_dir }}/bin/python {{ project_work_tree }}/src/manage.py makemigrations thumbnail --noinput"
+
 - name: migrate
   command: "{{ project_virtualenv_dir }}/bin/python {{ project_work_tree }}/src/manage.py migrate --noinput"
   notify:
     - restart gunicorn
 
-- name: install packages based on bower.json.
+- name: install packages based on bower.json
   bower:
     path: "{{ project_work_tree }}/frontend/static"
 
