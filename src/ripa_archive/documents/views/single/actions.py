@@ -15,21 +15,16 @@ from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.models import Document, DocumentEditMeta, Remark
 from ripa_archive.documents.views.main import get_folder_or_404
+from ripa_archive.documents.views.single.main import get_document
 from ripa_archive.notifications.models import Notification
 from ripa_archive.notifications import notifications_factory
+from ripa_archive.permissions import codes
 from ripa_archive.permissions.decorators import require_permissions
-
-
-def get_document(*args, **kwargs):
-    path, name = kwargs.get("path"), kwargs["name"]
-    parent_folder = get_folder_or_404(path)
-    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
-    return document
 
 
 @api_view(["POST"])
 @transaction.atomic
-@require_permissions(["documents_can_take_for_revision"], get_instance_functor=get_document)
+@require_permissions([codes.DOCUMENTS_CAN_TAKE_DOCUMENT_FOR_REVISION], get_instance_functor=get_document)
 def take_for_revision(request, name, path=None):
     document = get_document(name=name, path=path)
 
@@ -52,7 +47,7 @@ def take_for_revision(request, name, path=None):
 
 @api_view(["POST"])
 @transaction.atomic
-@require_permissions(["documents_can_read"], get_instance_functor=get_document)
+@require_permissions([codes.DOCUMENTS_CAN_READ], get_instance_functor=get_document)
 def toggle_follow(request, name, path=None):
     document = get_document(name=name, path=path)
 
@@ -66,6 +61,7 @@ def toggle_follow(request, name, path=None):
 
 @api_view(["POST"])
 @transaction.atomic
+@require_permissions([codes.DOCUMENTS_CAN_REVIEW], get_instance_functor=get_document)
 def accept_remark(request, name, path=None):
     document = get_document(name=name, path=path)
 
@@ -94,6 +90,7 @@ def accept_remark(request, name, path=None):
 
 @api_view(["POST"])
 @transaction.atomic
+@require_permissions([codes.DOCUMENTS_CAN_TAKE_DOCUMENT_FOR_REVISION], get_instance_functor=get_document)
 def mark_as_finished_remark(request, name, path=None):
     document = get_document(name=name, path=path)
 
@@ -120,6 +117,7 @@ def mark_as_finished_remark(request, name, path=None):
 
 @api_view(["POST"])
 @transaction.atomic
+@require_permissions([codes.DOCUMENTS_CAN_REVERT], get_instance_functor=get_document)
 def revert_document(request, name, path=None):
     document = get_document(name=name, path=path)
     activity_id = get_request_int_or_404(request, "data", "activity_id")
@@ -146,6 +144,7 @@ def revert_document(request, name, path=None):
 
 @api_view(["POST"])
 @transaction.atomic
+@require_permissions([codes.DOCUMENTS_CAN_REVIEW], get_instance_functor=get_document)
 def accept_document(request, name, path=None):
     document = get_document(name=name, path=path)
 
@@ -173,6 +172,7 @@ def accept_document(request, name, path=None):
 
 @api_view(["POST"])
 @transaction.atomic
+@require_permissions([codes.DOCUMENTS_CAN_REVIEW], get_instance_functor=get_document)
 def reject_document(request, name, path=None):
     document = get_document(name=name, path=path)
 

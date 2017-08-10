@@ -1,21 +1,38 @@
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.http import require_http_methods
 
 from ripa_archive.activity.models import Activity
-from ripa_archive.documents.models import Document, DocumentData, Remark
+from ripa_archive.documents.models import Document, DocumentData, Remark, Folder
 from ripa_archive.documents.views.main import get_folder_or_404, browser_base_context
+from ripa_archive.permissions import codes
+from ripa_archive.permissions.decorators import require_permissions
 from ripa_archive.views import sendfile
 
 
-def document_view(request, name, path=None):
+def get_document(*args, **kwargs):
+    path, name = kwargs.get("path"), kwargs["name"]
     parent_folder = get_folder_or_404(path)
     document = get_object_or_404(Document, parent=parent_folder, data__name=name)
+    return document
+
+
+def get_folder(*args, **kwargs):
+    path, name = kwargs.get("path"), kwargs["name"]
+    parent_folder = get_folder_or_404(path)
+    folder = get_object_or_404(Folder, parent=parent_folder, name=name)
+    return folder
+
+
+@transaction.atomic
+@require_permissions([codes.DOCUMENTS_CAN_READ], get_instance_functor=get_document)
+def document_view(request, name, path=None):
+    document = get_document(name=name, path=path)
 
     context = browser_base_context(request)
     context.update({
         "document": document,
-        "parent_folder": parent_folder,
         "activities":
             Activity.objects.filter(
                 content_type="documents.Document",
@@ -31,6 +48,7 @@ def document_view(request, name, path=None):
 
 
 @require_http_methods(["GET"])
+@require_permissions([codes.DOCUMENTS_CAN_READ_LAST_VERSION], get_instance_functor=get_document)
 def last_version_file(request, name, path=None):
     parent_folder = get_folder_or_404(path)
     document = get_object_or_404(Document, parent=parent_folder, data__name=name)
@@ -39,6 +57,7 @@ def last_version_file(request, name, path=None):
 
 
 @require_http_methods(["GET"])
+@require_permissions([codes.DOCUMENTS_CAN_READ_PREVIOUS_VERSIONS], get_instance_functor=get_document)
 def get_file(request, name, version, path=None):
     parent_folder = get_folder_or_404(path)
     document = get_object_or_404(Document, parent=parent_folder, data__name=name)

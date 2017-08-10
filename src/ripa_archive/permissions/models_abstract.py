@@ -8,6 +8,10 @@ class ModelWhichHaveCustomPermissionsMixin:
     custom_permission_model = None
 
     def is_user_has_permission(self, user, permission):
+        if hasattr(self, "parent") and  self.parent is not None:
+            if not self.parent.is_user_has_permission(user, permission):
+                return False
+
         custom_permissions = self.custom_permission_model.objects.filter(for_instances=self)
 
         for custom_permission in custom_permissions:

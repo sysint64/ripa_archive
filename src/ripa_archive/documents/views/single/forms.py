@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -9,20 +8,22 @@ from django.views.decorators.http import require_http_methods
 
 from request_helper import get_request_int_or_404
 from ripa_archive.activity import activity_factory
-from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.forms.single import UploadNewVersionForm, RemarkForm, RenameDocument, \
     RenameFolder
-from ripa_archive.documents.models import Document, Folder, Remark
-from ripa_archive.documents.views.main import get_folder_or_404, browser_base_context
+from ripa_archive.documents.models import Remark
+from ripa_archive.documents.views.main import browser_base_context
+from ripa_archive.documents.views.single.main import get_document, get_folder
 from ripa_archive.notifications import notifications_factory
+from ripa_archive.permissions import codes
+from ripa_archive.permissions.decorators import require_permissions
 
 
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
+@require_permissions([codes.DOCUMENTS_CAN_TAKE_DOCUMENT_FOR_REVISION], get_instance_functor=get_document)
 def upload_new_version(request, name, path=None):
-    parent_folder = get_folder_or_404(path)
-    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
+    document = get_document(name=name, path=path)
 
     if document.current_edit_meta is None:
         raise PermissionDenied()
@@ -74,9 +75,9 @@ def upload_new_version(request, name, path=None):
 
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
+@require_permissions([codes.DOCUMENTS_CAN_REVIEW], get_instance_functor=get_document)
 def write_remark(request, name, path=None):
-    parent_folder = get_folder_or_404(path)
-    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
+    document = get_document(name=name, path=path)
     reject_remark_id = request.GET.get("reject_remark_id")
     remark_to_reject = None
 
@@ -133,9 +134,9 @@ def write_remark(request, name, path=None):
 
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
+@require_permissions([codes.DOCUMENTS_CAN_EDIT], get_instance_functor=get_document)
 def rename_document(request, name, path=None):
-    parent_folder = get_folder_or_404(path)
-    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
+    document = get_document(name=name, path=path)
     old_name = document.name
 
     if request.method == "POST":
@@ -177,9 +178,9 @@ def rename_document(request, name, path=None):
 
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
+@require_permissions([codes.FOLDERS_CAN_EDIT], get_instance_functor=get_folder)
 def rename_folder(request, name, path=None):
-    parent_folder = get_folder_or_404(path)
-    folder = get_object_or_404(Folder, parent=parent_folder, name=name)
+    folder = get_folder(name=name, path=path)
     old_name = folder.name
 
     if request.method == "POST":

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load states %}
+{% load permissions %}
 
 {% block styles %}
     {{ block.super }}
@@ -59,31 +60,37 @@
             {# Folders #}
             <tr>
             </tr>
-            {% for folder in parent_folder.folders.all %}
-                <tr class="selectable context-menu folder{% folder_extra_classes folder %}" data-id="{{ folder.id }}" data-group="folders">
-                    <td class="data-double-click-link" data-href="{{ folder.permalink }}">
-                        <i class="fa fa-folder"></i>
-                    </td>
-                    <td class="data-double-click-link" data-href="{{ folder.permalink }}">
-                        {{ folder }}
-                    </td>
-                    <td></td>
-                    <td>{{ folder.documents.last.data.datetime }}</td>
-                </tr>
+            {% for folder in folders %}
+                {% folder_has_permission folder "folders_can_read" as has_perm %}
+                {% if has_perm %}
+                    <tr class="selectable context-menu folder{% folder_extra_classes folder %}" data-id="{{ folder.id }}" data-group="folders">
+                        <td class="data-double-click-link" data-href="{{ folder.permalink }}">
+                            <i class="fa fa-folder"></i>
+                        </td>
+                        <td class="data-double-click-link" data-href="{{ folder.permalink }}">
+                            {{ folder }}
+                        </td>
+                        <td></td>
+                        <td>{{ folder.documents.last.data.datetime }}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
 
             {# Documents #}
-            {% for document in parent_folder.documents.all %}
-                <tr class="selectable context-menu document{% document_extra_classes document %}" data-id="{{ document.id }}" data-group="documents">
-                    <td class="data-double-click-link" data-href="{{ document.permalink }}">
-                        <i class="fa {{ document.data.icon }}"></i>
-                    </td>
-                    <td class="data-double-click-link" data-href="{{ document.permalink }}">
-                        {{ document }}
-                    </td>
-                    <td>{{ document.status }}</td>
-                    <td>{{ document.data.datetime }}</td>
-                </tr>
+            {% for document in documents %}
+                {% document_has_permission document "documents_can_read" as has_perm %}
+                {% if has_perm %}
+                    <tr class="selectable context-menu document{% document_extra_classes document %}" data-id="{{ document.id }}" data-group="documents">
+                        <td class="data-double-click-link" data-href="{{ document.permalink }}">
+                            <i class="fa {{ document.data.icon }}"></i>
+                        </td>
+                        <td class="data-double-click-link" data-href="{{ document.permalink }}">
+                            {{ document }}
+                        </td>
+                        <td>{{ document.status }}</td>
+                        <td>{{ document.data.datetime }}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
             <tr>
             </tr>

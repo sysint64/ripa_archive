@@ -6,7 +6,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from ripa_archive.activity import activity_factory
-from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.models import Folder, Document
 from ripa_archive.documents.views.input_serializers import BulkInputSerializer, \

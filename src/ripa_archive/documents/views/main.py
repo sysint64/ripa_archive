@@ -1,6 +1,7 @@
 from enum import Enum
 
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -9,6 +10,7 @@ from haystack.query import SearchQuerySet
 
 from ripa_archive.activity.models import Activity
 from ripa_archive.documents.models import Folder, Document, Remark
+from ripa_archive.permissions import codes
 
 
 def get_folder_or_404(path):
@@ -63,6 +65,9 @@ def document_browser(request, path=None):
     parent_folder = get_folder_or_404(path)
     parent_folder_url = ""
 
+    if not parent_folder.is_user_has_permission(request.user, codes.FOLDERS_CAN_READ):
+        raise PermissionDenied()
+
     if parent_folder.parent is not None:
         parent_folder_url = parent_folder.parent.permalink
 
@@ -70,6 +75,8 @@ def document_browser(request, path=None):
     context.update({
         "parent_folder": parent_folder,
         "parent_folder_url": parent_folder_url,
+        "folders": Folder.objects.for_user(request.user, parent_folder),
+        "documents": Document.objects.for_user(request.user, parent_folder),
     })
 
     return TemplateResponse(template="documents_browser/list.html", request=request, context=context)
