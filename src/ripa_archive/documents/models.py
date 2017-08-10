@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.urls import reverse
 
 from ripa_archive.accounts.models import User
+from ripa_archive.permissions import codes
 from ripa_archive.permissions.models_abstract import ModelCustomPermission, ModelWhichHaveCustomPermissionsMixin
 
 
@@ -37,12 +38,12 @@ class FoldersManager(models.Manager):
             return queryset.none()
 
         if folder is not None:
-            if not folder.is_user_has_permission(user, "folders_can_read"):
+            if not folder.is_user_has_permission(user, codes.FOLDERS_CAN_READ):
                 return queryset.none()
 
             return queryset.filter(parent=folder)
         else:
-            if not user.group.has_permission("folders_can_read"):
+            if not user.group.has_permission(codes.FOLDERS_CAN_READ):
                 return queryset.none()
 
         return queryset
@@ -58,8 +59,21 @@ class DocumentsManager(models.Manager):
 
         return False
 
-    def for_user(self, user):
+    def for_user(self, user, folder=None):
         queryset = self.get_queryset()
+
+        if user is None or user.group is None:
+            return queryset.none()
+
+        if folder is not None:
+            if not folder.is_user_has_permission(user, codes.DOCUMENTS_CAN_READ):
+                return queryset.none()
+
+            return queryset.filter(parent=folder)
+        else:
+            if not user.group.has_permission(codes.DOCUMENTS_CAN_READ):
+                return queryset.none()
+
         return queryset
 
 
@@ -133,11 +147,12 @@ class Status(models.Model):
         return self.name
 
 
-class Document(models.Model):
+class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
     class Meta:
         default_related_name = "documents"
 
     content_type = "documents.Document"
+    custom_permission_model = DocumentCustomPermission
 
     owner = models.ForeignKey(User, null=True, related_name="owner")
     contributors = models.ManyToManyField(User, related_name="contributors")
