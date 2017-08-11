@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 
 from ripa_archive import views
+from ripa_archive.activity.views import users_activity
 from ripa_archive.notifications.views import notifications
 
 
@@ -17,6 +18,7 @@ urlpatterns = [
     url(r'^accounts/', include('ripa_archive.accounts.urls', namespace="accounts")),
     url(r'^permissions/', include('ripa_archive.permissions.urls', namespace="permissions")),
     url(r'^notifications/$', notifications, name="notifications"),
+    url(r'^activity/$', users_activity, name="activity"),
 ]
 
 

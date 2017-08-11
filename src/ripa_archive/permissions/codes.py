@@ -23,3 +23,5 @@ DOCUMENTS_CAN_READ_PREVIOUS_VERSIONS = "documents_can_read_previous_versions"
 DOCUMENTS_CAN_TAKE_DOCUMENT_FOR_REVISION = "documents_can_take_document_for_revision"
 DOCUMENTS_CAN_REVIEW = "documents_can_review"
 DOCUMENTS_CAN_REVERT = "documents_can_revert"
+
+ACTIVITY_CAN_READ = "activity_can_read"

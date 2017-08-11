@@ -30,6 +30,11 @@ def forwards_func(apps, schema_editor):
     PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can revert older version of document")
     PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может вернуть старую версию документа")
 
+    # Activity
+    perm = Permission.objects.create(code="activity_can_read")
+    PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can read users activity")
+    PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может просматривать активность пользователей")
+
 
 def reverse_func(apps, schema_editor):
     Permission = apps.get_model("permissions", "Permission")

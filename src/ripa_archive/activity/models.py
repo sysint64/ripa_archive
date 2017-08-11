@@ -1,7 +1,7 @@
 from django.db import models
 
 from ripa_archive.accounts.models import User
-from ripa_archive.documents.models import DocumentEditMeta, Remark, DocumentData, Document
+from ripa_archive.documents.models import DocumentEditMeta, Remark, DocumentData, Document, Folder
 from ripa_archive.notifications.models import Notification
 
 
@@ -27,3 +27,26 @@ class Activity(models.Model):
 
     objects = ActivityManager()
     _factory_objects = models.Manager()
+
+    @property
+    def target_instance(self):
+        if self.content_type == Document.content_type:
+            return Document.objects.filter(id=self.target_id).first()
+
+        elif self.content_type == Folder.content_type:
+            return Folder.objects.filter(id=self.target_id).first()
+
+    @property
+    def permalink(self):
+        instance = self.target_instance
+
+        if instance is None:
+            return ""
+
+        return instance.permalink
+
+    def __str__(self):
+        if self.target_instance is None:
+            return ""
+        else:
+            return str(self.target_instance)

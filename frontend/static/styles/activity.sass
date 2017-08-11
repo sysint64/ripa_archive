@@ -1,0 +1,34 @@
+@import "consts"
+
+ul.messages
+    position: relative
+
+    li
+        position: relative
+
+    li .message_wrapper
+        margin-right: 0
+
+        h4.heading
+            font-size: 14px
+            cursor: inherit
+
+            .datetime
+                float: right
+                display: block
+                margin-top: 5px
+                color: #aaa
+                font-weight: normal
+
+            .email
+                font-weight: normal
+
+        blockquote
+            font-size: 14px
+
+            &.activity
+                &.accepted
+                    border-color: $green
+
+                &.rejected
+                    border-color: #aa0000

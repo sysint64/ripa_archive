@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load staticfiles %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "styles/activity.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block content %}
+    <h3>Users activity</h3>
+    {% if users_activity.count > 0 %}
+        <ul class="messages">
+            {% for activity in users_activity %}
+                <li>
+                    {% thumbnail activity.user.avatar_image "50x50" crop="center" as im %}
+                        <img src="{{ im.url }}" class="avatar">
+                    {% empty %}
+                        <img src="{% static "images/noavatar.png" %}" class="avatar">
+                    {% endthumbnail %}
+
+                    <div class="message_wrapper">
+                        <h4 class="heading">
+                            <a href="{{ activity.permalink }}">
+                                {{ activity }}
+                            </a>
+                        </h4>
+
+                        <h4 class="heading">
+                            <a href="{{ activity.user.permalink }}">
+                                {{ activity.user }}
+                                <span class="email">({{ activity.user.email }})</span>
+                            </a>
+
+                            <span class="datetime">{{ activity.datetime }}</span>
+                        </h4>
+
+                        {% if activity.document_edit_meta is None %}
+                            <blockquote class="message activity">
+                                {{ activity.details }}
+                            </blockquote>
+                        {% else %}
+                            <blockquote class="message activity{{ activity.document_edit_meta.css_class }}">
+                                {{ activity.details }}
+                            </blockquote>
+                        {% endif %}
+                        <br>
+
+                        {% if activity.document_data is not None %}
+                            <p class="url">
+                                <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                Document version:
+                                <a href="{{ activity.document_data.permalink }}">
+                                    <i class="fa fa-paperclip"></i>
+                                    {{ activity.document_data.filename }}
+                                </a>
+                            </p>
+                        {% endif %}
+
+                        {% if activity.document_edit_meta.closed_by is not None and activity.document_edit_meta.is_accepted %}
+                            <div class="accepted_by">
+                                Accepted by: <a href="{{ activity.document_edit_meta.closed_by.permalink }}">{{ activity.document_edit_meta.closed_by }}</a>
+                            </div>
+                        {% elif activity.document_edit_meta.closed_by is not None and activity.document_edit_meta.is_rejected %}
+                            <div class="accepted_by">
+                                Rejected by: <a href="{{ activity.document_edit_meta.closed_by.permalink }}">{{ activity.document_edit_meta.closed_by }}</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        No users activity
+    {% endif %}
+{% endblock %}
