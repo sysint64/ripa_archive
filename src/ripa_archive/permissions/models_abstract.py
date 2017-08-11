@@ -21,7 +21,7 @@ class ModelWhichHaveCustomPermissionsMixin:
             if user.group in custom_permission.groups.all():
                 return custom_permission.has_permission(permission)
 
-        return user.group.has_permission("folders_can_read")
+        return user.group.has_permission(permission)
 
 
 class PermissionModel(models.Model):

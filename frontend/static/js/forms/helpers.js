@@ -14,11 +14,15 @@ function ajaxErrorHandler(info, selector) {
 }
 
 function getAjaxTextError(info) {
-    if (info.status != 400) {
-        return "Unexpected error (server respond with status code " + info.status + ")";
-    } else {
-        var json = $.parseJSON(info.responseText);
-        return json[0];
+    switch (info.status) {
+        case 400:
+            return $.parseJSON(info.responseText)[0];
+
+        case 403:
+            return "Permission denied";
+
+        default:
+            return "Unexpected error (server respond with status code " + info.status + ")";
     }
 }
 

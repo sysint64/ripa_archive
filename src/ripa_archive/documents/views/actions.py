@@ -11,6 +11,8 @@ from ripa_archive.documents.models import Folder, Document
 from ripa_archive.documents.views.input_serializers import BulkInputSerializer, \
     ChangeFolderInputSerializer
 from ripa_archive.documents.views.main import get_folder_or_404
+from ripa_archive.documents.views.permissions import check_bulk_permissions_edit, \
+    check_bulk_permissions_delete
 
 
 @api_view(["POST"])
@@ -22,6 +24,9 @@ def copy(request):
 
     folders = serializer.validated_data["folders"]
     documents = serializer.validated_data["documents"]
+
+    with transaction.atomic():
+        check_bulk_permissions_edit(request, folders, documents)
 
     request.session["copied_folders"] = [folder.id for folder in folders]
     request.session["copied_documents"] = [document.id for document in documents]
@@ -41,6 +46,9 @@ def cut(request):
 
     folders = serializer.validated_data["folders"]
     documents = serializer.validated_data["documents"]
+
+    with transaction.atomic():
+        check_bulk_permissions_edit(request, folders, documents)
 
     request.session["copied_folders"] = []
     request.session["copied_documents"] = []
@@ -137,6 +145,8 @@ def paste(request, path=None):
                     copy_document_data(dst_document=item, src_document_id=item_id)
 
     with transaction.atomic():
+        check_bulk_permissions_edit(request, folders, documents)
+
         do_paste(folders, Folder.objects, to_folder.folders)
         do_paste(documents, Document.objects, to_folder.documents)
 
@@ -166,6 +176,7 @@ def delete(request):
             item.delete()
 
     with transaction.atomic():
+        check_bulk_permissions_delete(request, folders, documents)
         delete_all(folders)
         delete_all(documents)
 
@@ -192,6 +203,7 @@ def change_folder(request):
             item.save()
 
     with transaction.atomic():
+        check_bulk_permissions_edit(request, folders, documents)
         update_parent(folders, to_folder.folders)
         update_parent(documents, to_folder.documents)
 
