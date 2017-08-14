@@ -9,6 +9,15 @@ def forwards_func(apps, schema_editor):
     Permission = apps.get_model("permissions", "Permission")
     PermissionTranslation = apps.get_model("permissions", "PermissionTranslation")
 
+    # Create perms
+    perm = Permission.objects.create(code="folders_can_create")
+    PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can create folders")
+    PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может создавать папки")
+
+    perm = Permission.objects.create(code="documents_can_create")
+    PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can create documents")
+    PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может создавать документы")
+
     # Documents
     perm = Permission.objects.create(code="documents_can_read_last_version")
     PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can read last version of document")
@@ -34,6 +43,36 @@ def forwards_func(apps, schema_editor):
     perm = Permission.objects.create(code="activity_can_read")
     PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can read users activity")
     PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может просматривать активность пользователей")
+
+    # Users
+    perm = Permission.objects.create(code="users_can_read_profile")
+    PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can read users profile")
+    PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может просматривать профили пользователей")
+
+    perm = Permission.objects.create(code="users_can_edit")
+    PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can edit users")
+    PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может редактировать пользователей")
+
+    perm = Permission.objects.create(code="users_can_delete")
+    PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can delete users")
+    PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может удалять пользователей")
+
+    perm = Permission.objects.create(code="users_can_create")
+    PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can create new users")
+    PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может создавать новыйх пользователей")
+
+    # Groups
+    perm = Permission.objects.create(code="groups_can_create")
+    PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can create new groups")
+    PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может создавать новые группы")
+
+    perm = Permission.objects.create(code="groups_can_edit")
+    PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can edit groups")
+    PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может редактировать группы")
+
+    perm = Permission.objects.create(code="groups_can_delete")
+    PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can delete groups")
+    PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может удалять группы")
 
 
 def reverse_func(apps, schema_editor):

@@ -7,7 +7,7 @@ from ripa_archive.permissions.decorators import require_permissions
 
 
 @transaction.atomic
-# @require_permissions([codes.ACTIVITY_CAN_READ])
+@require_permissions([codes.ACTIVITY_CAN_READ])
 def users_activity(request):
     context = {
         "users_activity": Activity.objects.all(),

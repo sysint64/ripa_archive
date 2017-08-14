@@ -13,7 +13,6 @@ var onSelectChange = function() {
     } else if (selectedCount == 1) {
         $oneSelectedTools.show();
         $atLeastOneSelectedTools.show();
-
         $editTool.find("a").attr("href", "!action:update/" + $selected.data("ref") + "/");
     } else if (selectedCount > 1) {
         $oneSelectedTools.hide();

@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.core.mail import send_mail
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
@@ -68,6 +69,10 @@ class User(AbstractBaseUser):
     @property
     def ref(self):
         return self.email
+
+    @property
+    def permalink(self):
+        return reverse("accounts:profile", kwargs={"user_id": self.id})
 
     def get_short_name(self):
         return self.first_name

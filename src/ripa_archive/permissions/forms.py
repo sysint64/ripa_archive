@@ -20,20 +20,36 @@ class GroupForm(AjaxModelForm):
             "data-live-search": "true"
         }),
     )
+
+    common_permissions = forms.ModelMultipleChoiceField(
+        label="Common permissions",
+        widget=forms.CheckboxSelectMultiple(),
+        required=False,
+        queryset=Permission.objects.common(),
+    )
+
     folder_permissions = forms.ModelMultipleChoiceField(
         label="Folder permissions",
         widget=forms.CheckboxSelectMultiple(),
-        required=True,
+        required=False,
         queryset=Permission.objects.for_generic_folders(),
     )
 
     documents_permissions = forms.ModelMultipleChoiceField(
         label="Documents permissions",
         widget=forms.CheckboxSelectMultiple(),
-        required=True,
+        required=False,
         queryset=Permission.objects.for_generic_documents(),
     )
 
     @property
     def permissions(self):
-        return self.cleaned_data["folder_permissions"] | self.cleaned_data["documents_permissions"]
+        return self.cleaned_data["folder_permissions"] | self.cleaned_data["documents_permissions"] | self.cleaned_data["common_permissions"]
+
+    @staticmethod
+    def initial(instance):
+        return {
+            "folder_permissions": instance.permissions.all(),
+            "documents_permissions": instance.permissions.all(),
+            "common_permissions": instance.permissions.all(),
+        }

@@ -9,6 +9,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from ripa_archive.permissions import codes
+from ripa_archive.permissions.decorators import require_permissions, require_at_least_one_permission
 from ripa_archive.permissions.forms import GroupForm
 from ripa_archive.permissions.input_serializers import BulkInputSerializer
 from ripa_archive.permissions.models import Group
@@ -27,6 +29,8 @@ def permissions_base_context(request):
 
 
 @login_required(login_url="accounts:login")
+@transaction.atomic
+@require_at_least_one_permission([codes.GROUPS_CAN_CREATE, codes.GROUPS_CAN_EDIT, codes.GROUPS_CAN_DELETE])
 def permissions(request):
     context = permissions_base_context(request)
     context.update({
@@ -39,6 +43,7 @@ def permissions(request):
 
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
+@require_permissions([codes.GROUPS_CAN_CREATE])
 def create_group(request):
     form = GroupForm(request.POST)
 
@@ -63,6 +68,7 @@ def create_group(request):
 
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
+@require_permissions([codes.GROUPS_CAN_EDIT])
 def update_group(request, name):
     instance = get_object_or_404(Group, name=name)
 
@@ -71,10 +77,7 @@ def update_group(request, name):
     else:
         form = GroupForm(
             instance=instance,
-            initial={
-                "folder_permissions": instance.permissions.all(),
-                "documents_permissions": instance.permissions.all()
-            }
+            initial=GroupForm.initial(instance)
         )
 
     context = permissions_base_context(request)
@@ -97,6 +100,8 @@ def update_group(request, name):
 
 
 @api_view(["POST"])
+@transaction.atomic
+@require_permissions([codes.GROUPS_CAN_DELETE])
 def delete_group(request):
     serializer = BulkInputSerializer(data=request.data)
 

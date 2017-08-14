@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 
 
 class PermissionManager(models.Manager):
@@ -13,6 +14,9 @@ class PermissionManager(models.Manager):
 
     def for_generic_documents(self):
         return self.all().filter(code__startswith="documents").exclude(code__contains="this")
+
+    def common(self):
+        return self.all().filter(Q(code__startswith="activity") | Q(code__startswith="users") | Q(code__startswith="groups"))
 
 
 class Permission(models.Model):

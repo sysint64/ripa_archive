@@ -1,3 +1,4 @@
+FOLDERS_CAN_CREATE = "folders_can_create"
 FOLDERS_CAN_EDIT = "folders_can_edit"
 FOLDERS_CAN_EDIT_PERMISSIONS = "folders_can_edit_permissions"
 FOLDERS_CAN_DELETE = "folders_can_delete"
@@ -13,11 +14,11 @@ FOLDERS_CAN_CREATE_DOCUMENTS_INSIDE_THIS_FOLDER = "folders_can_create_documents_
 FOLDERS_CAN_SET_CUSTOM_PERMISSIONS_TO_EXIST_DOCUMENTS = "folders_can_set_custom_permissions_to_exist_documents"
 FOLDERS_CAN_SET_CUSTOM_PERMISSIONS_TO_OWN_DOCUMENTS = "folders_can_set_custom_permissions_to_own_documents"
 
+DOCUMENTS_CAN_CREATE = "documents_can_create"
 DOCUMENTS_CAN_READ = "documents_can_read"
 DOCUMENTS_CAN_EDIT = "documents_can_edit"
 DOCUMENTS_CAN_DELETE = "documents_can_delete"
 DOCUMENTS_CAN_EDIT_PERMISSIONS = "documents_can_edit_permissions"
-
 DOCUMENTS_CAN_READ_LAST_VERSION = "documents_can_read_last_version"
 DOCUMENTS_CAN_READ_PREVIOUS_VERSIONS = "documents_can_read_previous_versions"
 DOCUMENTS_CAN_TAKE_DOCUMENT_FOR_REVISION = "documents_can_take_document_for_revision"
@@ -25,3 +26,12 @@ DOCUMENTS_CAN_REVIEW = "documents_can_review"
 DOCUMENTS_CAN_REVERT = "documents_can_revert"
 
 ACTIVITY_CAN_READ = "activity_can_read"
+
+USERS_CAN_READ_PROFILE = "users_can_read_profile"
+USERS_CAN_EDIT = "users_can_edit"
+USERS_CAN_DELETE = "users_can_delete"
+USERS_CAN_CREATE = "users_can_create"
+
+GROUPS_CAN_CREATE = "groups_can_create"
+GROUPS_CAN_EDIT = "groups_can_edit"
+GROUPS_CAN_DELETE = "groups_can_delete"

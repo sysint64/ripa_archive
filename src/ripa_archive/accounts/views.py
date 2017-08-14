@@ -13,6 +13,10 @@ from rest_framework.response import Response
 from ripa_archive.accounts.forms import LoginForm, UserForm
 from ripa_archive.accounts.input_serializers import BulkInputSerializer
 from ripa_archive.accounts.models import User
+from ripa_archive.activity.models import Activity
+from ripa_archive.documents.models import Document, DocumentEditMeta
+from ripa_archive.permissions import codes
+from ripa_archive.permissions.decorators import require_permissions
 
 
 class LoginView(TemplateView):
@@ -52,6 +56,8 @@ def users_base_context(request):
     }
 
 
+@transaction.atomic
+@require_permissions([codes.USERS_CAN_READ_PROFILE])
 def users(request):
     context = users_base_context(request)
     context.update({
@@ -62,8 +68,26 @@ def users(request):
     return TemplateResponse(template="users/list.html", request=request, context=context)
 
 
+@transaction.atomic
+@require_permissions([codes.USERS_CAN_READ_PROFILE])
+def profile(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    context = users_base_context(request)
+    context.update({
+        "items": User.objects.all(),
+        "module_name": "user",
+        "title": "Users",
+        "profile_user": user,
+        "recent_activity": Activity.objects.filter(user=user)[:5],
+        "worked_on_documents_edit_metas": DocumentEditMeta.objects.filter(editor=user)
+    })
+    return TemplateResponse(template="users/profile.html", request=request, context=context)
+
+
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
+@require_permissions([codes.USERS_CAN_CREATE])
 def create(request):
     form = UserForm(request.POST, request.FILES)
     context = users_base_context(request)
@@ -87,6 +111,7 @@ def create(request):
 
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
+@require_permissions([codes.USERS_CAN_EDIT])
 def update(request, email):
     instance = get_object_or_404(User, email=email)
 
@@ -112,6 +137,8 @@ def update(request, email):
 
 
 @api_view(["POST"])
+@transaction.atomic
+@require_permissions([codes.USERS_CAN_DELETE])
 def delete(request):
     serializer = BulkInputSerializer(data=request.data)
 

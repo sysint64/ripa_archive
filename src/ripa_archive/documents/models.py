@@ -326,6 +326,10 @@ class DocumentEditMeta(models.Model):
         return self.status == DocumentEditMeta.Status.ACTIVE
 
     @property
+    def time_spent(self):
+        return self.end_datetime - self.start_datetime
+
+    @property
     def css_class(self):
         return {
             DocumentEditMeta.Status.ACCEPTED: " accepted",

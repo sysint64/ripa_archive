@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% load thumbnail %}
+{% load staticfiles %}
+{% load humanize %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "styles/activity.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block content %}
+    <h3>User profile</h3>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>User Report
+                    <small>Activity report</small>
+                </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                    <div class="profile_img">
+                        <div id="crop-avatar">
+                            {% thumbnail profile_user.avatar_image "220x220" crop="center" as im %}
+                                <img src="{{ im.url }}" class="img-responsive avatar-view">
+                            {% empty %}
+                                <img src="{% static "images/noavatar.png" %}" class="img-responsive avatar-view">
+                            {% endthumbnail %}
+                        </div>
+                    </div>
+                    <h3>{{ profile_user }}</h3>
+
+                    <ul class="list-unstyled user_data">
+                        <li>
+                            <i class="fa fa-map-marker user-profile-icon"></i> San Francisco,
+                            California, USA
+                        </li>
+
+                        <li>
+                            <i class="fa fa-briefcase user-profile-icon"></i> Software Engineer
+                        </li>
+
+                        <li class="m-top-xs">
+                            <i class="fa fa-external-link user-profile-icon"></i>
+                            <a href="http://www.kimlabs.com/profile/" target="_blank">www.kimlabs.com</a>
+                        </li>
+                    </ul>
+
+                    <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
+                    <br>
+                </div>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+
+                    <div class="profile_title">
+                        <div class="col-md-6">
+                            <h2>User Activity Report</h2>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="reportrange" class="pull-right"
+                                 style="margin-top: 5px; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #E6E9ED">
+                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                <span>July 1, 2017 - July 31, 2017</span> <b class="caret"></b>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- start of user-activity-graph -->
+                    <div id="graph_bar">
+                    </div>
+                    <!-- end of user-activity-graph -->
+
+                    <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                            <li role="presentation" class="active">
+                                <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">
+                                    Recent activity
+                                </a>
+                            </li>
+                            <li role="presentation" class="">
+                                <a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">
+                                    Documents worked on
+                                </a>
+                            </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
+                                 aria-labelledby="home-tab">
+                                {% include "activity_items.html" with users_activity=recent_activity show_empty_text=True show_activity_permalink=True %}
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="tab_content2"
+                                 aria-labelledby="profile-tab">
+
+                                <!-- start user projects -->
+                                <table class="data table table-striped no-margin">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Project name</th>
+                                        <th>Date and time</th>
+                                        <th class="hidden-phone">Time spent</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for document_edit_meta in worked_on_documents_edit_metas %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>
+                                                <a href="{{ document_edit_meta.document.permalink }}">
+                                                    {{ document_edit_meta.document }}
+                                                </a>
+                                            </td>
+                                            <td>{{ document_edit_meta.start_datetime|naturaltime }}</td>
+                                            <td class="hidden-phone">
+                                                {% if document_edit_meta.end_datetime is None %}
+                                                    In progress
+                                                {% else %}
+                                                    {{ document_edit_meta.end_datetime|timesince:document_edit_meta.start_datetime }}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <!-- end user projects -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
