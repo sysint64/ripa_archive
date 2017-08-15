@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -58,6 +59,12 @@ class AjaxFormMixin:
                 "hidden": isinstance(field.widget, forms.HiddenInput),
                 "is_file": isinstance(field.widget, forms.FileInput)
             })
+
+    def is_valid(self):
+        try:
+            return super().is_valid()
+        except KeyError:
+            raise SuspiciousOperation()
 
 
 class AjaxForm(AjaxFormMixin, forms.Form):

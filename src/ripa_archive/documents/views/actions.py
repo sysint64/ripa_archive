@@ -59,6 +59,9 @@ def cut(request):
     return Response({}, status=status.HTTP_200_OK)
 
 
+# TODO: permission to edit in to_folder
+# TODO: activity
+# TODO: resolve 505 error
 @api_view(["POST"])
 def paste(request, path=None):
     to_folder = get_folder_or_404(path)
@@ -105,7 +108,7 @@ def paste(request, path=None):
             if item is None:
                 continue
 
-            if to_folder_manager.exist_with_name(item.name):
+            if to_folder_manager.exist_with_name(item.parent, item.name):
                 raise ValidationError(to_folder_manager.ALREADY_EXIST_ERROR % item.name)
 
             old_path = item.path
@@ -145,8 +148,6 @@ def paste(request, path=None):
                     copy_document_data(dst_document=item, src_document_id=item_id)
 
     with transaction.atomic():
-        check_bulk_permissions_edit(request, folders, documents)
-
         do_paste(folders, Folder.objects, to_folder.folders)
         do_paste(documents, Document.objects, to_folder.documents)
 
@@ -196,7 +197,7 @@ def change_folder(request):
 
     def update_parent(items, manager):
         for item in items:
-            if manager.exist_with_name(item.name):
+            if manager.exist_with_name(item.parent, item.name):
                 raise ValidationError(manager.ALREADY_EXIST_ERROR % item.name)
 
             item.parent = to_folder

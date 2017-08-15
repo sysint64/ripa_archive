@@ -14,15 +14,12 @@ from ripa_archive.views import sendfile
 def get_document(*args, **kwargs):
     path, name = kwargs.get("path"), kwargs["name"]
     parent_folder = get_folder_or_404(path)
-    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
+    document = get_object_or_404(Document, parent=parent_folder, name=name)
     return document
 
 
 def get_folder(*args, **kwargs):
-    path, name = kwargs.get("path"), kwargs["name"]
-    parent_folder = get_folder_or_404(path)
-    folder = get_object_or_404(Folder, parent=parent_folder, name=name)
-    return folder
+    return get_folder_or_404(kwargs.get("path"))
 
 
 @transaction.atomic
@@ -51,7 +48,7 @@ def document_view(request, name, path=None):
 @require_permissions([codes.DOCUMENTS_CAN_READ_LAST_VERSION], get_instance_functor=get_document)
 def last_version_file(request, name, path=None):
     parent_folder = get_folder_or_404(path)
-    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
+    document = get_object_or_404(Document, parent=parent_folder, name=name)
 
     return sendfile(request, str(document.data.file.file), force_download=True)
 
@@ -60,7 +57,7 @@ def last_version_file(request, name, path=None):
 @require_permissions([codes.DOCUMENTS_CAN_READ_PREVIOUS_VERSIONS], get_instance_functor=get_document)
 def get_file(request, name, version, path=None):
     parent_folder = get_folder_or_404(path)
-    document = get_object_or_404(Document, parent=parent_folder, data__name=name)
+    document = get_object_or_404(Document, parent=parent_folder, name=name)
     data = get_object_or_404(DocumentData, document=document, pk=version)
 
     return sendfile(request, str(data.file.file), force_download=True)

@@ -76,8 +76,9 @@ class CreateDocuments(BrowserMultiFormCreation):
 
     def perform_create(self, form):
         document = Document.objects.create(
-            parent=self.parent_folder,
             owner=self.request.user,
+            parent=form.cleaned_data["parent"],
+            name=form.cleaned_data["name"],
             status=form.cleaned_data["status"]
         )
         data = form.save(commit=False)
@@ -93,7 +94,7 @@ class CreateDocuments(BrowserMultiFormCreation):
             self.request.user,
             document,
             strings.ACTIVITY_CREATE_DOCUMENT.format(
-                name=document.data.name,
+                name=document.name,
                 path=document.path
             ),
             document_data=document.last_data

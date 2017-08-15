@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
@@ -140,9 +140,9 @@ def rename_document(request, name, path=None):
     old_name = document.name
 
     if request.method == "POST":
-        form = RenameDocument(request.POST, instance=document.data)
+        form = RenameDocument(request.POST, instance=document)
     else:
-        form = RenameDocument(instance=document.data)
+        form = RenameDocument(instance=document)
 
     context = browser_base_context(request)
     context.update({
@@ -155,13 +155,13 @@ def rename_document(request, name, path=None):
     if request.method == "POST" and form.is_valid():
         redirect_next = request.GET.get("next", "single")
 
-        if old_name != form.cleaned_data["name"]:
+        if old_name != document.name:
             activity_factory.for_document(
                 request.user,
                 document,
                 strings.ACTIVITY_RENAME_DOCUMENT.format(
                     old_name=old_name,
-                    new_name=form.cleaned_data["name"]
+                    new_name=document.name
                 )
             )
 
@@ -179,14 +179,14 @@ def rename_document(request, name, path=None):
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
 @require_permissions([codes.FOLDERS_CAN_EDIT], get_instance_functor=get_folder)
-def rename_folder(request, name, path=None):
-    folder = get_folder(name=name, path=path)
+def rename_folder(request, path=None):
+    folder = get_folder(path=path)
     old_name = folder.name
 
     if request.method == "POST":
         form = RenameFolder(request.POST, instance=folder)
     else:
-        form = RenameDocument(instance=folder)
+        form = RenameFolder(instance=folder)
 
     context = browser_base_context(request)
     context.update({
@@ -210,6 +210,7 @@ def rename_folder(request, name, path=None):
             )
 
         form.save()
+
         messages.success(request, "Successfully renamed")
 
         if redirect_next == "list":

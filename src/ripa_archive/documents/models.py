@@ -28,8 +28,8 @@ class FoldersManager(models.Manager):
 
         return parent_folder
 
-    def exist_with_name(self, name):
-        return self.get_queryset().filter(name__iexact=name).count() > 0
+    def exist_with_name(self, parent, name):
+        return self.get_queryset().filter(parent=parent, name__iexact=name).count() > 0
 
     def for_user(self, user, folder=None):
         queryset = self.get_queryset()
@@ -52,12 +52,8 @@ class FoldersManager(models.Manager):
 class DocumentsManager(models.Manager):
     ALREADY_EXIST_ERROR = 'Document with name "%s" already exist in this folder'
 
-    def exist_with_name(self, name):
-        for item in self.get_queryset().all():
-            if item.data.name.lower() == name.lower():
-                return True
-
-        return False
+    def exist_with_name(self, parent, name):
+        return self.get_queryset().filter(parent=parent, name__iexact=name).count() > 0
 
     def for_user(self, user, folder=None):
         queryset = self.get_queryset()
@@ -154,6 +150,7 @@ class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
     content_type = "documents.Document"
     custom_permission_model = DocumentCustomPermission
 
+    name = models.CharField(max_length=255, default="No name")
     owner = models.ForeignKey(User, null=True, related_name="owner")
     contributors = models.ManyToManyField(User, related_name="contributors")
     followers = models.ManyToManyField(User, related_name="followers")
@@ -174,9 +171,9 @@ class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
             kwargs = {}
 
         if self.parent.path != "":
-            kwargs.update({"path": self.parent.path, "name": self.data.name})
+            kwargs.update({"path": self.parent.path, "name": self.name})
         else:
-            kwargs.update({"name": self.data.name})
+            kwargs.update({"name": self.name})
 
         return reverse("documents:" + urlname, kwargs=kwargs)
 
@@ -196,10 +193,6 @@ class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
         return self._reverse("get-file", kwargs={"version": data.pk})
 
     @property
-    def name(self):
-        return self.data.name
-
-    @property
     def last_data(self):
         return DocumentData.objects.filter(document=self).order_by("-datetime").last()
 
@@ -215,10 +208,7 @@ class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
         return self.current_edit_meta is not None
 
     def __str__(self):
-        if self.data is not None:
-            return self.data.name
-
-        return "None"
+        return self.name
 
 
 class DocumentType:
@@ -265,11 +255,10 @@ class DocumentData(models.Model):
 
     document = models.ForeignKey(Document)
     file = models.FileField(upload_to="documents/")
-    name = models.CharField(max_length=60)
     datetime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.file.name
 
     @property
     def filename(self):

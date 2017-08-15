@@ -44,13 +44,23 @@ var onSelectChange = null;
                         }
                     );
                     break;
+
+                case "rename":
+                    const $selected = $(".selected");
+
+                    if ($selected.length > 1)
+                        break;
+
+                    location.href = $selected.find("td").first().data("href") + "!action:rename/";
+                    break
             }
         },
         items: {
             "edit": {name: "Edit", icon: "edit"},
             "cut": {name: "Cut", icon: "cut"},
             "copy": {name: "Copy", icon: "copy"},
-            "delete": {name: "Delete", icon: "delete"}
+            "delete": {name: "Delete", icon: "delete"},
+            "rename": {name: "Rename", icon: "rename"}
         },
         events: {
             show: function(options) {

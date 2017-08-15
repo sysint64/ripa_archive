@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from forms.ajax import AjaxModelForm
 from ripa_archive.accounts.models import User
 from ripa_archive.documents.models import Folder, DocumentData, Status, FolderCustomPermission, \
-    DocumentCustomPermission
+    DocumentCustomPermission, Document, FoldersManager, DocumentsManager
 from ripa_archive.permissions.models import Permission, Group
 
 
@@ -24,8 +24,8 @@ class CreateFolderForm(AjaxModelForm):
         name = self.cleaned_data["name"]
         parent = self.cleaned_data["parent"]
 
-        if Folder.objects.filter(parent=parent, name__iexact=name).count() > 0:
-            raise ValidationError("Folder with this name already exist")
+        if Folder.objects.exist_with_name(parent, name):
+            raise ValidationError(FoldersManager.ALREADY_EXIST_ERROR % name)
 
         return name
 
@@ -33,9 +33,26 @@ class CreateFolderForm(AjaxModelForm):
 class CreateDocumentForm(AjaxModelForm):
     class Meta:
         model = DocumentData
-        fields = "name", "file",
+        fields = "file",
 
+    parent = forms.ModelChoiceField(
+        queryset=Folder.objects.all(),
+        required=True,
+        widget=forms.HiddenInput()
+    )
+
+    name = forms.CharField(max_length=255, label="Name")
     status = forms.ModelChoiceField(queryset=Status.objects.all(), label="Status")
+
+    # Check uniqueness in folder
+    def clean_name(self):
+        name = self.cleaned_data["name"]
+        parent = self.cleaned_data["parent"]
+
+        if Document.objects.exist_with_name(parent, name):
+            raise ValidationError(DocumentsManager.ALREADY_EXIST_ERROR % name)
+
+        return name
 
 
 class PermissionsFormMixin:

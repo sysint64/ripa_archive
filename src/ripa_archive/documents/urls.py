@@ -95,7 +95,7 @@ urlpatterns += [
 
 # Folder actions
 urlpatterns += \
-    folder_url(r'!action:rename/', single_forms_views.rename_folder, name="rename-folder")
+    browser_url(r'!action:rename/', single_forms_views.rename_folder, name="rename-folder")
 
 # Folder validators
 urlpatterns += [
