@@ -12,6 +12,8 @@ var onSelectChange = null;
     $.contextMenu({
         selector: '.context-menu',
         callback: function (key, options) {
+            const $selected = $(".selected");
+
             switch (key) {
                 case "delete":
                     executeActionWithConfirm(
@@ -46,21 +48,35 @@ var onSelectChange = null;
                     break;
 
                 case "rename":
-                    const $selected = $(".selected");
-
                     if ($selected.length > 1)
                         break;
 
                     location.href = $selected.find("td").first().data("href") + "!action:rename/";
-                    break
+                    break;
+
+                case "edit_permissions":
+                    if ($selected.length > 1)
+                        break;
+
+                    location.href = $selected.find("td").first().data("href") + "!action:edit-permissions/";
+                    break;
             }
         },
         items: {
-            "edit": {name: "Edit", icon: "edit"},
+            "rename": {
+                name: "Rename",
+                icon: "edit",
+                disabled: function() { return $(".selected").length != 1; }
+            },
+            "edit_permissions": {
+                name: "Edit permissions",
+                icon: "fa-key",
+                disabled: function() { return $(".selected").length != 1; }
+            },
+            "sep": "-",
             "cut": {name: "Cut", icon: "cut"},
             "copy": {name: "Copy", icon: "copy"},
-            "delete": {name: "Delete", icon: "delete"},
-            "rename": {name: "Rename", icon: "rename"}
+            "delete": {name: "Delete", icon: "delete"}
         },
         events: {
             show: function(options) {
@@ -96,6 +112,7 @@ var onSelectChange = null;
         items: {
             "create_folders": {name: "Create folder(s)", icon: "fa-folder"},
             "create_documents": {name: "Create document(s)", icon: "fa-file-o"},
+            "sep": "-",
             "paste": {name: "Paste", icon: "paste"}
         },
         events: {

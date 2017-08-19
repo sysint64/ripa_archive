@@ -28,8 +28,13 @@ class FoldersManager(models.Manager):
 
         return parent_folder
 
-    def exist_with_name(self, parent, name):
-        return self.get_queryset().filter(parent=parent, name__iexact=name).count() > 0
+    def exist_with_name(self, parent, name, instance=None):
+        qs = self.get_queryset().filter(parent=parent, name__iexact=name)
+
+        if instance is not None:
+            qs = qs.exclude(pk=instance.pk)
+
+        return qs.count() > 0
 
     def for_user(self, user, folder=None):
         queryset = self.get_queryset()
@@ -52,8 +57,13 @@ class FoldersManager(models.Manager):
 class DocumentsManager(models.Manager):
     ALREADY_EXIST_ERROR = 'Document with name "%s" already exist in this folder'
 
-    def exist_with_name(self, parent, name):
-        return self.get_queryset().filter(parent=parent, name__iexact=name).count() > 0
+    def exist_with_name(self, parent, name, instance=None):
+        qs = self.get_queryset().filter(parent=parent, name__iexact=name)
+
+        if instance is not None:
+            qs = qs.exclude(pk=instance.pk)
+
+        return qs.count() > 0
 
     def for_user(self, user, folder=None):
         queryset = self.get_queryset()

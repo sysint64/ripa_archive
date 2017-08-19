@@ -3,6 +3,7 @@ from django.db import transaction
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied as RestPermissionDenied
 from rest_framework.response import Response
 
 from ripa_archive.activity import activity_factory
@@ -13,6 +14,7 @@ from ripa_archive.documents.views.input_serializers import BulkInputSerializer, 
 from ripa_archive.documents.views.main import get_folder_or_404
 from ripa_archive.documents.views.permissions import check_bulk_permissions_edit, \
     check_bulk_permissions_delete
+from ripa_archive.permissions import codes
 
 
 @api_view(["POST"])
@@ -59,9 +61,6 @@ def cut(request):
     return Response({}, status=status.HTTP_200_OK)
 
 
-# TODO: permission to edit in to_folder
-# TODO: activity
-# TODO: resolve 505 error
 @api_view(["POST"])
 def paste(request, path=None):
     to_folder = get_folder_or_404(path)
@@ -78,28 +77,50 @@ def paste(request, path=None):
     def copy_content(dst_folder, src_folder_id):
         def _copy(manager):
             for item in manager.all():
-                new_src_folder_id = item.id
+                src_item_id = item.id
                 item.pk = None
                 item.parent = dst_folder
-                item.save()
 
-                if isinstance(item, Folder):
-                    copy_content(dst_folder=item, src_folder_id=new_src_folder_id)
+                activity_factory.for_folder(
+                    request.user,
+                    dst_folder,
+                    strings.ACTIVITY_COPY_FOLDER,
+                    ref={
+                        "id": src_folder_id,
+                        "content_type": Folder.content_type,
+                        "text": "source document",
+                    }
+                )
+
+                if isinstance(item, Document):
+                    copy_document_data(dst_document=item, src_document_id=src_item_id)
+
+                elif isinstance(item, Folder):
+                    item.save()
+                    copy_content(dst_folder=item, src_folder_id=src_item_id)
 
         _copy(Folder.objects.filter(parent__id=src_folder_id))
         _copy(Document.objects.filter(parent__id=src_folder_id))
 
-    # TODO: add copy action to log
     def copy_document_data(dst_document, src_document_id):
         src_document = Document.objects.filter(pk=src_document_id).first()
 
-        for document_data in src_document.document_data_set.all():
-            document_data.pk = None
-            document_data.document = dst_document
-            document_data.save()
+        data = dst_document.data
+        data.pk = None
+        data.save()
 
-        dst_document.data = src_document.last_data
+        dst_document.data = data
         dst_document.save()
+
+        activity_factory.for_document(
+            request.user,
+            dst_document,
+            strings.ACTIVITY_COPY_DOCUMENT,
+            ref={
+                "instance": src_document,
+                "text": "source document",
+            }
+        )
 
     def do_paste(items, manager, to_folder_manager):
         for item_id in items:
@@ -139,17 +160,33 @@ def paste(request, path=None):
                     raise SuspiciousOperation()
 
             else:  # make copy
-                item.pk = None
-                item.save()
-
                 if isinstance(item, Folder):
+                    item.pk = None
+                    item.save()
                     copy_content(dst_folder=item, src_folder_id=item_id)
                 elif isinstance(item, Document):
+                    item.pk = None
                     copy_document_data(dst_document=item, src_document_id=item_id)
 
     with transaction.atomic():
-        do_paste(folders, Folder.objects, to_folder.folders)
-        do_paste(documents, Document.objects, to_folder.documents)
+        if len(folders) > 0:
+            if not to_folder.is_user_has_permission(request.user, codes.FOLDERS_CAN_CREATE_FOLDERS_INSIDE_THIS_FOLDER):
+                raise RestPermissionDenied()
+
+            if not request.user.group.has_permission(codes.FOLDERS_CAN_CREATE):
+                raise RestPermissionDenied()
+
+            do_paste(folders, Folder.objects, to_folder.folders)
+
+        if len(documents) > 0:
+
+            if not to_folder.is_user_has_permission(request.user, codes.FOLDERS_CAN_CREATE_DOCUMENTS_INSIDE_THIS_FOLDER):
+                raise RestPermissionDenied()
+
+            if not request.user.group.has_permission(codes.DOCUMENTS_CAN_CREATE):
+                raise RestPermissionDenied()
+
+            do_paste(documents, Document.objects, to_folder.documents)
 
         request.session["copied_folders"] = []
         request.session["copied_documents"] = []

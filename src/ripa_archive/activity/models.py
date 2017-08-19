@@ -24,6 +24,9 @@ class Activity(models.Model):
     target_id = models.PositiveIntegerField(null=True)
     datetime = models.DateTimeField(auto_now_add=True)
     details = models.TextField()
+    ref_id = models.PositiveIntegerField(null=True)
+    ref_content_type = models.CharField(blank=True, max_length=100)
+    ref_text = models.CharField(blank=True, max_length=100)
 
     objects = ActivityManager()
     _factory_objects = models.Manager()

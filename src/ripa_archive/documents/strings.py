@@ -5,6 +5,8 @@ ACTIVITY_RENAME_FOLDER = "Rename folder from \"{old_name}\" to \"{new_name}\""
 ACTIVITY_MOVE_DOCUMENT = "Move document from \"Root/{old_path}\" to \"Root/{new_path}\""
 ACTIVITY_MOVE_FOLDER = "Move folder from \"Root/{old_path}\" to \"Root/{new_path}\""
 ACTIVITY_REVERT_DOCUMENT = "Revert document from {datetime}"
+ACTIVITY_COPY_DOCUMENT = "Copy document"
+ACTIVITY_COPY_FOLDER = "Copy folder"
 
 NOTIFICATION_REMARK_ACCEPTED = "Was accepted remark"
 NOTIFICATION_REMARK_FINISHED = "Remark was marked as \"finished\""
