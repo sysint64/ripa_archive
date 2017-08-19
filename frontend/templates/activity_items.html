@@ -40,6 +40,18 @@
                     {% endif %}
                     <br>
 
+                    {% if show_revert_button and activity.document_data is not None and activity.document_data.id != document.data.id %}
+                        <ul class="reviewer-tools">
+                            <li>
+                                <a href="" class="revert-document"
+                                   data-activity-id="{{ activity.pk }}">
+                                    Revert <i class="fa fa-undo"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <br>
+                    {% endif %}
+
                     {% if activity.document_data is not None %}
                         <p class="url">
                             <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
@@ -47,6 +59,17 @@
                             <a href="{{ activity.document_data.permalink }}">
                                 <i class="fa fa-paperclip"></i>
                                 {{ activity.document_data.filename }}
+                            </a>
+                        </p>
+                    {% endif %}
+
+                    {% if activity.ref_id is not None %}
+                        <p class="url">
+                            <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                            {{ activity.ref_text }}:
+                            <a href="{{ activity.ref_instance.permalink }}">
+                                <i class="fa fa-link"></i>
+                                {{ activity.ref_instance }}
                             </a>
                         </p>
                     {% endif %}

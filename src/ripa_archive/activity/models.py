@@ -48,6 +48,15 @@ class Activity(models.Model):
 
         return instance.permalink
 
+    @property
+    def ref_instance(self):
+        cls = {
+            Document.content_type: Document,
+            Folder.content_type: Folder
+        }.get(self.content_type)
+
+        return cls.objects.filter(pk=self.ref_id).first()
+
     def __str__(self):
         if self.target_instance is None:
             return ""

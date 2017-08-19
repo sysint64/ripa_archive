@@ -30,7 +30,7 @@ def document_view(request, name, path=None):
     context = browser_base_context(request)
     context.update({
         "document": document,
-        "activities":
+        "users_activity":
             Activity.objects.filter(
                 content_type="documents.Document",
                 target_id=document.pk
@@ -40,7 +40,7 @@ def document_view(request, name, path=None):
         "user_is_editor": document.current_edit_meta is not None and document.current_edit_meta.editor == request.user
     })
 
-    return TemplateResponse(template="documents_browser/single.html", request=request,
+    return TemplateResponse(template="documents_browser/single/index.html", request=request,
                             context=context)
 
 
