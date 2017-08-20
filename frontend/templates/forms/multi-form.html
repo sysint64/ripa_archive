@@ -3,6 +3,8 @@
 
 {% block styles %}
     {{ block.super }}
+    <link rel="stylesheet" href="{% static "vendors/bootstrap-select/dist/css/bootstrap-select.min.css" %}">
+
     <link rel="stylesheet" href="{% static "styles/multi_form.sass" %}" type="text/x-sass">
     <link rel="stylesheet" href="{% static "styles/forms.sass" %}" type="text/x-sass">
     <link rel="stylesheet" href="{% static "styles/dialogs.sass" %}" type="text/x-sass">
@@ -11,9 +13,12 @@
 
 {% block js %}
     {{ block.super }}
+    <script src="{% static "vendors/bootstrap-select/dist/js/bootstrap-select.min.js" %}" charset="utf-8"></script>
+
     <script src="{% static 'js/dialogs.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/forms/helpers.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/forms/multi_form.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/forms/form.js' %}" charset="utf-8"></script>
 {% endblock %}
 
 {% block dialogs %}
@@ -31,13 +36,13 @@
     </h3>
 
     {# Display non ajax messages #}
-{#    {% if messages %}#}
-{#        <ul class="notification-messages">#}
-{#            {% for message in messages %}#}
-{#                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>#}
-{#            {% endfor %}#}
-{#        </ul>#}
-{#    {% endif %}#}
+    {% if messages %}
+        <ul class="notification-messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     <div class="multi-form">
         <form method="post" id="multiform"
@@ -46,32 +51,41 @@
               data-validation="{{ validator_url }}"
         >
             {% block form_content %}
-                {# Primary block #}
-                <div class="block" id="block-primary">
-                    <div class="header">
-                        New item
-                        <a class="fa fa-trash-o remove-block"></a>
-                    </div>
-                    <div class="form-wrapper">
-                        {% for field, field_meta in form %}
-                            {% if not field_meta.hidden %}
-                                <div class="form-group">
-                                    <label for="id_{{ field_meta.name }}"
-                                           class="control-label col-md-3 col-sm-3 col-xs-12{% if field_meta.help_text != "" %} with-help-text{% endif %}">
-                                        {{ field_meta.label }}
-                                        {% if field_meta.help_text != "" %}
-                                            <div class="help-text">{{ field_meta.help_text }}</div>
-                                        {% endif %}
-                                    </label>
-                                    <div class="col-md-9 col-sm-9 col-xs-12">
-                                        {{ field }}
-                                    </div>
-                                </div>                           {% else %}
-                                <div style="display: none">{{ field }}</div>
+                {% for form in forms %}
+                    <div {% if form.prefix is not None and form.prefix != "" %}data-prefix="{{ form.prefix }}"{% endif %} class="block"{% if forloop.first %} id="block-primary"{% endif %}>
+                        {% if form.instance.id is not None %}
+                            {% if form.prefix != "" and form.prefix is not None %}
+                                <input type="hidden" name="{{ form.prefix }}-instance_id" value="{{ form.instance.id }}" class="instance-id">
+                            {% else %}
+                                <input type="hidden" name="instance_id" value="{{ form.instance.id }}" class="instance-id">
                             {% endif %}
-                        {% endfor %}
+                        {% endif %}
+                        <div class="header">
+                            New item
+                            <a class="fa fa-trash-o remove-block"></a>
+                        </div>
+                        <div class="form-wrapper">
+                            {% for field, field_meta in form %}
+                                {% if not field_meta.hidden %}
+                                    <div class="form-group">
+                                        <label for="id_{{ field_meta.name }}"
+                                               class="control-label col-md-3 col-sm-3 col-xs-12{% if field_meta.help_text != "" %} with-help-text{% endif %}">
+                                            {{ field_meta.label }}
+                                            {% if field_meta.help_text != "" %}
+                                                <div class="help-text">{{ field_meta.help_text }}</div>
+                                            {% endif %}
+                                        </label>
+                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                            {{ field }}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div style="display: none">{{ field }}</div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
+                {% endfor %}
             {% endblock %}
 
             <div id="block-cursor"></div>
@@ -80,12 +94,13 @@
             {% endblock %}
 
             {% block action_buttons %}
-{#                <button class="submit-button" type="submit"><i class="fa fa-check"></i> Create</button>#}
-                <button class="add-block-button" type="button"><i class="fa fa-plus"></i> Add another folder</button>
+                <button class="submit-button" type="submit"><i class="fa fa-check"></i> {{ submit_title }}</button>
+                <button class="add-block-button" type="button"><i class="fa fa-plus"></i> {{ add_title }}</button>
             {% endblock %}
             <div class="clearfix"></div>
 
             {{ form_prefixes_field|safe }}
+            <input type="hidden" name="delete_ids" id="delete_ids">
 
             {% block after_actions_buttons %}
             {% endblock %}

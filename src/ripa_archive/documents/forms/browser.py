@@ -98,7 +98,7 @@ class PermissionsFormMixin:
         return self.cleaned_data
 
 
-class FolderPermissionsForm(PermissionsFormMixin, AjaxModelForm):
+class FolderPermissionsCreateForm(PermissionsFormMixin, AjaxModelForm):
     class Meta:
         model = FolderCustomPermission
         fields = "groups", "users", "permissions",
@@ -110,11 +110,43 @@ class FolderPermissionsForm(PermissionsFormMixin, AjaxModelForm):
     )
 
 
-class DocumentPermissionsForm(PermissionsFormMixin, AjaxModelForm):
+class DocumentPermissionsCreateForm(PermissionsFormMixin, AjaxModelForm):
     class Meta:
         model = DocumentCustomPermission
         fields = "groups", "users", "permissions",
 
+    users = forms.ModelMultipleChoiceField(**PermissionsFormMixin.users_attrs)
+    groups = forms.ModelMultipleChoiceField(**PermissionsFormMixin.groups_attrs)
+    permissions = forms.ModelMultipleChoiceField(
+        **PermissionsFormMixin.permissions_attrs(Permission.objects.for_documents()),
+    )
+
+
+class FolderPermissionsEditForm(PermissionsFormMixin, AjaxModelForm):
+    class Meta:
+        model = FolderCustomPermission
+        fields = "for_instance", "groups", "users", "permissions",
+
+    for_instance = forms.ModelChoiceField(
+        queryset=Folder.objects.all(),
+        widget=forms.HiddenInput
+    )
+    users = forms.ModelMultipleChoiceField(**PermissionsFormMixin.users_attrs)
+    groups = forms.ModelMultipleChoiceField(**PermissionsFormMixin.groups_attrs)
+    permissions = forms.ModelMultipleChoiceField(
+        **PermissionsFormMixin.permissions_attrs(Permission.objects.for_folders()),
+    )
+
+
+class DocumentPermissionsEditForm(PermissionsFormMixin, AjaxModelForm):
+    class Meta:
+        model = DocumentCustomPermission
+        fields = "for_instance", "groups", "users", "permissions",
+
+    for_instance = forms.ModelChoiceField(
+        queryset=Document.objects.all(),
+        widget=forms.HiddenInput
+    )
     users = forms.ModelMultipleChoiceField(**PermissionsFormMixin.users_attrs)
     groups = forms.ModelMultipleChoiceField(**PermissionsFormMixin.groups_attrs)
     permissions = forms.ModelMultipleChoiceField(

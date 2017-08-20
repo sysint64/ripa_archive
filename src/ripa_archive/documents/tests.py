@@ -75,9 +75,8 @@ class PermissionsTestCase(APITestCase):
         self.user_4.group = group_3
         self.user_4.save()
 
-        self.custom_permission = FolderCustomPermission.objects.create()
+        self.custom_permission = FolderCustomPermission.objects.create(for_instance=self.folder_2)
         self.custom_permission.groups.add(group_3)
-        self.custom_permission.for_instances.add(self.folder_2)
 
         # self.user_2.
 

@@ -3,13 +3,11 @@
 
 {% block styles %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static "vendors/bootstrap-select/dist/css/bootstrap-select.min.css" %}">
     <link rel="stylesheet" href="{% static "styles/multi_form_permissions.sass" %}" type="text/x-sass">
 {% endblock %}
 
 {% block js %}
     {{ block.super }}
-    <script src="{% static "vendors/bootstrap-select/dist/js/bootstrap-select.min.js" %}" charset="utf-8"></script>
     <script src="{% static "js/forms/multi_form_permissions.js" %}" charset="utf-8"></script>
 {% endblock %}
 
@@ -41,10 +39,16 @@
 
     <div id="permission-block-cursor"></div>
 
-    <button class="submit-button" type="submit"><i class="fa fa-check"></i> Create</button>
+    <button class="submit-button" type="submit"><i class="fa fa-check"></i> {{ submit_title }}</button>
     <button class="add-permission-button" type="button"><i class="fa fa-plus"></i> Add custom permission</button>
 
     {{ permissions_form_prefixes_field|safe }}
 
     <div class="clearfix"></div>
+{% endblock %}
+
+{% block action_buttons %}
+    <button class="add-block-button" type="button" style="margin-right: 0">
+        <i class="fa fa-plus"></i> {{ add_title }}
+    </button>
 {% endblock %}

@@ -1,3 +1,6 @@
+var formsPrefixes = [];
+var deleteIds = [];
+
 function bindEvents() {
     $(".block").click(function() {
         $(".multi-form").find(".block").removeClass("active");
@@ -9,6 +12,12 @@ function bindEvents() {
         const index = formsPrefixes.indexOf($block.data("prefix"));
         formsPrefixes.splice(index, 1);
         console.log(formsPrefixes);
+        const $instanceIdInput = $block.find("input[type=hidden].instance-id");
+
+        if ($instanceIdInput.length > 0)
+            deleteIds.push($instanceIdInput.val());
+
+        console.log(deleteIds);
         $(this).closest(".block").remove();
     });
 
@@ -38,9 +47,20 @@ function rebindEvents() {
     const primaryBlockHtml = $blockPrimary.html();
     const formPrefix = "block";
     var lastBlockNumber = 0;
-    var formsPrefixes = [];
 
-    $blockPrimary.find(".remove-block").remove();
+    $blockPrimary.remove();
+
+    $(".block").each(function() {
+        if (typeof $(this).data("prefix") === "undefined" || $(this).data("prefix") === "")
+            return;
+
+        const prefix = $(this).data("prefix");
+
+        lastBlockNumber += 1;
+        formsPrefixes.push(prefix);
+    });
+
+    console.log(formsPrefixes);
 
     function putBlock() {
         lastBlockNumber += 1;
@@ -57,14 +77,34 @@ function rebindEvents() {
         console.log(formsPrefixes);
     }
 
+    function putFirstBlock() {
+        var $block = $("<div/>", {"class": "block", "html": primaryBlockHtml});
+        $("#block-cursor").before($block);
+    }
+
     $(".add-block-button").click(function() {
-        putBlock();
+        if ($(".block").length == 0) {
+            putFirstBlock();
+        } else {
+            putBlock();
+        }
+
         rebindEvents();
     });
 
-    $("#multiform").submit(function(event, isValid) {
+    const $multiform = $("#multiform");
+
+    $multiform.submit(function(event, isValid) {
         showWaitDialog();
+
+        if ($(".block").length == 0) {
+            window.location.href = $(".go-back").attr("href");
+            event.preventDefault();
+            return;
+        }
+
         $(this).find("#form_prefixes").val(formsPrefixes.join(","));
+        $(this).find("#delete_ids").val(deleteIds.join(","));
 
         if ($(this).find("#permissions_form_prefixes").length > 0)
             $(this).find("#permissions_form_prefixes").val(permissionsFormsPrefixes.join(","));
@@ -77,7 +117,7 @@ function rebindEvents() {
         validateApiForm($(this));
     });
 
-    $("#multiform").on("validation_error", function() {
+    $multiform.on("validation_error", function() {
         hideWaitDialog();
     });
 

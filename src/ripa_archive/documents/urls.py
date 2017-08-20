@@ -33,6 +33,7 @@ urlpatterns = \
     browser_url(r'', main_views.document_browser, name="index") + \
     browser_url(r'!action:create-documents/', forms_views.CreateDocuments.as_view(), name="create-documents") + \
     browser_url(r'!action:create-folders/', forms_views.CreateFolders.as_view(), name="create-folders") + \
+    browser_url(r'!action:edit-permissions/', forms_views.EditFolderPermissions.as_view(), name="edit-folder-permissions") + \
     browser_url(r'!action:paste/', actions_views.paste, name="action-paste") + \
     browser_url(r'!search/', main_views.search, name="search") + \
     browser_url(r'!folder/', main_views.search, name="search")
@@ -40,12 +41,20 @@ urlpatterns = \
 # Form validators
 urlpatterns += [
     url(r'^!validator:create-folders/$',
-        CompositeAjaxFormValidator.as_view(forms=[CreateFolderForm, FolderPermissionsForm]),
+        CompositeAjaxFormValidator.as_view(forms=[CreateFolderForm, FolderPermissionsCreateForm]),
         name="validator-create-folders"),
 
     url(r'^!validator:create-documents/$',
-        CompositeAjaxFormValidator.as_view(forms=[CreateDocumentForm, DocumentPermissionsForm]),
+        CompositeAjaxFormValidator.as_view(forms=[CreateDocumentForm, DocumentPermissionsCreateForm]),
         name="validator-create-documents"),
+
+    url(r'^!validator:edit-folder-permissions/$',
+        CompositeAjaxFormValidator.as_view(forms=[FolderPermissionsEditForm]),
+        name="validator-edit-folder-permissions"),
+
+    url(r'^!validator:edit-document-permissions/$',
+        CompositeAjaxFormValidator.as_view(forms=[DocumentPermissionsEditForm]),
+        name="validator-edit-document-permissions"),
 ]
 
 # Actions

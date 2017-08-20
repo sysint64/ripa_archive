@@ -12,7 +12,7 @@ class ModelWhichHaveCustomPermissionsMixin:
             if not self.parent.is_user_has_permission(user, permission):
                 return False
 
-        custom_permissions = self.custom_permission_model.objects.filter(for_instances=self)
+        custom_permissions = self.custom_permission_model.objects.filter(for_instance=self)
 
         for custom_permission in custom_permissions:
             if user in custom_permission.users.all():

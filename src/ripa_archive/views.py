@@ -1,4 +1,5 @@
 import os
+from io import UnsupportedOperation
 
 from django.conf import settings
 from django.db import transaction
@@ -14,23 +15,32 @@ from django.views.static import serve
 from forms.multi_form import get_multi_form
 from urllib.parse import quote
 
+from request_helper import get_request_int_or_none
+
 
 def layout(request, template):
     return render_to_response("layout/{}.html".format(template))
 
 
-class MultiFormCreation(View):
+class MultiFormView(View):
     title = ""
     validator_url = None
     form_class = None
+    instance_class = None
     redirect_url_name = ""
     template = "forms/multi-form.html"
+
+    def get_forms(self, **kwargs):
+        return [self.form_class()]
+
+    def get_pattern_form(self, **kwargs):
+        return self.form_class()
 
     def get_context_data(self, **kwargs):
         return {
             "form_title": self.title,
             "validator_url": reverse(self.validator_url),
-            "form": self.form_class(),
+            "forms": [self.get_pattern_form(**kwargs)] + self.get_forms(**kwargs),
             "form_prefixes_field": self.form_class.prefixes_field("form_prefixes"),
         }
 
@@ -42,16 +52,49 @@ class MultiFormCreation(View):
     def post(self, request, **kwargs):
         success, _ = self.perform_form(request, **kwargs)
 
+        delete_ids = request.POST.get("delete_ids", "")
+        delete_ids.split(",")
+
+        for instance_id in delete_ids:
+            try:
+                instance_id = int(instance_id)
+            except:
+                continue
+
+            instance = self.instance_class.objects.filter(pk=instance_id).first()
+
+            if instance is None:
+                continue
+
+            self.perform_delete(instance, **kwargs)
+
         if success:
             return self.do_redirect("index", **kwargs)
         else:
-            return self.do_redirect(self.redirect_url_name, **kwargs)
+            context = self.get_context_data(**kwargs)
+            return TemplateResponse(request=request, template=self.template, context=context)
+
+    def perform_delete(self, instance, **kwargs):
+        instance.delete()
 
     def do_redirect(self, redirect_url_name, **kwargs):
-        return redirect(redirect_url_name)
+        return redirect("documents:index")
+        # return redirect(redirect_url_name)
 
     def perform_form(self, request, **kwargs):
-        forms = get_multi_form(self.form_class, request.POST, self.request.FILES)
+        print(request.POST)
+
+        def get_instance(prefix=None):
+            field_name = "instance_id" if prefix is None else prefix + "-instance_id"
+            id = get_request_int_or_none(request, "POST", field_name)
+
+            if id is None:
+                return None
+
+            return self.instance_class.objects.filter(id=id).first()
+
+        forms = get_multi_form(self.form_class, request.POST, self.request.FILES,
+                               get_instance=get_instance)
 
         for form in forms:
             if not form.is_valid():
@@ -61,17 +104,17 @@ class MultiFormCreation(View):
         instances = []
 
         for form in forms:
-            item = self.perform_create(form)
+            item = self.perform_save(form)
             instances.append(item)
 
         return True, instances
 
-    def perform_create(self, form):
+    def perform_save(self, form):
         item = form.save()
         return item
 
 
-class MultiFormCreationWithPermissions(MultiFormCreation):
+class MultiFormCreationWithPermissions(MultiFormView):
     permissions_form_class = None
     template = "forms/multi-form-permissions.html"
 
@@ -91,7 +134,7 @@ class MultiFormCreationWithPermissions(MultiFormCreation):
         if not success:
             return self.do_redirect(self.redirect_url_name, **kwargs)
 
-        success, _ = self.perform_permissions_form(request, instances, **kwargs)
+        success = self.perform_permissions_form(request, instances, **kwargs)
 
         if not success:
             return self.do_redirect(self.redirect_url_name, **kwargs)
@@ -105,23 +148,20 @@ class MultiFormCreationWithPermissions(MultiFormCreation):
         for form in permissions_forms:
             if not form.is_valid():
                 messages.error(request, form.errors)
-                return False, None
-
-        permissions = []
+                return False
 
         for form in permissions_forms:
-            item = self.perform_permissions_create(form, form_instances)
-            permissions.append(item)
+            self.perform_permissions_create(form, form_instances)
 
-        return True, permissions
+        return True
 
     def perform_permissions_create(self, form, for_instances):
-        permission = form.save()
-
         for instance in for_instances:
-            permission.for_instances.add(instance)
+            permission = form.save(commit=False)
+            permission.for_instance = instance
+            permission.save()
 
-        return permission
+        return None
 
 
 def sendfile(request, filename, force_download=False):

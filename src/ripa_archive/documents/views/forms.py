@@ -1,3 +1,6 @@
+from io import UnsupportedOperation
+
+from django.core.exceptions import SuspiciousOperation
 from django.shortcuts import redirect
 from django.db import transaction
 
@@ -5,10 +8,10 @@ from ripa_archive.activity import activity_factory
 from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.forms.browser import CreateFolderForm, CreateDocumentForm, \
-    FolderPermissionsForm, DocumentPermissionsForm
-from ripa_archive.documents.models import Document, Folder
+    FolderPermissionsCreateForm, DocumentPermissionsCreateForm, FolderPermissionsEditForm
+from ripa_archive.documents.models import Document, Folder, FolderCustomPermission
 from ripa_archive.documents.views.main import get_folder_or_404, browser_base_context
-from ripa_archive.views import MultiFormCreationWithPermissions
+from ripa_archive.views import MultiFormCreationWithPermissions, MultiFormView
 
 
 class BrowserMultiFormCreation(MultiFormCreationWithPermissions):
@@ -20,10 +23,20 @@ class BrowserMultiFormCreation(MultiFormCreationWithPermissions):
         context.update(browser_base_context(self.request))
         context.update({
             "parent_folder": parent_folder,
-            "form": self.form_class(initial={"parent": parent_folder}),
         })
 
         return context
+
+    # TODO: reduce repetition - path, parent_folder
+    def get_forms(self, **kwargs):
+        path = kwargs.get("path")
+        parent_folder = get_folder_or_404(path)
+        return [self.form_class(initial={"parent": parent_folder})]
+
+    def get_pattern_form(self, **kwargs):
+        path = kwargs.get("path")
+        parent_folder = get_folder_or_404(path)
+        return self.form_class(initial={"parent": parent_folder})
 
     @transaction.atomic
     def post(self, request, **kwargs):
@@ -31,7 +44,7 @@ class BrowserMultiFormCreation(MultiFormCreationWithPermissions):
         self.parent_folder = get_folder_or_404(path)
         return super().post(request, **kwargs)
 
-    def perform_create(self, form):
+    def perform_save(self, form):
         item = form.save(commit=False)
         item.parent = self.parent_folder
         item.save()
@@ -50,11 +63,11 @@ class CreateFolders(BrowserMultiFormCreation):
     title = "Create folders"
     validator_url = "documents:validator-create-folders"
     form_class = CreateFolderForm
-    permissions_form_class = FolderPermissionsForm
+    permissions_form_class = FolderPermissionsCreateForm
     redirect_url_name = "create-folders"
 
-    def perform_create(self, form):
-        folder = super().perform_create(form)
+    def perform_save(self, form):
+        folder = super().perform_save(form)
         activity_factory.for_folder(
             self.request.user,
             folder,
@@ -71,10 +84,10 @@ class CreateDocuments(BrowserMultiFormCreation):
     title = "Create documents"
     validator_url = "documents:validator-create-documents"
     form_class = CreateDocumentForm
-    permissions_form_class = DocumentPermissionsForm
+    permissions_form_class = DocumentPermissionsCreateForm
     redirect_url_name = "create-documents"
 
-    def perform_create(self, form):
+    def perform_save(self, form):
         document = Document.objects.create(
             owner=self.request.user,
             parent=form.cleaned_data["parent"],
@@ -99,3 +112,58 @@ class CreateDocuments(BrowserMultiFormCreation):
             ),
             document_data=document.last_data
         )
+
+
+class EditPermissions(MultiFormView):
+    title = "Edit permissions"
+    form_class = None
+    instance_class = None
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            "submit_title": "Update permissions",
+            "add_title": "Add another permission"
+        })
+        return context
+
+    def get_for_instance(self, **kwargs):
+        raise UnsupportedOperation()
+
+    def get_forms(self, **kwargs):
+        for_instance = self.get_for_instance(**kwargs)
+        forms = []
+
+        permissions = self.instance_class.objects.filter(for_instance=for_instance)
+
+        for index, permission in enumerate(permissions):
+            prefix = "block" + str(index) if index != 0 else ""
+            forms.append(self.form_class(instance=permission, prefix=prefix))
+
+        return forms
+
+    def perform_delete(self, instance, **kwargs):
+        for_instance = self.get_for_instance(**kwargs)
+
+        if instance.for_instance != for_instance:
+            raise SuspiciousOperation()
+
+        instance.delete()
+
+    def get_pattern_form(self, **kwargs):
+        return self.form_class(initial={
+            "for_instance": self.get_for_instance(**kwargs)
+        })
+
+
+class EditFolderPermissions(EditPermissions):
+    form_class = FolderPermissionsEditForm
+    instance_class = FolderCustomPermission
+    validator_url = "documents:validator-edit-folder-permissions"
+
+    def get_for_instance(self, **kwargs):
+        path = kwargs.get("path")
+        return get_folder_or_404(path)

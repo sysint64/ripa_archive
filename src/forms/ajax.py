@@ -60,11 +60,11 @@ class AjaxFormMixin:
                 "is_file": isinstance(field.widget, forms.FileInput)
             })
 
-    def is_valid(self):
-        try:
-            return super().is_valid()
-        except KeyError:
-            raise SuspiciousOperation()
+    # def is_valid(self):
+    #     try:
+    #         return super().is_valid()
+    #     except KeyError:
+    #         raise SuspiciousOperation()
 
 
 class AjaxForm(AjaxFormMixin, forms.Form):

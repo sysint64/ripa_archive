@@ -84,11 +84,11 @@ class DocumentsManager(models.Manager):
 
 
 class FolderCustomPermission(ModelCustomPermission):
-    for_instances = models.ManyToManyField("Folder")  # TODO: change to FK, cascade delete
+    for_instance = models.ForeignKey("Folder")
 
 
 class DocumentCustomPermission(ModelCustomPermission):
-    for_instances = models.ManyToManyField("Document")  # TODO: change to FK, cascade delete
+    for_instance = models.ForeignKey("Document")
 
 
 # Default folders: root and none
