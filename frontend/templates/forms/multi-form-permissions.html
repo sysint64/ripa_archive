@@ -6,14 +6,13 @@
     <link rel="stylesheet" href="{% static "styles/multi_form_permissions.sass" %}" type="text/x-sass">
 {% endblock %}
 
-{% block js %}
-    {{ block.super }}
+{% block js_before_form_js %}
     <script src="{% static "js/forms/multi_form_permissions.js" %}" charset="utf-8"></script>
 {% endblock %}
 
 {% block after_actions_buttons %}
     {# Primary block #}
-    <div class="block" id="block-permissions" style="display: none">
+    <div class="block permissions-block" id="block-permissions" style="display: none">
         <div class="header">
             Permission
             <a class="fa fa-trash-o remove-block"></a>

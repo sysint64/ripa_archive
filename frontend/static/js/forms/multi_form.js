@@ -9,9 +9,15 @@ function bindEvents() {
 
     $(".remove-block").click(function() {
         const $block = $(this).closest(".block");
-        const index = formsPrefixes.indexOf($block.data("prefix"));
-        formsPrefixes.splice(index, 1);
-        console.log(formsPrefixes);
+
+        if ($block.hasClass("permissions-block")) {
+            const index = permissionsFormsPrefixes.indexOf($block.data("prefix"));
+            permissionsFormsPrefixes.splice(index, 1);
+        } else {
+            const index = formsPrefixes.indexOf($block.data("prefix"));
+            formsPrefixes.splice(index, 1);
+        }
+
         const $instanceIdInput = $block.find("input[type=hidden].instance-id");
 
         if ($instanceIdInput.length > 0)
@@ -60,8 +66,6 @@ function rebindEvents() {
         formsPrefixes.push(prefix);
     });
 
-    console.log(formsPrefixes);
-
     function putBlock() {
         lastBlockNumber += 1;
         const prefix = formPrefix + parseInt(lastBlockNumber);
@@ -71,6 +75,7 @@ function rebindEvents() {
         $block.find("label").attr("for", addPrefix);
         $block.find("input,select").attr("name", addPrefix).attr("id", addPrefix);
         $block.find(".form-error").attr("data-name", addPrefix);
+        $block.find("select[multiple]").addClass("selectpicker").selectpicker();
         $("#block-cursor").before($block);
 
         formsPrefixes.push(prefix);
@@ -79,6 +84,7 @@ function rebindEvents() {
 
     function putFirstBlock() {
         var $block = $("<div/>", {"class": "block", "html": primaryBlockHtml});
+        $block.find("select[multiple]").addClass("selectpicker").selectpicker();
         $("#block-cursor").before($block);
     }
 
@@ -98,8 +104,8 @@ function rebindEvents() {
         showWaitDialog();
 
         if ($(".block").length == 0) {
-            window.location.href = $(".go-back").attr("href");
-            event.preventDefault();
+            $(this).find("#form_is_empty").val("1");
+            $(this).find("#delete_ids").val(deleteIds.join(","));
             return;
         }
 

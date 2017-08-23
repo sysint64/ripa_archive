@@ -40,8 +40,7 @@
               data-validation="{{ validator_url }}"
         >
             {% block form_content %}
-                {# Primary block #}
-                <div class="block" id="block-primary">
+                <div class="block">
                     <div class="header">
                         New item
                     </div>
@@ -69,11 +68,6 @@
                         {% endfor %}
                     </div>
                 </div>
-            {% endblock %}
-
-            <div id="block-cursor"></div>
-
-            {% block after_cursor %}
             {% endblock %}
 
             {% block action_buttons %}

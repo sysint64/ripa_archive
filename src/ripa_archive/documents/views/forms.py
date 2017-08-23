@@ -8,9 +8,12 @@ from ripa_archive.activity import activity_factory
 from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.forms.browser import CreateFolderForm, CreateDocumentForm, \
-    FolderPermissionsCreateForm, DocumentPermissionsCreateForm, FolderPermissionsEditForm
-from ripa_archive.documents.models import Document, Folder, FolderCustomPermission
+    FolderPermissionsCreateForm, DocumentPermissionsCreateForm, FolderPermissionsEditForm, \
+    DocumentPermissionsEditForm
+from ripa_archive.documents.models import Document, Folder, FolderCustomPermission, \
+    DocumentCustomPermission
 from ripa_archive.documents.views.main import get_folder_or_404, browser_base_context
+from ripa_archive.documents.views.single.main import get_document
 from ripa_archive.views import MultiFormCreationWithPermissions, MultiFormView
 
 
@@ -38,7 +41,6 @@ class BrowserMultiFormCreation(MultiFormCreationWithPermissions):
         parent_folder = get_folder_or_404(path)
         return self.form_class(initial={"parent": parent_folder})
 
-    @transaction.atomic
     def post(self, request, **kwargs):
         path = kwargs.get("path")
         self.parent_folder = get_folder_or_404(path)
@@ -113,6 +115,8 @@ class CreateDocuments(BrowserMultiFormCreation):
             document_data=document.last_data
         )
 
+        return document
+
 
 class EditPermissions(MultiFormView):
     title = "Edit permissions"
@@ -167,3 +171,12 @@ class EditFolderPermissions(EditPermissions):
     def get_for_instance(self, **kwargs):
         path = kwargs.get("path")
         return get_folder_or_404(path)
+
+
+class EditDocumentPermissions(EditPermissions):
+    form_class = DocumentPermissionsEditForm
+    instance_class = DocumentCustomPermission
+    validator_url = "documents:validator-edit-document-permissions"
+
+    def get_for_instance(self, **kwargs):
+        return get_document(**kwargs)

@@ -1,5 +1,4 @@
 import os
-from io import UnsupportedOperation
 
 from django.conf import settings
 from django.db import transaction
@@ -48,11 +47,8 @@ class MultiFormView(View):
         context = self.get_context_data(**kwargs)
         return TemplateResponse(request=request, template=self.template, context=context)
 
-    @transaction.atomic
-    def post(self, request, **kwargs):
-        success, _ = self.perform_form(request, **kwargs)
-
-        delete_ids = request.POST.get("delete_ids", "")
+    def _handle_delete_form(self, **kwargs):
+        delete_ids = self.request.POST.get("delete_ids", "")
         delete_ids.split(",")
 
         for instance_id in delete_ids:
@@ -68,6 +64,16 @@ class MultiFormView(View):
 
             self.perform_delete(instance, **kwargs)
 
+    @transaction.atomic
+    def post(self, request, **kwargs):
+        self._handle_delete_form(**kwargs)
+        form_is_empty = request.POST.get("form_is_empty", "0") == "1"
+
+        if not form_is_empty:
+            success, _ = self.perform_form(request, **kwargs)
+        else:
+            success = True
+
         if success:
             return self.do_redirect("index", **kwargs)
         else:
@@ -82,8 +88,6 @@ class MultiFormView(View):
         # return redirect(redirect_url_name)
 
     def perform_form(self, request, **kwargs):
-        print(request.POST)
-
         def get_instance(prefix=None):
             field_name = "instance_id" if prefix is None else prefix + "-instance_id"
             id = get_request_int_or_none(request, "POST", field_name)
@@ -160,6 +164,7 @@ class MultiFormCreationWithPermissions(MultiFormView):
             permission = form.save(commit=False)
             permission.for_instance = instance
             permission.save()
+            form.save_m2m()
 
         return None
 

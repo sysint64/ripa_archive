@@ -18,6 +18,7 @@
     <script src="{% static 'js/dialogs.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/forms/helpers.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/forms/multi_form.js' %}" charset="utf-8"></script>
+    {% block js_before_form_js %}{% endblock %}
     <script src="{% static 'js/forms/form.js' %}" charset="utf-8"></script>
 {% endblock %}
 
@@ -101,6 +102,7 @@
 
             {{ form_prefixes_field|safe }}
             <input type="hidden" name="delete_ids" id="delete_ids">
+            <input type="hidden" name="form_is_empty" id="form_is_empty" value="0">
 
             {% block after_actions_buttons %}
             {% endblock %}

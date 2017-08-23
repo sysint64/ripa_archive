@@ -75,7 +75,8 @@ urlpatterns += \
 urlpatterns += \
     document_url(r'!action:upload-new-version/', single_forms_views.upload_new_version, name="upload-new-version") + \
     document_url(r'!action:write-remark/', single_forms_views.write_remark, name="write-remark") + \
-    document_url(r'!action:rename/', single_forms_views.rename_document, name="rename-document")
+    document_url(r'!action:rename/', single_forms_views.rename_document, name="rename-document") + \
+    document_url(r'!action:edit-permissions/', forms_views.EditDocumentPermissions.as_view(), name="edit-document-permissions")
 
 # Single document actions
 urlpatterns += \
