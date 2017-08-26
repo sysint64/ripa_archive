@@ -41,6 +41,11 @@ def document_view(request, name, path=None):
         "archive": document.status == Document.Status.FINAL
     })
 
+    if document.status == Document.Status.FINAL:
+        context.update({
+            "active_url_name": "archive",
+        })
+
     return TemplateResponse(template="documents_browser/single/index.html", request=request,
                             context=context)
 

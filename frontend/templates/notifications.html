@@ -9,13 +9,23 @@
 {% block content %}
     <h3>Notifications</h3>
     {% for notification in notifications %}
-        <div class="notification">
-            <a href="{{ notification.permalink }}"><b>{{ notification.title }}</b></a>
-            <div class="content">{{ notification.text|linebreaksbr }}</div>
-            <div class="details">
-                {{ notification.detail|linebreaksbr }}
+        <a href="{{ notification.permalink }}">
+            <div class="notification {% if notification.is_read %}is-read{% endif %}">
+                <div class="title">
+                    {{ notification.title }}
+                </div>
+{#                {% if not notification.is_read %}#}
+{#                    <div class="new-notification-badge"></div>#}
+{#                {% endif %}#}
+                <div class="clearfix"></div>
+                <div class="content">{{ notification.text|linebreaksbr }}</div>
+                {% if notification.detail != "" %}
+                    <div class="details">
+                        <b>Details:</b> {{ notification.detail|linebreaksbr }}
+                    </div>
+                {% endif %}
             </div>
-        </div>
+        </a>
     {% empty %}
         No new notifications
     {% endfor %}

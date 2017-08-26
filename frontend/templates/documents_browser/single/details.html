@@ -40,22 +40,24 @@
 <br>
 
 <div class="text-center mtop20">
-    {% if user_is_editor %}
-        <a href="{{ document.upload_new_version_permalink }}" class="btn btn-sm btn-primary"
-           id="upload-new-version">Upload new version</a>
-        <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
-    {% endif %}
+    {% if not archive %}
+        {% if user_is_editor %}
+            <a href="{{ document.upload_new_version_permalink }}" class="btn btn-sm btn-primary"
+               id="upload-new-version">Upload new version</a>
+            <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
+        {% endif %}
 
-    {% if not document.is_under_edition %}
-        <a href="#" class="btn btn-sm btn-primary" id="take-for-revision">Take for revision</a>
-        <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
-    {% endif %}
+        {% if not document.is_under_edition %}
+            <a href="#" class="btn btn-sm btn-primary" id="take-for-revision">Take for revision</a>
+            <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
+        {% endif %}
 
-    {% if not user_is_editor and document.is_under_edition %}
-        <a href="!action:write-remark/" class="btn btn-sm btn-primary" id="write-remark">Write
-            remark</a>
-        <a href="#" class="btn btn-sm btn-success" id="accept-document">Accept</a>
-        <a href="#" class="btn btn-sm btn-danger" id="reject-document">Reject</a>
+        {% if not user_is_editor and document.is_under_edition %}
+            <a href="!action:write-remark/" class="btn btn-sm btn-primary" id="write-remark">Write
+                remark</a>
+            <a href="#" class="btn btn-sm btn-success" id="accept-document">Accept</a>
+            <a href="#" class="btn btn-sm btn-danger" id="reject-document">Reject</a>
+        {% endif %}
     {% endif %}
 
     <a href="!action:update-document-status/" class="btn btn-sm btn-primary">Update status</a>

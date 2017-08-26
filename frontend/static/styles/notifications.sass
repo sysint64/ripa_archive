@@ -1,0 +1,35 @@
+@import "consts"
+
+.notification
+    padding: 5px 10px
+    font-size: 16px
+    border-bottom: 1px solid #ccc
+    background: rgba(28, 201, 166, 0.07)
+
+    .title
+        font-weight: bold
+        float: left
+
+    .new-notification-badge
+        width: 8px
+        height: 8px
+        background: $green
+        float: left
+        border-radius: 8px
+        margin-left: 8px
+        margin-top: 8px
+
+    .details
+        border-left: 4px solid #ddd
+        padding-left: 5px
+        color: #394D5F
+
+    &:hover
+        background: rgba(28, 201, 166, 0.15)
+
+    &.is-read
+        background: none
+
+        &:hover
+            background: #f0f0f0
+

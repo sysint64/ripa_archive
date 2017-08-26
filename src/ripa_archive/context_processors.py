@@ -26,7 +26,7 @@ def common(request):
 
     if not request.user.is_anonymous:
         context.update({
-            "have_notifications": Notification.objects.filter(to=request.user).count() > 0
+            "have_notifications": Notification.objects.filter(to=request.user, is_read=False).count() > 0
         })
 
     return context
