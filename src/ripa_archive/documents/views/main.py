@@ -71,12 +71,34 @@ def document_browser(request, path=None):
     if parent_folder.parent is not None:
         parent_folder_url = parent_folder.parent.permalink
 
+    sort_by, sort_direction = request.session.get("documents-sort-by", "name,asc").split(",")
+
+    def apply_sort(queryset):
+        if queryset.model == Folder and sort_by != "name":
+            return queryset
+
+        qs_sort_direction = {
+            "asc": "",
+            "desc": "-",
+        }.get(sort_direction)
+
+        qs_sort_field = {
+            "datetime": "data__datetime"
+        }.get(sort_by, sort_by)
+
+        return queryset.order_by("%s%s" % (qs_sort_direction, qs_sort_field))
+
+    sorting_css_classes = {"name": "", "status": "", "datetime": "", sort_by: sort_direction}
+
     context = browser_base_context(request)
     context.update({
+        "sorting_name_css_classes": sorting_css_classes["name"],
+        "sorting_status_css_classes": sorting_css_classes["status"],
+        "sorting_datetime_css_classes": sorting_css_classes["datetime"],
         "parent_folder": parent_folder,
         "parent_folder_url": parent_folder_url,
-        "folders": Folder.objects.for_user(request.user, parent_folder),
-        "documents": Document.objects.for_user(request.user, parent_folder),
+        "folders": apply_sort(Folder.objects.for_user(request.user, parent_folder)),
+        "documents": apply_sort(Document.objects.for_user(request.user, parent_folder)),
     })
 
     return TemplateResponse(template="documents_browser/list.html", request=request, context=context)

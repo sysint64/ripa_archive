@@ -162,4 +162,23 @@ var onSelectChange = null;
         if (onSelectChange != null)
             onSelectChange();
     });
+
+    // Sorting
+    $("th.sorting").click(function() {
+        const direction = $(this).hasClass("asc") ? "desc" : "asc";
+        const field = $(this).data("sort-field");
+
+        executeAction(
+            "documents",
+            "sort-by",
+            {
+                "sort_by": field,
+                "sort_direction": direction
+            },
+            function () {
+                showWaitDialog();
+                location.reload();
+            }
+        );
+    });
 })(jQuery);

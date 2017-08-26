@@ -246,3 +246,18 @@ def change_folder(request):
         update_parent(documents, to_folder.documents)
 
     return Response({}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+def sort_by(request):
+    sort_by = request.data.get("sort_by")
+    sort_direction = request.data.get("sort_direction")
+
+    if sort_by not in ("name", "status", "datetime"):
+        raise ValidationError("Bad sort field")
+
+    if sort_direction not in ("asc", "desc"):
+        raise ValidationError("Bad sort direction")
+
+    request.session["documents-sort-by"] = "%s,%s" % (sort_by, sort_direction)
+    return Response({}, status=status.HTTP_200_OK)

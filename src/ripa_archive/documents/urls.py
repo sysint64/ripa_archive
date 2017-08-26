@@ -63,6 +63,7 @@ urlpatterns += [
     url(r'^!action:delete/$', actions_views.delete, name="action-delete"),
     url(r'^!action:copy/$', actions_views.copy, name="action-copy"),
     url(r'^!action:cut/$', actions_views.cut, name="action-cut"),
+    url(r'^!action:sort-by/$', actions_views.sort_by, name="sort-by"),
 ]
 
 # Single document
