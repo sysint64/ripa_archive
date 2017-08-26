@@ -9,8 +9,8 @@ from django.views.decorators.http import require_http_methods
 from request_helper import get_request_int_or_404
 from ripa_archive.activity import activity_factory
 from ripa_archive.documents import strings
-from ripa_archive.documents.forms.single import UploadNewVersionForm, RemarkForm, RenameDocument, \
-    RenameFolder
+from ripa_archive.documents.forms.single import UploadNewVersionForm, RemarkForm, RenameDocumentForm, \
+    RenameFolderForm, UpdateStatusForm
 from ripa_archive.documents.models import Remark
 from ripa_archive.documents.views.main import browser_base_context
 from ripa_archive.documents.views.single.main import get_document, get_folder
@@ -140,9 +140,9 @@ def rename_document(request, name, path=None):
     old_name = document.name
 
     if request.method == "POST":
-        form = RenameDocument(request.POST, instance=document)
+        form = RenameDocumentForm(request.POST, instance=document)
     else:
-        form = RenameDocument(instance=document)
+        form = RenameDocumentForm(instance=document)
 
     context = browser_base_context(request)
     context.update({
@@ -184,9 +184,9 @@ def rename_folder(request, path=None):
     old_name = folder.name
 
     if request.method == "POST":
-        form = RenameFolder(request.POST, instance=folder)
+        form = RenameFolderForm(request.POST, instance=folder)
     else:
-        form = RenameFolder(instance=folder)
+        form = RenameFolderForm(instance=folder)
 
     context = browser_base_context(request)
     context.update({
@@ -217,5 +217,32 @@ def rename_folder(request, path=None):
             return redirect(folder.parent.permalink)
         else:
             return redirect(folder.permalink)
+
+    return TemplateResponse(template="forms/form.html", request=request, context=context)
+
+
+@require_http_methods(["GET", "POST"])
+@transaction.atomic
+@require_permissions([codes.DOCUMENTS_CAN_EDIT], get_instance_functor=get_document)
+def update_document_status(request, name, path=None):
+    document = get_document(name=name, path=path)
+
+    if request.method == "POST":
+        form = UpdateStatusForm(request.POST, instance=document)
+    else:
+        form = UpdateStatusForm(instance=document)
+
+    context = browser_base_context(request)
+    context.update({
+        "form_title": "Update document status",
+        "form": form,
+        "submit_title": "Update",
+        "validator_url": reverse("documents:validator-update-document-status"),
+    })
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Successfully updated")
+        return redirect(document.permalink)
 
     return TemplateResponse(template="forms/form.html", request=request, context=context)

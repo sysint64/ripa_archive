@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 
 from forms.ajax import AjaxModelForm
 from ripa_archive.accounts.models import User
-from ripa_archive.documents.models import Folder, DocumentData, Status, FolderCustomPermission, \
+from ripa_archive.documents.models import Folder, DocumentData, FolderCustomPermission, \
     DocumentCustomPermission, Document, FoldersManager, DocumentsManager
 from ripa_archive.permissions.models import Permission, Group
 
@@ -42,7 +42,7 @@ class CreateDocumentForm(AjaxModelForm):
     )
 
     name = forms.CharField(max_length=255, label="Name")
-    status = forms.ModelChoiceField(queryset=Status.objects.all(), label="Status")
+    status = forms.ChoiceField(choices=Document.Status.CHOICES, label="Status")
 
     # Check uniqueness in folder
     def clean_name(self):

@@ -25,7 +25,7 @@ class UploadNewVersionForm(AjaxModelForm):
     )
 
 
-class RenameFolder(AjaxModelForm):
+class RenameFolderForm(AjaxModelForm):
     class Meta:
         model = Folder
         fields = "parent", "name"
@@ -47,7 +47,7 @@ class RenameFolder(AjaxModelForm):
         return name
 
 
-class RenameDocument(AjaxModelForm):
+class RenameDocumentForm(AjaxModelForm):
     class Meta:
         model = Document
         fields = "parent", "name"
@@ -79,3 +79,9 @@ class RemarkForm(AjaxModelForm):
         required=True,
         widget=forms.Textarea(attrs={"rows": 2})
     )
+
+
+class UpdateStatusForm(AjaxModelForm):
+    class Meta:
+        model = Document
+        fields = "status",

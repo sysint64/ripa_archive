@@ -2,6 +2,7 @@ from enum import Enum
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -61,7 +62,7 @@ def browser_base_context(request):
 
 
 @login_required(login_url="accounts:login")
-def document_browser(request, path=None):
+def document_browser(request, path=None, archive=False):
     parent_folder = get_folder_or_404(path)
     parent_folder_url = ""
 
@@ -90,6 +91,9 @@ def document_browser(request, path=None):
 
     sorting_css_classes = {"name": "", "status": "", "datetime": "", sort_by: sort_direction}
 
+    folders = apply_sort(Folder.objects.for_user(request.user, parent_folder))
+    documents = apply_sort(Document.objects.for_user(request.user, parent_folder))
+
     context = browser_base_context(request)
     context.update({
         "sorting_name_css_classes": sorting_css_classes["name"],
@@ -97,9 +101,20 @@ def document_browser(request, path=None):
         "sorting_datetime_css_classes": sorting_css_classes["datetime"],
         "parent_folder": parent_folder,
         "parent_folder_url": parent_folder_url,
-        "folders": apply_sort(Folder.objects.for_user(request.user, parent_folder)),
-        "documents": apply_sort(Document.objects.for_user(request.user, parent_folder)),
+        "folders": folders,
+        "documents": documents,
     })
+
+    if archive:
+        context.update({
+            "active_url_name": "archive",
+            "documents": documents.filter(status=Document.Status.FINAL),
+            "archive": True,
+        })
+    else:
+        context.update({
+            "documents": documents.filter(~Q(status=Document.Status.FINAL)),
+        })
 
     return TemplateResponse(template="documents_browser/list.html", request=request, context=context)
 

@@ -11,10 +11,10 @@ from ripa_archive.documents.views.single import actions as single_actions_views
 from ripa_archive.documents.views.single import main as single_main_view
 
 
-def browser_url(regex, view, name=None):
+def browser_url(regex, view, name=None, kwargs=None):
     return [
-        url(r'^'+regex+'$', view, name=name),
-        url(r'^(?P<path>[0-9a-zA-ZА-Яа-я /]+)/'+regex+'$', view, name=name),
+        url(r'^'+regex+'$', view, name=name, kwargs=kwargs),
+        url(r'^(?P<path>[0-9a-zA-ZА-Яа-я /]+)/'+regex+'$', view, name=name, kwargs=kwargs),
     ]
 
 
@@ -31,6 +31,7 @@ def folder_url(regex, view, name=None):
 
 urlpatterns = \
     browser_url(r'', main_views.document_browser, name="index") + \
+    browser_url(r'!archive/', main_views.document_browser, name="archive", kwargs={"archive": True}) + \
     browser_url(r'!action:create-documents/', forms_views.CreateDocuments.as_view(), name="create-documents") + \
     browser_url(r'!action:create-folders/', forms_views.CreateFolders.as_view(), name="create-folders") + \
     browser_url(r'!action:edit-permissions/', forms_views.EditFolderPermissions.as_view(), name="edit-folder-permissions") + \
@@ -77,7 +78,8 @@ urlpatterns += \
     document_url(r'!action:upload-new-version/', single_forms_views.upload_new_version, name="upload-new-version") + \
     document_url(r'!action:write-remark/', single_forms_views.write_remark, name="write-remark") + \
     document_url(r'!action:rename/', single_forms_views.rename_document, name="rename-document") + \
-    document_url(r'!action:edit-permissions/', forms_views.EditDocumentPermissions.as_view(), name="edit-document-permissions")
+    document_url(r'!action:edit-permissions/', forms_views.EditDocumentPermissions.as_view(), name="edit-document-permissions") + \
+    document_url(r'!action:update-document-status/', single_forms_views.update_document_status, name="update-document-status")
 
 # Single document actions
 urlpatterns += \
@@ -100,8 +102,12 @@ urlpatterns += [
         name="validator-write-remark"),
 
     url(r'^validator:rename-document/$',
-        CompositeAjaxFormValidator.as_view(forms=[RenameDocument]),
+        CompositeAjaxFormValidator.as_view(forms=[RenameDocumentForm]),
         name="validator-rename-document"),
+
+    url(r'^validator:update-document-status/$',
+        CompositeAjaxFormValidator.as_view(forms=[UpdateStatusForm]),
+        name="validator-update-document-status"),
 ]
 
 # Folder actions
@@ -111,6 +117,6 @@ urlpatterns += \
 # Folder validators
 urlpatterns += [
     url(r'^validator:rename-folder/$',
-        CompositeAjaxFormValidator.as_view(forms=[RenameFolder]),
+        CompositeAjaxFormValidator.as_view(forms=[RenameFolderForm]),
         name="validator-rename-folder"),
 ]

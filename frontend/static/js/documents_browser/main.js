@@ -60,6 +60,13 @@ var onSelectChange = null;
 
                     location.href = $selected.find("td").first().data("href") + "!action:edit-permissions/";
                     break;
+
+                case "update_status":
+                    if ($selected.length > 1)
+                        break;
+
+                    location.href = $selected.find("td").first().data("href") + "!action:update-document-status/";
+                    break;
             }
         },
         items: {
@@ -72,6 +79,14 @@ var onSelectChange = null;
                 name: "Edit permissions",
                 icon: "fa-key",
                 disabled: function() { return $(".selected").length != 1; }
+            },
+            "update_status": {
+                name: "Update status",
+                // icon: "fa-check",
+                disabled: function() {
+                    const $selected = $(".selected");
+                    return $selected.length != 1 || !$selected.hasClass("document");
+                }
             },
             "sep": "-",
             "cut": {name: "Cut", icon: "cut"},

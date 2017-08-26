@@ -38,6 +38,12 @@
                     </a>
                 </li>
 
+                <li{% if active_url_name == "archive" %} class="active"{% endif %}>
+                    <a href="{% url "documents:archive" %}">
+                        <i class="fa fa-archive"></i> Final texts archive
+                    </a>
+                </li>
+
                 <li{% if active_url_name == "users" %} class="active"{% endif %}>
                     <a href="{% url "accounts:index" %}">
                         <i class="fa fa-users"></i> Users

@@ -39,6 +39,7 @@ def take_for_revision(request, name, path=None):
     )
 
     document.current_edit_meta = edit_meta
+    document.status = Document.Status.IN_PROGRESS
     document.save()
 
     messages.success(request._request, "Successfully took")
@@ -165,6 +166,7 @@ def accept_document(request, name, path=None):
 
     document.accepted_edit_meta = document.current_edit_meta
     document.current_edit_meta = None
+    document.status = Document.Status.FINAL
     document.save()
 
     return Response({}, status=status.HTTP_200_OK)
@@ -194,6 +196,7 @@ def reject_document(request, name, path=None):
     document.accepted_edit_meta = document.current_edit_meta
     document.current_edit_meta = None
     document.data = edit_meta.previous_document_data
+    document.status = Document.Status.OPEN
     document.save()
 
     activity_factory.for_document(

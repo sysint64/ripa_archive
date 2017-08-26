@@ -111,6 +111,13 @@ class Folder(ModelWhichHaveCustomPermissionsMixin, models.Model):
             return reverse("documents:index")
 
     @property
+    def archive_permalink(self):
+        if self.path != "":
+            return reverse("documents:archive", kwargs={"path": self.path})
+        else:
+            return reverse("documents:archive")
+
+    @property
     def path_folders(self):
         items = [self]
         current_folder = self.parent
@@ -141,13 +148,14 @@ class Folder(ModelWhichHaveCustomPermissionsMixin, models.Model):
 
         return items
 
-    def __str__(self):
-        return self.name
+    @property
+    def archive_breadcrumbs(self):
+        items = []
 
+        for folder in self.path_folders:
+            items.append({"name": folder.name, "permalink": folder.archive_permalink})
 
-class Status(models.Model):
-    name = models.CharField(max_length=20)
-    allow_delete = models.BooleanField()
+        return items
 
     def __str__(self):
         return self.name
@@ -156,6 +164,21 @@ class Status(models.Model):
 class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
     class Meta:
         default_related_name = "documents"
+
+    class Status:
+        OPEN = "0"
+        IN_PROGRESS = "1"
+        PROJECT = "2"
+        FINAL = "3"
+        CLOSE = "4"
+
+        CHOICES = (
+            (OPEN, "Open"),
+            # (IN_PROGRESS, "In progress"),
+            (PROJECT, "Project"),
+            (FINAL, "Final"),
+            (CLOSE, "Close"),
+        )
 
     content_type = "documents.Document"
     custom_permission_model = DocumentCustomPermission
@@ -169,7 +192,7 @@ class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
     current_edit_meta = models.ForeignKey("DocumentEditMeta", null=True, default=None)
     accepted_edit_meta = models.ForeignKey("DocumentEditMeta", null=True, default=None, related_name="accepted_edit_meta")
     parent = models.ForeignKey(Folder)
-    status = models.ForeignKey(Status)
+    status = models.CharField(max_length=2, default=Status.OPEN, choices=Status.CHOICES)
 
     objects = DocumentsManager()
 

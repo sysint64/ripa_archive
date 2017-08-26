@@ -64,10 +64,10 @@
                 {% folder_has_permission folder "folders_can_read" as has_perm %}
                 {% if has_perm %}
                     <tr class="selectable context-menu folder{% folder_extra_classes folder %}" data-id="{{ folder.id }}" data-group="folders">
-                        <td class="data-double-click-link" data-href="{{ folder.permalink }}">
+                        <td class="data-double-click-link" data-href="{% if archive %}{{ folder.archive_permalink }}{% else %}{{ folder.permalink }}{% endif %}">
                             <i class="fa fa-folder"></i>
                         </td>
-                        <td class="data-double-click-link" data-href="{{ folder.permalink }}">
+                        <td class="data-double-click-link" data-href="{% if archive %}{{ folder.archive_permalink }}{% else %}{{ folder.permalink }}{% endif %}">
                             {{ folder }}
                         </td>
                         <td></td>

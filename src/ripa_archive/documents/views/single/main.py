@@ -37,7 +37,8 @@ def document_view(request, name, path=None):
             )[:20],
         "remarks": Remark.active_objects.filter(edit_meta__document=document),
         "user_is_follow": request.user in document.followers.all(),
-        "user_is_editor": document.current_edit_meta is not None and document.current_edit_meta.editor == request.user
+        "user_is_editor": document.current_edit_meta is not None and document.current_edit_meta.editor == request.user,
+        "archive": document.status == Document.Status.FINAL
     })
 
     return TemplateResponse(template="documents_browser/single/index.html", request=request,
