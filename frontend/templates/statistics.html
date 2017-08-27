@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static "styles/loading.css" %}"
     <link rel="stylesheet" href="{% static "styles/daterangepicker.sass" %}" type="text/x-sass">
     <link rel="stylesheet" href="{% static "styles/activity.sass" %}" type="text/x-sass">
+    <link rel="stylesheet" href="{% static "styles/statistics.sass" %}" type="text/x-sass">
 {% endblock %}
 
 {% block dialogs %}
@@ -39,33 +40,33 @@
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
             <div class="count">{{ total_users }}</div>
-{#            <span class="count_bottom"><i class="green">4% </i> From last Week</span>#}
+            {#            <span class="count_bottom"><i class="green">4% </i> From last Week</span>#}
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Total Males</span>
             <div class="count">{{ total_males }}</div>
-{#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
+            {#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Total Females</span>
             <div class="count">{{ total_females }}</div>
-{#            <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span>#}
+            {#            <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span>#}
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-file-o"></i> Total Documents</span>
             <div class="count">{{ total_documents }}</div>
-{#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
+            {#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-file-o"></i> Total Finished documents</span>
             <div class="count">{{ total_finished_documents }}</div>
-{#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
+            {#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
         </div>
-        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-plug"></i> Total Connections</span>
-            <div class="count">{{ total_connections }}</div>
-{#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
-        </div>
+        {#        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">#}
+        {#            <span class="count_top"><i class="fa fa-plug"></i> Total Connections</span>#}
+        {#            <div class="count">{{ total_connections }}</div>#}
+        {#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
+        {#        </div>#}
     </div>
 
     <div class="row">
@@ -145,7 +146,7 @@
 
     {# Hello #}
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="dashboard_graph">
                 <div class="row x_title">
                     <div class="col-md-12">
@@ -154,6 +155,79 @@
                 </div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     {% include "activity_items.html" with users_activity=recent_activity show_empty_text=True show_activity_permalink=True %}
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="dashboard_graph">
+                <div class="row x_title">
+                    <div class="col-md-12">
+                        <h3>Last accepted documents</h3>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    {% for document in last_edited_documents %}
+                        <div class="last-edited-document">
+                            <a href="{{ document.permalink }}" class="header">
+                                <i class="fa {{ document.data.icon }}"></i> {{ document }}
+                                <div class="datetime">
+                                    {{ document.accepted_edit_meta.end_datetime }}
+                                </div>
+                            </a>
+                            <div>
+                                <b>Edited by:</b>
+                                <a href="{{ document.accepted_edit_meta.editor.permalink }}">
+                                    {{ document.accepted_edit_meta.editor }}
+                                </a>
+                            </div>
+                            <div>
+                                <b>Accepted by:</b>
+                                <a href="{{ document.accepted_edit_meta.closed_by.permalink }}">
+                                    {{ document.accepted_edit_meta.closed_by }}
+                                </a>
+                            </div>
+                        </div>
+                    {% empty %}
+                        No accepted documents
+                    {% endfor %}
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <br>
+            <div class="dashboard_graph">
+                <div class="row x_title">
+                    <div class="col-md-12">
+                        <h3>Last took on revision documents</h3>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    {% for document in last_took_for_revision_documents %}
+                        <div class="last-edited-document">
+                            <a href="{{ document.permalink }}" class="header">
+                                <i class="fa {{ document.data.icon }}"></i> {{ document }}
+                                <div class="datetime">
+                                    {{ document.accepted_edit_meta.start_datetime }}
+                                </div>
+                            </a>
+                            <div>
+                                <b>Edited by:</b>
+                                <a href="{{ document.accepted_edit_meta.editor.permalink }}">
+                                    {{ document.accepted_edit_meta.editor }}
+                                </a>
+                            </div>
+                            <div>
+                                <b>Accepted by:</b>
+                                <a href="{{ document.accepted_edit_meta.closed_by.permalink }}">
+                                    {{ document.accepted_edit_meta.closed_by }}
+                                </a>
+                            </div>
+                        </div>
+                    {% empty %}
+                        No took documents
+                    {% endfor %}
                 </div>
                 <div class="clearfix"></div>
             </div>
