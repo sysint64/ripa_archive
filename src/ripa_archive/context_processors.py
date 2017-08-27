@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from ripa_archive.documents.views.main import SearchPlaceCode
 from ripa_archive.notifications.models import Notification
 
@@ -8,8 +10,15 @@ def search(request):
     if search_place is None:
         search_place = SearchPlaceCode.THIS_FOLDER
 
+    is_documents = request.path.split("/")[1] == "documents"
+
+    if not is_documents:
+        search_url = "/documents/!search/"
+    else:
+        search_url = request.path.split("!")[0] + "!search/"
+
     return {
-        "search_url": request.path.split("!")[0] + "!search/",
+        "search_url": search_url,
         "search_place": search_place.value,
         "search_place_name": search_place.get_name()
     }
@@ -26,7 +35,9 @@ def common(request):
 
     if not request.user.is_anonymous:
         context.update({
-            "have_notifications": Notification.objects.filter(to=request.user, is_read=False).count() > 0
+            "have_notifications": Notification.objects.filter(to=request.user, is_read=False).count() > 0,
+            "project_title": settings.PROJECT_TITLE,
+            "project_version": settings.PROJECT_VERSION
         })
 
     return context

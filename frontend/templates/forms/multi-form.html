@@ -70,7 +70,10 @@
                                 {% if not field_meta.hidden %}
                                     <div class="form-group">
                                         <label for="id_{{ field_meta.name }}"
-                                               class="control-label col-md-3 col-sm-3 col-xs-12{% if field_meta.help_text != "" %} with-help-text{% endif %}">
+                                               class="control-label col-md-3 col-sm-3 col-xs-12{% if field_meta.help_text != "" %} with-help-text{% endif %}"
+                                        >
+                                            {% if field_meta.required %}<span style="color: #a00">*</span>{% endif %}
+
                                             {{ field_meta.label }}
                                             {% if field_meta.help_text != "" %}
                                                 <div class="help-text">{{ field_meta.help_text }}</div>

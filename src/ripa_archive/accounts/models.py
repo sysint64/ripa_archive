@@ -45,6 +45,10 @@ class User(AbstractBaseUser):
     last_name = models.CharField("last name", max_length=30, blank=True)
     group = models.ForeignKey(Group, null=True)
 
+    location = models.CharField("location", max_length=255, blank=True)
+    position = models.CharField("position", max_length=100, blank=True)
+    web_site = models.URLField("web_site", max_length=100, blank=True)
+
     is_active = models.BooleanField(
         _('active'),
         default=True,
@@ -68,11 +72,27 @@ class User(AbstractBaseUser):
 
     @property
     def ref(self):
-        return self.email
+        return self.id
 
     @property
     def permalink(self):
         return reverse("accounts:profile", kwargs={"user_id": self.id})
+
+    @property
+    def gender_icon(self):
+        return {
+            User.Gender.UNSET: "fa-genderless",
+            User.Gender.MALE: "fa-mars",
+            User.Gender.FEMALE: "fa-venus",
+        }.get(self.gender)
+
+    @property
+    def gender_str(self):
+        return {
+            User.Gender.UNSET: "Unset",
+            User.Gender.MALE: "Male",
+            User.Gender.FEMALE: "Female",
+        }.get(self.gender)
 
     def get_short_name(self):
         return self.first_name

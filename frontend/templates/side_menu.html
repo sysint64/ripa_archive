@@ -7,7 +7,7 @@
         <div class="menu_section">
             <ul class="nav side-menu">
                 <li{% if active_url_name == "statistics" %} class="active"{% endif %}>
-                    <a>
+                    <a href="{% url "statistics" %}">
                         <i class="fa fa-bar-chart-o"></i> Statistics
                     </a>
                 </li>

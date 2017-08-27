@@ -8,7 +8,7 @@ from ripa_archive.permissions.models import Group
 urlpatterns = [
     url(r'^$', views.permissions, name="index"),
     url(r'^!action:create/$', views.create_group, name="action-create"),
-    url(r'^!action:update/(?P<name>[0-9a-zA-ZА-Яа-я\-_ ]+)/$', views.update_group, name="action-update"),
+    url(r'^(?P<name>[0-9a-zA-ZА-Яа-я\-_ ]+)/!action:update/$', views.update_group, name="action-update"),
     url(r'^!action:delete/$', views.delete_group, name="action-delete"),
 
     # Validators
@@ -18,7 +18,7 @@ urlpatterns = [
         name="validator-create"
     ),
     url(
-        r'^!validator:update/(?P<name>[0-9a-zA-ZА-Яа-я ]+)/$',
+        r'^(?P<name>[0-9a-zA-ZА-Яа-я ]+)/!validator:update/$',
         CompositeAjaxFormValidator.as_view(
             forms=[GroupForm],
             instance_cls=Group,

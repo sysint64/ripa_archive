@@ -4,6 +4,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = False
 
+PROJECT_VERSION = "1.0 Canary"
+PROJECT_TITLE = "Ripa Archive"
+
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [

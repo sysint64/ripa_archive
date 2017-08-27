@@ -14,8 +14,9 @@ urlpatterns = [
     # Users
     url(r'^$', views.users, name="index"),
     url(r'^(?P<user_id>[0-9]+)/$', views.profile, name="profile"),
+    url(r'^(?P<user_id>[0-9]+)/!action:update/$', views.update, name="update"),
     url(r'^!action:create/$', views.create, name="create"),
-    url(r'^!action:update/(?P<email>[0-9a-zA-ZА-Яа-я.\-_@]+)/$', views.update, name="update"),
+    # url(r'^!action:update/(?P<email>[0-9a-zA-ZА-Яа-я.\-_@]+)/$', views.update, name="update"),
     url(r'^!action:delete/$', views.delete, name="delete"),
 
     # Validators
@@ -25,11 +26,11 @@ urlpatterns = [
         name="validator-create"
     ),
     url(
-        r'^!validator:update/(?P<email>[0-9a-zA-ZА-Яа-я.\-_@]+)/$',
+        r'^(?P<id>[0-9]+)/!validator:update/$',
         CompositeAjaxFormValidator.as_view(
             forms=[UserForm],
             instance_cls=User,
-            instance_query_field="email"
+            instance_query_field="id"
         ),
         name="validator-update"
     ),

@@ -80,7 +80,7 @@ def profile(request, user_id):
         "title": "Users",
         "profile_user": user,
         "recent_activity": Activity.objects.filter(user=user)[:5],
-        "worked_on_documents_edit_metas": DocumentEditMeta.objects.filter(editor=user)
+        "worked_on_documents_edit_metas": DocumentEditMeta.objects.filter(editor=user).order_by("-end_datetime")
     })
     return TemplateResponse(template="users/profile.html", request=request, context=context)
 
@@ -112,8 +112,8 @@ def create(request):
 @require_http_methods(["GET", "POST"])
 @transaction.atomic
 @require_permissions([codes.USERS_CAN_EDIT])
-def update(request, email):
-    instance = get_object_or_404(User, email=email)
+def update(request, user_id):
+    instance = get_object_or_404(User, id=user_id)
 
     if request.method == "POST":
         form = UserForm(request.POST, request.FILES, instance=instance)
@@ -125,7 +125,7 @@ def update(request, email):
         "form_title": "Update user",
         "form": form,
         "submit_title": "Update",
-        "validator_url": reverse("accounts:validator-update", kwargs={"email": email}),
+        "validator_url": reverse("accounts:validator-update", kwargs={"id": user_id}),
     })
 
     if request.method == "POST" and form.is_valid():

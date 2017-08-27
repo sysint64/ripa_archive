@@ -1,21 +1,21 @@
-{% extends "module_list_filtered.html" %}
+{% extends "module_list.html" %}
 {% load i18n %}
 
-{% block filter %}
-    <h3>Is active</h3>
-    <ul>
-        <li class="active"><a href="?">All</a></li>
-        <li><a href="?is_active__exact=1">Yes</a></li>
-        <li><a href="?is_active__exact=0">No</a></li>
-    </ul>
-
-    <h3>Is staff</h3>
-    <ul>
-        <li class="active"><a href="?">All</a></li>
-        <li><a href="?is_staff__exact=1">Yes</a></li>
-        <li><a href="?is_staff__exact=0">No</a></li>
-    </ul>
-{% endblock %}
+{#{% block filter %}#}
+{#    <h3>Is active</h3>#}
+{#    <ul>#}
+{#        <li class="active"><a href="?">All</a></li>#}
+{#        <li><a href="?is_active__exact=1">Yes</a></li>#}
+{#        <li><a href="?is_active__exact=0">No</a></li>#}
+{#    </ul>#}
+{##}
+{#    <h3>Is staff</h3>#}
+{#    <ul>#}
+{#        <li class="active"><a href="?">All</a></li>#}
+{#        <li><a href="?is_staff__exact=1">Yes</a></li>#}
+{#        <li><a href="?is_staff__exact=0">No</a></li>#}
+{#    </ul>#}
+{#{% endblock %}#}
 
 {% block table_header %}
     <th>Full name</th>

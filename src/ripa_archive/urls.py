@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from ripa_archive import views
 from ripa_archive.activity.views import users_activity
 from ripa_archive.notifications.views import notifications
+from ripa_archive.views_statistics import statistics
 
 
 def redirect_to_browser(request):
@@ -19,6 +20,7 @@ urlpatterns = [
     url(r'^permissions/', include('ripa_archive.permissions.urls', namespace="permissions")),
     url(r'^notifications/$', notifications, name="notifications"),
     url(r'^activity/$', users_activity, name="activity"),
+    url(r'^statistics/$', statistics, name="statistics"),
 ]
 
 
