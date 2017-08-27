@@ -48,17 +48,11 @@
     $reportrange.daterangepicker(optionSet, cb);
 
     $reportrange.on('apply.daterangepicker', function (ev, picker) {
-        // console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
-
         location.href = "?start_date=" + picker.startDate.format('YYYY-MM-DD') +
             "&end_date=" + picker.endDate.format('YYYY-MM-DD')
     });
 
     // plot
-
-    function gd(year, month, day) {
-        return new Date(year, month - 1, day).getTime();
-    }
 
     const $plot = $("#chart_plot_01");
     const $accepted_points = $plot.find(".accepted-points");
@@ -129,5 +123,5 @@
         tooltip: false
     };
 
-    $.plot($plot, [accepted_plot_points, rejected_plot_points], chart_plot_01_settings);
+    $.plot($plot, [rejected_plot_points, accepted_plot_points], chart_plot_01_settings);
 })(jQuery);
