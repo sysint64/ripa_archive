@@ -44,6 +44,11 @@ def forwards_func(apps, schema_editor):
     PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can read users activity")
     PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может просматривать активность пользователей")
 
+    # Statistics
+    perm = Permission.objects.create(code="statistics_can_read")
+    PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can read statistics")
+    PermissionTranslation.objects.create(permission=perm, language_code="ru", name="Может просматривать статистику")
+
     # Users
     perm = Permission.objects.create(code="users_can_read_profile")
     PermissionTranslation.objects.create(permission=perm, language_code="en", name="Can read users profile")

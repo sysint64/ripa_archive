@@ -7,9 +7,12 @@ from django.utils import timezone
 from ripa_archive.accounts.models import User
 from ripa_archive.activity.models import Activity
 from ripa_archive.documents.models import Document, DocumentEditMeta
+from ripa_archive.permissions import codes
+from ripa_archive.permissions.decorators import require_permissions
 
 
 @transaction.atomic
+@require_permissions([codes.STATISTICS_CAN_READ])
 def statistics(request):
     accepted_documents = Document.objects.filter(
         ~Q(accepted_edit_meta=None) &
@@ -58,9 +61,6 @@ def statistics(request):
 
     total_accepted = get_plot_points(accepted_documents, accepted_points)
     total_rejected = get_plot_points(rejected_documents, rejected_points)
-
-    print(accepted_points.items())
-    print(rejected_points)
 
     total = total_accepted + total_rejected
 
