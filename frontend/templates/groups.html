@@ -1,0 +1,24 @@
+{% extends "module_list.html" %}
+{% load i18n %}
+{% load permissions %}
+
+{% block edit_tool %}
+    {% user_has_permission "groups_can_edit" as groups_can_edit %}
+    {% if groups_can_edit %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block create_tool %}
+    {% user_has_permission "groups_can_create" as groups_can_create %}
+    {% if groups_can_create %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block delete_tool %}
+    {% user_has_permission "groups_can_delete" as groups_can_delete %}
+    {% if groups_can_delete %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}

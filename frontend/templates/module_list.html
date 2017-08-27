@@ -35,30 +35,36 @@
 
     <ul class="object-tools">
         {% block one_selected_tools %}
-            <li class="one-selected-tools" id="edit-tool">
-                <a href="">
-                    {% trans "Edit "|add:module_name %}
-                    <i class="fa fa-pencil"></i>
-                </a>
-            </li>
+            {% block edit_tool %}
+                <li class="one-selected-tools" id="edit-tool">
+                    <a href="">
+                        {% trans "Edit "|add:module_name %}
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                </li>
+            {% endblock %}
         {% endblock %}
 
         {% block at_least_one_selected_tools %}
-            <li class="at-least-one-selected-tools">
-                <a href="">
-                    {% trans "Delete "|add:module_name|add:"(s)" %}
-                    <i class="fa fa-times"></i>
-                </a>
-            </li>
+            {% block delete_tool %}
+                <li class="at-least-one-selected-tools">
+                    <a href="">
+                        {% trans "Delete "|add:module_name|add:"(s)" %}
+                        <i class="fa fa-times"></i>
+                    </a>
+                </li>
+            {% endblock %}
         {% endblock %}
 
         {% block fix_tools %}
-            <li class="fix-tools">
-                <a href="!action:create/">
-                    {% trans "Add "|add:module_name %}
-                    <i class="fa fa-plus"></i>
-                </a>
-            </li>
+            {% block create_tool %}
+                <li class="fix-tools">
+                    <a href="!action:create/">
+                        {% trans "Add "|add:module_name %}
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </li>
+            {% endblock %}
         {% endblock %}
     </ul>
 

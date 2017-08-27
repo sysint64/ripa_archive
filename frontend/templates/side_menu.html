@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load permissions %}
 
 <div class="left_col scroll-view">
     <div class="clearfix"></div>
@@ -6,41 +7,66 @@
     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
         <div class="menu_section">
             <ul class="nav side-menu">
-                <li{% if active_url_name == "statistics" %} class="active"{% endif %}>
-                    <a href="{% url "statistics" %}">
-                        <i class="fa fa-bar-chart-o"></i> Statistics
-                    </a>
-                </li>
+                {% user_has_permission "statistics_can_read" as statistics_can_read %}
 
-                <li{% if active_url_name == "documents" %} class="active"{% endif %}>
-                    <a href="{% url "documents:index" %}">
-                        <i class="fa fa-files-o"></i> Documents
-                    </a>
-                </li>
+                {% if statistics_can_read %}
+                    <li{% if active_url_name == "statistics" %} class="active"{% endif %}>
+                        <a href="{% url "statistics" %}">
+                            <i class="fa fa-bar-chart-o"></i> Statistics
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li{% if active_url_name == "archive" %} class="active"{% endif %}>
-                    <a href="{% url "documents:archive" %}">
-                        <i class="fa fa-archive"></i> Archive
-                    </a>
-                </li>
+                {% user_has_permission "documents_can_read" as documents_can_read %}
 
-                <li{% if active_url_name == "users" %} class="active"{% endif %}>
-                    <a href="{% url "accounts:index" %}">
-                        <i class="fa fa-users"></i> Users
-                    </a>
-                </li>
+                {% if documents_can_read %}
+                    <li{% if active_url_name == "documents" %} class="active"{% endif %}>
+                        <a href="{% url "documents:index" %}">
+                            <i class="fa fa-files-o"></i> Documents
+                        </a>
+                    </li>
 
-                <li{% if active_url_name == "permissions" %} class="active"{% endif %}>
-                    <a href="{% url "permissions:index" %}">
-                        <i class="fa fa-key"></i> Permissions
-                    </a>
-                </li>
+                    <li{% if active_url_name == "archive" %} class="active"{% endif %}>
+                        <a href="{% url "documents:archive" %}">
+                            <i class="fa fa-archive"></i> Archive
+                        </a>
+                    </li>
+                {% endif %}
 
-                <li{% if active_url_name == "activity" %} class="active"{% endif %}>
-                    <a href="{% url "activity" %}">
-                        <i class="fa fa-history"></i> Activity
-                    </a>
-                </li>
+                {% user_has_permission "users_can_read_profile" as users_can_read_profile %}
+                {% user_has_permission "users_can_edit" as users_can_edit %}
+                {% user_has_permission "users_can_edit" as users_can_delete %}
+                {% user_has_permission "users_can_create" as users_can_create %}
+
+                {% if users_can_read_profile or users_can_edit or users_can_delete or users_can_create %}
+                    <li{% if active_url_name == "users" %} class="active"{% endif %}>
+                        <a href="{% url "accounts:index" %}">
+                            <i class="fa fa-users"></i> Users
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% user_has_permission "groups_can_create" as groups_can_create %}
+                {% user_has_permission "groups_can_edit" as groups_can_edit %}
+                {% user_has_permission "groups_can_delete" as groups_can_delete %}
+
+                {% if groups_can_create or groups_can_edit or groups_can_delete  %}
+                    <li{% if active_url_name == "permissions" %} class="active"{% endif %}>
+                        <a href="{% url "permissions:index" %}">
+                            <i class="fa fa-key"></i> Permissions
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% user_has_permission "activity_can_read" as activity_can_read %}
+
+                {% if activity_can_read %}
+                    <li{% if active_url_name == "activity" %} class="active"{% endif %}>
+                        <a href="{% url "activity" %}">
+                            <i class="fa fa-history"></i> Activity
+                        </a>
+                    </li>
+                {% endif %}
 
 {#                <li{% if active_url_name == "settings" %} class="active"{% endif %}>#}
 {#                    <a href="{% url "settings" %}>#}

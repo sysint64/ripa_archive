@@ -1,5 +1,6 @@
 {% extends "module_list.html" %}
 {% load i18n %}
+{% load permissions %}
 
 {#{% block filter %}#}
 {#    <h3>Is active</h3>#}
@@ -30,12 +31,36 @@
 {% endblock %}
 
 {% block one_selected_tools %}
-    <li class="one-selected-tools">
-        <a href="">
-            {% trans "View profile" %}
-            <i class="fa fa-user"></i>
-        </a>
-    </li>
+    {% user_has_permission "users_can_read_profile" as users_can_read_profile %}
+    {% if users_can_read_profile %}
+        <li class="one-selected-tools">
+            <a href="">
+                {% trans "View profile" %}
+                <i class="fa fa-user"></i>
+            </a>
+        </li>
+    {% endif %}
 
     {{ block.super }}
+{% endblock %}
+
+{% block edit_tool %}
+    {% user_has_permission "users_can_edit" as users_can_edit %}
+    {% if users_can_edit %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block create_tool %}
+    {% user_has_permission "users_can_create" as users_can_create %}
+    {% if users_can_create %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block delete_tool %}
+    {% user_has_permission "users_can_delete" as users_can_delete %}
+    {% if users_can_delete %}
+        {{ block.super }}
+    {% endif %}
 {% endblock %}

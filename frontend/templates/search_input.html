@@ -1,23 +1,30 @@
-<div class="form-group pull-left top_search">
-    <form action="{{ search_url }}" method="get">
-        {% if search_places|length > 0 %}
-            <div class="input-group">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle"
-                            data-toggle="dropdown" aria-expanded="false">{{ search_place_name }}
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                        {% for place in search_places %}
-                            <li><a href="#" data-place="{{ place.code }}">{{ place.name }}</a></li>
-                        {% endfor %}
-                    </ul>
+{% load permissions %}
+
+{% user_has_permission "documents_can_read" as documents_can_read %}
+{% if documents_can_read %}
+    <div class="form-group pull-left top_search">
+        <form action="{{ search_url }}" method="get">
+            {% if search_places|length > 0 %}
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown" aria-expanded="false">{{ search_place_name }}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            {% for place in search_places %}
+                                <li><a href="#" data-place="{{ place.code }}">{{ place.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search" name="q"
+                           value="{{ query }}">
                 </div>
-                <input type="text" class="form-control" placeholder="Search" name="q" value="{{ query }}">
-            </div>
-        {% else %}
-            <input type="text" class="form-control" placeholder="Search" name="q">
-        {% endif %}
-        <input type="hidden" class="form-control" name="place" value="{{ search_place }}">
-    </form>
-</div>
+            {% else %}
+                <input type="text" class="form-control" placeholder="Search" name="q">
+            {% endif %}
+            <input type="hidden" class="form-control" name="place" value="{{ search_place }}">
+        </form>
+    </div>
+{% endif %}

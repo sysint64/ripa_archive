@@ -38,7 +38,7 @@ def permissions(request):
         "module_name": "group",
         "title": "User groups"
     })
-    return TemplateResponse(template="module_list.html", request=request, context=context)
+    return TemplateResponse(template="groups.html", request=request, context=context)
 
 
 @require_http_methods(["GET", "POST"])
