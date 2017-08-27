@@ -62,11 +62,6 @@
             <div class="count">{{ total_finished_documents }}</div>
             {#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
         </div>
-        {#        <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">#}
-        {#            <span class="count_top"><i class="fa fa-plug"></i> Total Connections</span>#}
-        {#            <div class="count">{{ total_connections }}</div>#}
-        {#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
-        {#        </div>#}
     </div>
 
     <div class="row">
@@ -86,50 +81,35 @@
                 </div>
 
                 <div class="col-md-9 col-sm-9 col-xs-12">
-                    <div id="chart_plot_01" class="demo-placeholder"></div>
+                    <div id="chart_plot_01" style="height: 280px">
+                        <div class="accepted-points">
+                            {% for point in accepted_points.items %}
+                                <div class="point" data-date="{{ point.0 }}" data-value="{{ point.1 }}"></div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="rejected-points">
+                            {% for point in rejected_points.items %}
+                                <div class="point" data-date="{{ point.0 }}" data-value="{{ point.1 }}"></div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-3 col-sm-3 col-xs-12 bg-white">
-                    <div class="x_title">
-                        <h2>Most active users</h2>
-                        <div class="clearfix"></div>
-                    </div>
-
                     <div class="col-md-12 col-sm-12 col-xs-6">
                         <div>
-                            <p>Andrey Kabylin</p>
+                            <p>Accepted documents</p>
                             <div class="">
                                 <div class="progress progress_sm" style="width: 76%;">
-                                    <div class="progress-bar bg-green" role="progressbar"
-                                         data-transitiongoal="80"></div>
+                                    <div class="progress-bar bg-green" role="progressbar" style="width: {{ accepted_documents_percent }}%"></div>
                                 </div>
                             </div>
                         </div>
                         <div>
-                            <p>Twitter Campaign</p>
+                            <p>Rejected documents</p>
                             <div class="">
                                 <div class="progress progress_sm" style="width: 76%;">
-                                    <div class="progress-bar bg-green" role="progressbar"
-                                         data-transitiongoal="60"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-xs-6">
-                        <div>
-                            <p>Conventional Media</p>
-                            <div class="">
-                                <div class="progress progress_sm" style="width: 76%;">
-                                    <div class="progress-bar bg-green" role="progressbar"
-                                         data-transitiongoal="40"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <p>Bill boards</p>
-                            <div class="">
-                                <div class="progress progress_sm" style="width: 76%;">
-                                    <div class="progress-bar bg-green" role="progressbar"
-                                         data-transitiongoal="50"></div>
+                                    <div class="progress-bar bg-green" role="progressbar" style="width: {{ rejected_documents_percent }}%; background: #f78f9b !important; border-color: #de5162 !important;"></div>
                                 </div>
                             </div>
                         </div>
@@ -177,7 +157,7 @@
                                 </div>
                             </a>
                             <div>
-                                <b>Edited by:</b>
+                                <b>Editor:</b>
                                 <a href="{{ document.accepted_edit_meta.editor.permalink }}">
                                     {{ document.accepted_edit_meta.editor }}
                                 </a>
@@ -209,19 +189,13 @@
                             <a href="{{ document.permalink }}" class="header">
                                 <i class="fa {{ document.data.icon }}"></i> {{ document }}
                                 <div class="datetime">
-                                    {{ document.accepted_edit_meta.start_datetime }}
+                                    {{ document.current_edit_meta.start_datetime }}
                                 </div>
                             </a>
                             <div>
-                                <b>Edited by:</b>
-                                <a href="{{ document.accepted_edit_meta.editor.permalink }}">
-                                    {{ document.accepted_edit_meta.editor }}
-                                </a>
-                            </div>
-                            <div>
-                                <b>Accepted by:</b>
-                                <a href="{{ document.accepted_edit_meta.closed_by.permalink }}">
-                                    {{ document.accepted_edit_meta.closed_by }}
+                                <b>Editor:</b>
+                                <a href="{{ document.current_edit_meta.editor.permalink }}">
+                                    {{ document.current_edit_meta.editor }}
                                 </a>
                             </div>
                         </div>

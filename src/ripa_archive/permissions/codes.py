@@ -26,6 +26,7 @@ DOCUMENTS_CAN_REVIEW = "documents_can_review"
 DOCUMENTS_CAN_REVERT = "documents_can_revert"
 
 ACTIVITY_CAN_READ = "activity_can_read"
+STATISTICS_CAN_READ = "statistics_can_read"
 
 USERS_CAN_READ_PROFILE = "users_can_read_profile"
 USERS_CAN_EDIT = "users_can_edit"

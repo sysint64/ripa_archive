@@ -50,8 +50,8 @@
     $reportrange.on('apply.daterangepicker', function (ev, picker) {
         // console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
 
-        location.href = "?start_date=" + picker.startDate.format('MM/DD/YYYY') +
-            "&end_date=" + picker.endDate.format('MM/DD/YYYY')
+        location.href = "?start_date=" + picker.startDate.format('YYYY-MM-DD') +
+            "&end_date=" + picker.endDate.format('YYYY-MM-DD')
     });
 
     // plot
@@ -60,25 +60,27 @@
         return new Date(year, month - 1, day).getTime();
     }
 
-    var arr_data1 = [
-        [gd(2012, 1, 1), 17],
-        [gd(2012, 1, 2), 74],
-        [gd(2012, 1, 3), 6],
-        [gd(2012, 1, 4), 39],
-        [gd(2012, 1, 5), 20],
-        [gd(2012, 1, 6), 85],
-        [gd(2012, 1, 7), 7]
-    ];
+    const $plot = $("#chart_plot_01");
+    const $accepted_points = $plot.find(".accepted-points");
+    const $rejected_points = $plot.find(".rejected-points");
 
-    var arr_data2 = [
-        [gd(2012, 1, 1), 82],
-        [gd(2012, 1, 2), 23],
-        [gd(2012, 1, 3), 66],
-        [gd(2012, 1, 4), 9],
-        [gd(2012, 1, 5), 119],
-        [gd(2012, 1, 6), 6],
-        [gd(2012, 1, 7), 9]
-    ];
+    var accepted_plot_points = [];
+    var rejected_plot_points = [];
+
+    $accepted_points.find(".point").each(function() {
+        const date = $(this).data("date");
+        const value = $(this).data("value");
+        accepted_plot_points.push([new Date(date).getTime(), value]);
+    });
+
+    $rejected_points.find(".point").each(function() {
+        const date = $(this).data("date");
+        const value = $(this).data("value");
+        rejected_plot_points.push([new Date(date).getTime(), value]);
+    });
+
+    $accepted_points.remove();
+    $rejected_points.remove();
 
     var chart_plot_01_settings = {
         series: {
@@ -106,12 +108,14 @@
             borderWidth: 1,
             color: '#fff'
         },
-        colors: ["rgba(38, 185, 154, 0.38)", "rgba(3, 88, 106, 0.38)"],
+        colors: [
+            "rgba(230, 88, 106, 0.38)",
+            "rgba(38, 185, 154, 0.38)"
+        ],
         xaxis: {
             tickColor: "rgba(51, 51, 51, 0.06)",
             mode: "time",
             tickSize: [1, "day"],
-            //tickLength: 10,
             axisLabel: "Date",
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
@@ -125,5 +129,5 @@
         tooltip: false
     };
 
-    $.plot($("#chart_plot_01"), [arr_data1, arr_data2], chart_plot_01_settings);
+    $.plot($plot, [accepted_plot_points, rejected_plot_points], chart_plot_01_settings);
 })(jQuery);
