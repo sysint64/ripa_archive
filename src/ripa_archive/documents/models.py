@@ -211,6 +211,10 @@ class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
         return reverse("documents:" + urlname, kwargs=kwargs)
 
     @property
+    def status_str(self):
+        return dict(Document.Status.CHOICES).get(self.status, "Undefined")
+
+    @property
     def permalink(self):
         return self._reverse("document")
 
