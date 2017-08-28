@@ -32,6 +32,11 @@ var onSelectChange = null;
         return !permissions[perm];
     }
 
+    function contextMenuItemIsBulkDisabled($item, perm) {
+        const permissions = parsePermissions($item);
+        return !permissions[perm];
+    }
+
     $.contextMenu({
         selector: '.context-menu',
         callback: function (key, options) {
@@ -112,17 +117,17 @@ var onSelectChange = null;
             "cut": {
                 name: "Cut",
                 icon: "cut",
-                disabled: function () { return contextMenuItemIsDisabled($(".selected"), "edit"); }
+                disabled: function () { return contextMenuItemIsBulkDisabled($(".selected"), "edit"); }
             },
             "copy": {
                 name: "Copy",
                 icon: "copy",
-                disabled: function () { return contextMenuItemIsDisabled($(".selected"), "edit"); }
+                disabled: function () { return contextMenuItemIsBulkDisabled($(".selected"), "edit"); }
             },
             "delete": {
                 name: "Delete",
                 icon: "delete",
-                disabled: function () { return contextMenuItemIsDisabled($(".selected"), "delete"); }
+                disabled: function () { return contextMenuItemIsBulkDisabled($(".selected"), "delete"); }
             }
         },
         events: {
