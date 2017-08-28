@@ -29,7 +29,7 @@ class FolderIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare(self, obj):
         data = super().prepare(obj)
-        data['suggestions'] = data['text']
+        # data['suggestions'] = data['text']
         return data
 
     def prepare_parent_ids(self, obj):
@@ -57,6 +57,6 @@ class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
         extracted_data = self.get_backend().extract_file_contents(file_obj)
         t = loader.select_template(('search/indexes/documents/document_text.txt',))
         data['text'] = t.render(Context({'object': obj, 'extracted': extracted_data}))
-        data['suggestions'] = data['text'][:30000]
+        # data['suggestions'] = data['text'][:30000]
 
         return data
