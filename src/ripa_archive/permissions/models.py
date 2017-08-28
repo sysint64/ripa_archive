@@ -16,7 +16,7 @@ class PermissionManager(models.Manager):
         return self.all().filter(code__startswith="documents").exclude(code__contains="this")
 
     def common(self):
-        return self.all().filter(Q(code__startswith="activity") | Q(code__startswith="users") | Q(code__startswith="groups"))
+        return self.all().filter(Q(code__startswith="activity") | Q(code__startswith="users") | Q(code__startswith="groups") | Q(code__startswith="statistics"))
 
 
 class Permission(models.Model):
