@@ -25,7 +25,9 @@
     "jquery-json": "^2.6.0",
     "bootstrap-select": "^1.12.2",
     "echarts": "^3.7.0",
-    "bootstrap-daterangepicker": "^2.1.25"
+    "bootstrap-daterangepicker": "^2.1.25",
+    "Flot": "flot#^0.8.3",
+    "flot-spline": "^0.8.2"
   },
   "resolutions": {
     "jquery": "^2.2.3",
