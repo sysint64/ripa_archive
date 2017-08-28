@@ -24,7 +24,8 @@
     "js-cookie": "^2.1.4",
     "jquery-json": "^2.6.0",
     "bootstrap-select": "^1.12.2",
-    "echarts": "^3.7.0"
+    "echarts": "^3.7.0",
+    "bootstrap-daterangepicker": "^2.1.25"
   },
   "resolutions": {
     "jquery": "^2.2.3",
