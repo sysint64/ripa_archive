@@ -35,7 +35,6 @@ var onSelectChange = function() {
     });
 
     $atLeastOneSelectedTools.click(function(event) {
-        console.log(getSelectedItemsData());
         executeActionWithConfirm(
             null,
             "delete",

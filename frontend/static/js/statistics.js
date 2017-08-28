@@ -1,7 +1,6 @@
 (function ($) {
     const $reportrange = $("#reportrange");
     var cb = function (start, end, label) {
-        console.log(start.toISOString(), end.toISOString(), label);
         $reportrange.find('span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
     };
 

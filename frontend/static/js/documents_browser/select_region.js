@@ -3,8 +3,6 @@
     var selectRegionCoords = null;
 
     $workRegion.mousedown(function(event) {
-        console.log($(event.target).is("td"));
-
         var exludeSelectRegion = $(event.target).is("td") || $(event.target).is("tr");
         exludeSelectRegion = exludeSelectRegion || $(event.target).hasClass("exclude-select-region");
         exludeSelectRegion = exludeSelectRegion || $(event.target).closest(".exclude-select-region").length > 0;

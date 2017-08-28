@@ -122,36 +122,40 @@
                                  aria-labelledby="profile-tab">
 
                                 <!-- start user projects -->
-                                <table class="data table table-striped no-margin">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Project name</th>
-                                        <th>Date and time</th>
-                                        <th class="hidden-phone">Time spent</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for document_edit_meta in worked_on_documents_edit_metas %}
+                                {% if worked_on_documents_edit_metas.count == 0 %}
+                                    No documents
+                                {% else %}
+                                    <table class="data table table-striped no-margin">
+                                        <thead>
                                         <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>
-                                                <a href="{{ document_edit_meta.document.permalink }}">
-                                                    {{ document_edit_meta.document }}
-                                                </a>
-                                            </td>
-                                            <td>{{ document_edit_meta.start_datetime|naturaltime }}</td>
-                                            <td class="hidden-phone">
-                                                {% if document_edit_meta.end_datetime is None %}
-                                                    In progress
-                                                {% else %}
-                                                    {{ document_edit_meta.start_datetime|timesince:document_edit_meta.end_datetime }}
-                                                {% endif %}
-                                            </td>
+                                            <th>#</th>
+                                            <th>Project name</th>
+                                            <th>Date and time</th>
+                                            <th class="hidden-phone">Time spent</th>
                                         </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                        {% for document_edit_meta in worked_on_documents_edit_metas %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>
+                                                    <a href="{{ document_edit_meta.document.permalink }}">
+                                                        {{ document_edit_meta.document }}
+                                                    </a>
+                                                </td>
+                                                <td>{{ document_edit_meta.start_datetime|naturaltime }}</td>
+                                                <td class="hidden-phone">
+                                                    {% if document_edit_meta.end_datetime is None %}
+                                                        In progress
+                                                    {% else %}
+                                                        {{ document_edit_meta.start_datetime|timesince:document_edit_meta.end_datetime }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% endif %}
                                 <!-- end user projects -->
 
                             </div>

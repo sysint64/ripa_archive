@@ -16,7 +16,7 @@ from ripa_archive.accounts.models import User
 from ripa_archive.activity.models import Activity
 from ripa_archive.documents.models import Document, DocumentEditMeta
 from ripa_archive.permissions import codes
-from ripa_archive.permissions.decorators import require_permissions
+from ripa_archive.permissions.decorators import require_permissions, check_permissions
 
 
 class LoginView(TemplateView):
@@ -69,9 +69,11 @@ def users(request):
 
 
 @transaction.atomic
-@require_permissions([codes.USERS_CAN_READ_PROFILE])
 def profile(request, user_id):
     user = get_object_or_404(User, id=user_id)
+
+    if user != request.user:
+        check_permissions(request, [codes.USERS_CAN_READ_PROFILE], None)
 
     context = users_base_context(request)
     context.update({

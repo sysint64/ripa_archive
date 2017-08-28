@@ -1,5 +1,6 @@
 {% load thumbnail %}
 {% load staticfiles %}
+{% load permissions %}
 
 {% if users_activity.count > 0 %}
     <ul class="messages">
@@ -40,7 +41,11 @@
                     {% endif %}
                     <br>
 
-                    {% if show_revert_button and activity.document_data is not None and activity.document_data.id != document.data.id %}
+                    {% if document %}
+                        {% user_has_permission_for_instance document "documents_can_revert" as documents_can_revert %}
+                    {% endif %}
+
+                    {% if show_revert_button and activity.document_data is not None and activity.document_data.id != document.data.id and documents_can_revert %}
                         <ul class="reviewer-tools">
                             <li>
                                 <a href="" class="revert-document"

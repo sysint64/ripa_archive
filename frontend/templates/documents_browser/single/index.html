@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load thumbnail %}
+{% load permissions %}
 
 {% block styles %}
     {{ block.super }}
@@ -37,6 +38,11 @@
         <small>{% include "documents_browser/document_breadcrumbs.html" %}</small>
     </h3>
 
+    {% user_has_permission_for_instance document "documents_can_take_document_for_revision" as documents_can_take_document_for_revision %}
+    {% user_has_permission_for_instance document "activity_can_read" as activity_can_read %}
+    {% user_has_permission_for_instance document "documents_can_review" as documents_can_review %}
+    {% user_has_permission_for_instance document "documents_can_edit" as documents_can_edit %}
+
     <div class="x_panel">
         <div class="x_title">
             <h2>{{ document.name }}</h2>
@@ -53,13 +59,17 @@
         </div>
         <div class="document-content xcontent">
             <div class="col-md-9 col-sm-9 col-xs-12">
-                {% if document.is_under_edition and remarks.count > 0 %}
-                    <h4>Remarks</h4>
-                    {% include "documents_browser/single/remarks.html" %}
+                {% if documents_can_take_document_for_revision or documents_can_review %}
+                    {% if document.is_under_edition and remarks.count > 0 %}
+                        <h4>Remarks</h4>
+                        {% include "documents_browser/single/remarks.html" %}
+                    {% endif %}
                 {% endif %}
 
-                <h4>Activity</h4>
-                {% include "activity_items.html" with show_revert_button=True %}
+                {% if activity_can_read %}
+                    <h4>Activity</h4>
+                    {% include "activity_items.html" with show_revert_button=True %}
+                {% endif %}
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12">
                 <section class="panel">

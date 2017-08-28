@@ -23,7 +23,6 @@ function bindEvents() {
         if ($instanceIdInput.length > 0)
             deleteIds.push($instanceIdInput.val());
 
-        console.log(deleteIds);
         $(this).closest(".block").remove();
     });
 
@@ -79,7 +78,6 @@ function rebindEvents() {
         $("#block-cursor").before($block);
 
         formsPrefixes.push(prefix);
-        console.log(formsPrefixes);
     }
 
     function putFirstBlock() {
