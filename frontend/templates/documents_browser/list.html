@@ -35,6 +35,9 @@
     <div id="select-region"></div>
     <div id="drag-region"></div>
 
+    {% html_folder_data_perms parent_folder as folder_permissions %}
+    <div id="parent-folder-perms" data-permissions="{{ folder_permissions }}"></div>
+
     {% if parent_folder_url != "" %}
         <a href="{{ parent_folder_url }}" class="go-back">
             <i class="fa fa-long-arrow-up"></i>
@@ -61,9 +64,15 @@
             <tr>
             </tr>
             {% for folder in folders %}
-                {% user_has_permission_for_instance folder "folders_can_read" as has_perm %}
-                {% if has_perm %}
-                    <tr class="selectable context-menu folder{% folder_extra_classes folder %}" data-id="{{ folder.id }}" data-group="folders">
+                {% user_has_permission_for_instance folder "folders_can_read" as folders_can_read %}
+                {% html_folder_data_perms folder as folder_permissions %}
+
+                {% if folders_can_read %}
+                    <tr class="selectable context-menu folder{% folder_extra_classes folder %}"
+                        data-id="{{ folder.id }}"
+                        data-group="folders"
+                        data-permissions="{{ folder_permissions }}"
+                    >
                         <td class="data-double-click-link" data-href="{% if archive %}{{ folder.archive_permalink }}{% else %}{{ folder.permalink }}{% endif %}">
                             <i class="fa fa-folder"></i>
                         </td>
@@ -78,9 +87,15 @@
 
             {# Documents #}
             {% for document in documents %}
-                {% user_has_permission_for_instance document "documents_can_read" as has_perm %}
-                {% if has_perm %}
-                    <tr class="selectable context-menu document{% document_extra_classes document %}" data-id="{{ document.id }}" data-group="documents">
+                {% user_has_permission_for_instance document "documents_can_read" as documents_can_read %}
+                {% html_document_data_perms document as document_permissions %}
+
+                {% if documents_can_read %}
+                    <tr class="selectable context-menu document{% document_extra_classes document %}"
+                        data-id="{{ document.id }}"
+                        data-group="documents"
+                        data-permissions="{{ document_permissions }}"
+                    >
                         <td class="data-double-click-link" data-href="{{ document.permalink }}">
                             <i class="fa {{ document.data.icon }}"></i>
                         </td>

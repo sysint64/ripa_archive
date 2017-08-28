@@ -83,7 +83,7 @@ class PermissionsFormMixin:
         return {
             "label": "Permissions",
             "widget": forms.CheckboxSelectMultiple(),
-            "required": True,
+            "required": False,
             "queryset": queryset,
         }
 

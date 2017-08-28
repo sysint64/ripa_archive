@@ -7,7 +7,30 @@ var onSelectChange = null;
     $selectable.disableSelection();
     $workRegion.disableSelection();
 
+    const $parentFolderPermissions = $("#parent-folder-perms");
     var $lastSelected = null;
+
+    function parsePermissions($item) {
+        const permissions = $item.data("permissions");
+        const permissionsArray = permissions.split(";");
+
+        var map = {};
+
+        permissionsArray.forEach(function callback(currentValue, index, array) {
+            const permission = currentValue.split(":");
+            map[permission[0]] = permission[1] === "1";
+        });
+
+        return map;
+    }
+
+    function contextMenuItemIsDisabled($item, perm) {
+        if ($item.length != 1)
+            return true;
+
+        const permissions = parsePermissions($item);
+        return !permissions[perm];
+    }
 
     $.contextMenu({
         selector: '.context-menu',
@@ -73,25 +96,34 @@ var onSelectChange = null;
             "rename": {
                 name: "Rename",
                 icon: "edit",
-                disabled: function() { return $(".selected").length != 1; }
+                disabled: function() { return contextMenuItemIsDisabled($(".selected"), "edit"); }
             },
             "edit_permissions": {
                 name: "Edit permissions",
                 icon: "fa-key",
-                disabled: function() { return $(".selected").length != 1; }
+                disabled: function() { return contextMenuItemIsDisabled($(".selected"), "edit_permissions"); }
             },
             "update_status": {
                 name: "Update status",
                 // icon: "fa-check",
-                disabled: function() {
-                    const $selected = $(".selected");
-                    return $selected.length != 1 || !$selected.hasClass("document");
-                }
+                disabled: function() { return contextMenuItemIsDisabled($(".selected"), "edit"); }
             },
             "sep": "-",
-            "cut": {name: "Cut", icon: "cut"},
-            "copy": {name: "Copy", icon: "copy"},
-            "delete": {name: "Delete", icon: "delete"}
+            "cut": {
+                name: "Cut",
+                icon: "cut",
+                disabled: function () { return contextMenuItemIsDisabled($(".selected"), "edit"); }
+            },
+            "copy": {
+                name: "Copy",
+                icon: "copy",
+                disabled: function () { return contextMenuItemIsDisabled($(".selected"), "edit"); }
+            },
+            "delete": {
+                name: "Delete",
+                icon: "delete",
+                disabled: function () { return contextMenuItemIsDisabled($(".selected"), "delete"); }
+            }
         },
         events: {
             show: function(options) {
@@ -125,10 +157,21 @@ var onSelectChange = null;
             }
         },
         items: {
-            "create_folders": {name: "Create folder(s)", icon: "fa-folder"},
-            "create_documents": {name: "Create document(s)", icon: "fa-file-o"},
+            "create_folders": {
+                name: "Create folder(s)",
+                icon: "fa-folder",
+                disabled: function () { return contextMenuItemIsDisabled($parentFolderPermissions, "create_folders"); }
+            },
+            "create_documents": {
+                name: "Create document(s)",
+                icon: "fa-file-o",
+                disabled: function () { return contextMenuItemIsDisabled($parentFolderPermissions, "create_documents"); }
+            },
             "sep": "-",
-            "paste": {name: "Paste", icon: "paste"}
+            "paste": {
+                name: "Paste", icon: "paste",
+                disabled: function () { return contextMenuItemIsDisabled($parentFolderPermissions, "edit"); }
+            }
         },
         events: {
             show: function(options) {
