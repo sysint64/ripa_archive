@@ -121,8 +121,11 @@ function rebindEvents() {
         validateApiForm($(this));
     });
 
-    $multiform.on("validation_error", function() {
+    $multiform.on("on_error", function(event, statusCode) {
         hideWaitDialog();
+
+        if (statusCode != 400)
+            showErrorDialog("Something went wrong! Please contact with administrator.<br>Status code: " + statusCode);
     });
 
     bindEvents();

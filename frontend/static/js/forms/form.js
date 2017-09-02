@@ -26,4 +26,23 @@
             $(this).parent().removeClass("checked");
         }
     });
+
+    const $form = $("#form");
+    $form.submit(function(event, isValid) {
+        showWaitDialog();
+
+        if (isValid) {
+            return;
+        }
+
+        event.preventDefault();
+        validateApiForm($(this));
+    });
+
+    $form.on("on_error", function(event, statusCode) {
+        hideWaitDialog();
+
+        if (statusCode != 400)
+            showErrorDialog("Something went wrong! Please contact with administrator.<br>Status code: " + statusCode);
+    });
 })(jQuery);
