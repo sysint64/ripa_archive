@@ -1,4 +1,7 @@
+from django.core.exceptions import SuspiciousOperation
+
 from ripa_archive.activity.models import Activity
+from ripa_archive.documents import strings
 from ripa_archive.documents.models import Document, Folder
 from ripa_archive.notifications import notifications_factory
 
@@ -48,3 +51,43 @@ def for_folder(user, folder, detail, ref=None):
         ref_text=ref_text,
         ref_content_type=ref_content_type,
     )
+
+
+def delete(request, item):
+    if isinstance(item, Folder):
+        for_folder(
+            request.user,
+            item,
+            strings.ACTIVITY_DELETE_FOLDER.format(path=item.path)
+        )
+    elif isinstance(item, Document):
+        for_document(
+            request.user,
+            item,
+            strings.ACTIVITY_DELETE_DOCUMENT.format(path=item.path)
+        )
+    else:
+        raise SuspiciousOperation()
+
+
+def move(request, old_path, item):
+    if isinstance(item, Folder):
+        for_folder(
+            request.user,
+            item,
+            strings.ACTIVITY_MOVE_FOLDER.format(
+                old_path=old_path,
+                new_path=item.path
+            )
+        )
+    elif isinstance(item, Document):
+        for_document(
+            request.user,
+            item,
+            strings.ACTIVITY_MOVE_DOCUMENT.format(
+                old_path=old_path,
+                new_path=item.path
+            )
+        )
+    else:
+        raise SuspiciousOperation()

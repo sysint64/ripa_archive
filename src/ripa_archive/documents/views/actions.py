@@ -137,27 +137,7 @@ def paste(request, path=None):
 
             if do_cut:
                 item.save()
-
-                if isinstance(item, Folder):
-                    activity_factory.for_folder(
-                        request.user,
-                        item,
-                        strings.ACTIVITY_MOVE_FOLDER.format(
-                            old_path=old_path,
-                            new_path=item.path
-                        )
-                    )
-                elif isinstance(item, Document):
-                    activity_factory.for_document(
-                        request.user,
-                        item,
-                        strings.ACTIVITY_MOVE_DOCUMENT.format(
-                            old_path=old_path,
-                            new_path=item.path
-                        )
-                    )
-                else:
-                    raise SuspiciousOperation()
+                activity_factory.move(request, old_path, item)
 
             else:  # make copy
                 if isinstance(item, Folder):
@@ -211,21 +191,7 @@ def delete(request):
 
     def delete_all(items):
         for item in items:
-            if isinstance(item, Folder):
-                activity_factory.for_folder(
-                    request.user,
-                    item,
-                    strings.ACTIVITY_DELETE_FOLDER.format(path=item.path)
-                )
-            elif isinstance(item, Document):
-                activity_factory.for_document(
-                    request.user,
-                    item,
-                    strings.ACTIVITY_DELETE_DOCUMENT.format(path=item.path)
-                )
-            else:
-                raise SuspiciousOperation()
-
+            activity_factory.delete(request, item)
             item.delete()
 
     with transaction.atomic():
@@ -255,27 +221,7 @@ def change_folder(request):
             old_path = item.path
             item.parent = to_folder
             item.save()
-
-            if isinstance(item, Folder):
-                activity_factory.for_folder(
-                    request.user,
-                    item,
-                    strings.ACTIVITY_MOVE_FOLDER.format(
-                        old_path=old_path,
-                        new_path=item.path
-                    )
-                )
-            elif isinstance(item, Document):
-                activity_factory.for_document(
-                    request.user,
-                    item,
-                    strings.ACTIVITY_MOVE_DOCUMENT.format(
-                        old_path=old_path,
-                        new_path=item.path
-                    )
-                )
-            else:
-                raise SuspiciousOperation()
+            activity_factory.move(request, old_path, item)
 
     with transaction.atomic():
         check_bulk_permissions_edit(request, folders, documents)
