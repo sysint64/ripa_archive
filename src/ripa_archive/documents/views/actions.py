@@ -215,7 +215,7 @@ def change_folder(request):
 
     def update_parent(items, manager):
         for item in items:
-            if manager.exist_with_name(item.parent, item.name):
+            if manager.exist_with_name(to_folder, item.name):
                 raise ValidationError(manager.ALREADY_EXIST_ERROR % item.name)
 
             old_path = item.path

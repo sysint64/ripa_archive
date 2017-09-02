@@ -49,6 +49,9 @@ class Group(models.Model):
         return self.name
 
     def has_permission(self, permission):
+        if "this" in permission:
+            return True
+
         has_perm = self.permissions.filter(code=permission).count() > 0
 
         for inherit_group in self.inherit.all():
