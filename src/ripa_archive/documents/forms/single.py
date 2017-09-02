@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError, SuspiciousOperation
 
 from forms.ajax import AjaxModelForm
+from ripa_archive.documents import validators
 from ripa_archive.documents.models import DocumentData, Folder, Remark, Document, FoldersManager, \
     DocumentsManager
 
@@ -35,6 +36,12 @@ class RenameFolderForm(AjaxModelForm):
         required=True,
         widget=forms.HiddenInput()
     )
+    name = forms.CharField(
+        validators=[validators.name_validator],
+        max_length=validators.NAME_MAX_LENGTH,
+        required=True,
+        label="Name"
+    )
 
     # Check uniqueness in folder
     def clean_name(self):
@@ -56,6 +63,12 @@ class RenameDocumentForm(AjaxModelForm):
         queryset=Folder.objects.all(),
         required=True,
         widget=forms.HiddenInput(),
+    )
+    name = forms.CharField(
+        validators=[validators.name_validator],
+        max_length=validators.NAME_MAX_LENGTH,
+        required=True,
+        label="Name"
     )
 
     # Check uniqueness in folder

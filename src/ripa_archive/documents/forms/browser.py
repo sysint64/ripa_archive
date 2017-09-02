@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 
 from forms.ajax import AjaxModelForm
 from ripa_archive.accounts.models import User
+from ripa_archive.documents import validators
 from ripa_archive.documents.models import Folder, DocumentData, FolderCustomPermission, \
     DocumentCustomPermission, Document, FoldersManager, DocumentsManager
 from ripa_archive.permissions.models import Permission, Group
@@ -17,6 +18,12 @@ class CreateFolderForm(AjaxModelForm):
         queryset=Folder.objects.all(),
         required=True,
         widget=forms.HiddenInput()
+    )
+    name = forms.CharField(
+        validators=[validators.name_validator],
+        max_length=validators.NAME_MAX_LENGTH,
+        required=True,
+        label="Name"
     )
 
     # Check uniqueness in folder
@@ -40,8 +47,12 @@ class CreateDocumentForm(AjaxModelForm):
         required=True,
         widget=forms.HiddenInput()
     )
-
-    name = forms.CharField(max_length=255, label="Name")
+    name = forms.CharField(
+        validators=[validators.name_validator],
+        max_length=validators.NAME_MAX_LENGTH,
+        required=True,
+        label="Name"
+    )
     status = forms.ChoiceField(choices=Document.Status.CHOICES, label="Status")
 
     # Check uniqueness in folder

@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.urls import reverse
 
 from ripa_archive.accounts.models import User
+from ripa_archive.documents.validators import NAME_MAX_LENGTH
 from ripa_archive.permissions import codes
 from ripa_archive.permissions.models_abstract import ModelCustomPermission, ModelWhichHaveCustomPermissionsMixin
 
@@ -100,7 +101,7 @@ class Folder(ModelWhichHaveCustomPermissionsMixin, models.Model):
 
     custom_permission_model = FolderCustomPermission
     parent = models.ForeignKey('Folder', null=True, blank=True)
-    name = models.CharField(verbose_name="name", help_text="this is a help text", max_length=60)
+    name = models.CharField(verbose_name="name", help_text="this is a help text", max_length=NAME_MAX_LENGTH)
     objects = FoldersManager()
 
     @property
@@ -183,7 +184,7 @@ class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
     content_type = "documents.Document"
     custom_permission_model = DocumentCustomPermission
 
-    name = models.CharField(max_length=255, default="No name")
+    name = models.CharField(max_length=NAME_MAX_LENGTH, default="No name")
     owner = models.ForeignKey(User, null=True, related_name="owner")
     contributors = models.ManyToManyField(User, related_name="contributors")
     followers = models.ManyToManyField(User, related_name="followers")

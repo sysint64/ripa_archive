@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
 from forms.ajax import CompositeAjaxFormValidator
+from ripa_archive.documents import validators
 from ripa_archive.documents.forms.browser import *
 from ripa_archive.documents.forms.single import *
 from ripa_archive.documents.views import forms as forms_views
@@ -14,7 +15,7 @@ from ripa_archive.documents.views.single import main as single_main_view
 def browser_url(regex, view, name=None, kwargs=None):
     return [
         url(r'^'+regex+'$', view, name=name, kwargs=kwargs),
-        url(r'^(?P<path>[0-9a-zA-ZА-Яа-я /]+)/'+regex+'$', view, name=name, kwargs=kwargs),
+        url(r'^(?P<path>{})/{}$'.format(validators.NAME_REGEX, regex), view, name=name, kwargs=kwargs),
     ]
 
 
@@ -22,11 +23,11 @@ def document_url(regex, view, name=None):
     if view is None:
         return []
 
-    return browser_url(r'!document:(?P<name>[0-9a-zA-ZА-Яа-я ]+)/' + regex, view, name=name)
+    return browser_url(r'!document:(?P<name>{})/{}'.format(validators.NAME_REGEX, regex), view, name=name)
 
 
 def folder_url(regex, view, name=None):
-    return browser_url(r'!folder:(?P<name>[0-9a-zA-ZА-Яа-я ]+)/' + regex, view, name=name)
+    return browser_url(r'!folder:(?P<name>{})/{}'.format(validators.NAME_REGEX, regex), view, name=name)
 
 
 urlpatterns = \

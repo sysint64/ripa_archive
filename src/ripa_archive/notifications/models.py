@@ -23,4 +23,15 @@ class Notification(models.Model):
 
     @property
     def permalink(self):
-        return ""
+        cls = {
+            Document.content_type: Document,
+            Folder.content_type: Folder
+        }.get(self.content_type)
+
+        instance = cls.objects.filter(id=self.target_id).first()
+
+        if instance is None:
+            return ""
+
+        return instance.permalink
+
