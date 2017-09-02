@@ -47,7 +47,7 @@ class User(AbstractBaseUser):
 
     location = models.CharField("location", max_length=255, blank=True)
     position = models.CharField("position", max_length=100, blank=True)
-    web_site = models.URLField("web_site", max_length=100, blank=True)
+    web_site = models.URLField("web site", max_length=100, blank=True)
 
     is_active = models.BooleanField(
         _('active'),

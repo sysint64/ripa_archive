@@ -7,6 +7,8 @@ ACTIVITY_MOVE_FOLDER = "Move folder from \"Root/{old_path}\" to \"Root/{new_path
 ACTIVITY_REVERT_DOCUMENT = "Revert document from {datetime}"
 ACTIVITY_COPY_DOCUMENT = "Copy document"
 ACTIVITY_COPY_FOLDER = "Copy folder"
+ACTIVITY_DELETE_FOLDER = "Delete folder \"Root/{path}\""
+ACTIVITY_DELETE_DOCUMENT = "Delete document \"Root/{path}\""
 
 NOTIFICATION_REMARK_ACCEPTED = "Was accepted remark"
 NOTIFICATION_REMARK_FINISHED = "Remark was marked as \"finished\""

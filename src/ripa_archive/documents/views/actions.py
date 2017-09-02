@@ -211,6 +211,21 @@ def delete(request):
 
     def delete_all(items):
         for item in items:
+            if isinstance(item, Folder):
+                activity_factory.for_folder(
+                    request.user,
+                    item,
+                    strings.ACTIVITY_DELETE_FOLDER.format(path=item.path)
+                )
+            elif isinstance(item, Document):
+                activity_factory.for_document(
+                    request.user,
+                    item,
+                    strings.ACTIVITY_DELETE_DOCUMENT.format(path=item.path)
+                )
+            else:
+                raise SuspiciousOperation()
+
             item.delete()
 
     with transaction.atomic():
@@ -237,8 +252,30 @@ def change_folder(request):
             if manager.exist_with_name(item.parent, item.name):
                 raise ValidationError(manager.ALREADY_EXIST_ERROR % item.name)
 
+            old_path = item.path
             item.parent = to_folder
             item.save()
+
+            if isinstance(item, Folder):
+                activity_factory.for_folder(
+                    request.user,
+                    item,
+                    strings.ACTIVITY_MOVE_FOLDER.format(
+                        old_path=old_path,
+                        new_path=item.path
+                    )
+                )
+            elif isinstance(item, Document):
+                activity_factory.for_document(
+                    request.user,
+                    item,
+                    strings.ACTIVITY_MOVE_DOCUMENT.format(
+                        old_path=old_path,
+                        new_path=item.path
+                    )
+                )
+            else:
+                raise SuspiciousOperation()
 
     with transaction.atomic():
         check_bulk_permissions_edit(request, folders, documents)
