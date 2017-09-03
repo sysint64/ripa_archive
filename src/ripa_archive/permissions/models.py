@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
+from ripa_archive.middleware import LanguageMiddleware
+
 
 class PermissionManager(models.Manager):
     def for_folders(self):
@@ -25,7 +27,7 @@ class Permission(models.Model):
     objects = PermissionManager()
 
     def __str__(self):
-        return self.translations.get(language_code="en").name
+        return self.translations.get(language_code=LanguageMiddleware.code).name
 
 
 class PermissionTranslation(models.Model):

@@ -1,5 +1,6 @@
 from ripa_archive.documents.models import Document
-from ripa_archive.notifications.models import Notification
+from ripa_archive.documents.strings import get_notification_text
+from ripa_archive.notifications.models import Notification, NotificationTranslation
 
 
 def walk_by_followers(document, sender, create_notification_functor):
@@ -7,17 +8,32 @@ def walk_by_followers(document, sender, create_notification_functor):
         create_notification_functor(follower)
 
 
+def create_notification_translation(notification, title, detail):
+    NotificationTranslation.objects.create(
+        notification=notification,
+        title=title,
+        text=get_notification_text(detail, "en"),
+        language_code="en"
+    )
+
+    NotificationTranslation.objects.create(
+        notification=notification,
+        title=title,
+        text=get_notification_text(detail, "ru"),
+        language_code="ru"
+    )
+
+
 def notification_remark(user, document, remark, detail, to_followers=False):
     def create_notification(to_user):
-        Notification.objects.create(
+        notification = Notification.objects.create(
             user=user,
             to=to_user,
             content_type=Document.content_type,
             target_id=document.id,
-            title=str(document),
-            text=detail,
             detail=remark.text
         )
+        create_notification_translation(notification, str(document), detail)
 
     if to_followers:
         walk_by_followers(document, user, create_notification)
@@ -30,14 +46,13 @@ def notification_remark(user, document, remark, detail, to_followers=False):
 
 def notification_document(user, document, detail, to_followers=False):
     def create_notification(to_user):
-        Notification.objects.create(
+        notification = Notification.objects.create(
             user=user,
             to=to_user,
             content_type=Document.content_type,
             target_id=document.id,
-            title=str(document),
-            text=detail,
         )
+        create_notification_translation(notification, str(document), detail)
 
     if to_followers:
         walk_by_followers(document, user, create_notification)
