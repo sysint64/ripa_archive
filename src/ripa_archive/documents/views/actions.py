@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.exceptions import PermissionDenied as RestPermissionDenied
 from rest_framework.response import Response
+from django.utils.translation import ugettext_lazy as _
 
 from ripa_archive.activity import activity_factory
 from ripa_archive.documents import strings

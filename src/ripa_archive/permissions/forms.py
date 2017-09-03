@@ -1,5 +1,6 @@
 from django import forms
 from django.forms.widgets import Input
+from django.utils.translation import ugettext_lazy as _
 
 from forms.ajax import AjaxModelForm
 from ripa_archive.permissions.models import Group, Permission
@@ -11,7 +12,7 @@ class GroupForm(AjaxModelForm):
         fields = "inherit", "name"
 
     inherit = forms.ModelMultipleChoiceField(
-        label="Inherit from",
+        label=_("Inherit from"),
         required=False,
         queryset=Group.objects.all(),
         widget=forms.SelectMultiple(attrs={
@@ -22,21 +23,21 @@ class GroupForm(AjaxModelForm):
     )
 
     common_permissions = forms.ModelMultipleChoiceField(
-        label="Common permissions",
+        label=_("Common permissions"),
         widget=forms.CheckboxSelectMultiple(),
         required=False,
         queryset=Permission.objects.common(),
     )
 
     folder_permissions = forms.ModelMultipleChoiceField(
-        label="Folder permissions",
+        label=_("Folder permissions"),
         widget=forms.CheckboxSelectMultiple(),
         required=False,
         queryset=Permission.objects.for_generic_folders(),
     )
 
     documents_permissions = forms.ModelMultipleChoiceField(
-        label="Documents permissions",
+        label=_("Documents permissions"),
         widget=forms.CheckboxSelectMultiple(),
         required=False,
         queryset=Permission.objects.for_generic_documents(),

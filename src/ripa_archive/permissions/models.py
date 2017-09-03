@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.utils.translation import ugettext_lazy as _
 
 
 class PermissionManager(models.Manager):
@@ -37,7 +38,7 @@ class PermissionTranslation(models.Model):
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(_("Name"), max_length=255, unique=True)
     permissions = models.ManyToManyField(Permission)
     inherit = models.ManyToManyField('Group')
 

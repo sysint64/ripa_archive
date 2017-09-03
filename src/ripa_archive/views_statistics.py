@@ -3,6 +3,7 @@ from django.db import transaction
 from django.db.models import Q
 from django.template.response import TemplateResponse
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from ripa_archive.accounts.models import User
 from ripa_archive.activity.models import Activity
@@ -72,7 +73,7 @@ def statistics(request):
         rejected_documents_percent = round(total_rejected / total * 100)
 
     context = {
-        "page_title": "Statistics",
+        "page_title": _("Statistics"),
         "active_url_name": "statistics",
         "total_users": User.objects.all().count(),
         "total_males": User.objects.filter(gender=User.Gender.MALE).count(),

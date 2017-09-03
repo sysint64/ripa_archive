@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import ugettext_lazy as _
 
 from request_helper import get_request_int_or_404
 from ripa_archive.activity import activity_factory
@@ -36,9 +37,9 @@ def upload_new_version(request, name, path=None):
 
     context = browser_base_context(request)
     context.update({
-        "form_title": "Upload new version",
+        "form_title": _("Upload new version"),
         "form": form,
-        "submit_title": "Upload",
+        "submit_title": _("Upload"),
         "validator_url": reverse("documents:validator-upload-new-version"),
     })
 
@@ -67,7 +68,7 @@ def upload_new_version(request, name, path=None):
                 )
             )
 
-        messages.success(request, "Successfully uploaded")
+        messages.success(request, _("Successfully uploaded"))
         return redirect(document.permalink)
 
     return TemplateResponse(template="forms/form.html", request=request, context=context)
@@ -95,9 +96,9 @@ def write_remark(request, name, path=None):
 
     context = browser_base_context(request)
     context.update({
-        "form_title": "Write remark",
+        "form_title": _("Write remark"),
         "form": form,
-        "submit_title": "Submit",
+        "submit_title": _("Submit"),
         "validator_url": reverse("documents:validator-write-remark"),
     })
 
@@ -126,7 +127,7 @@ def write_remark(request, name, path=None):
             strings.NOTIFICATION_REMARK_WROTE
         )
 
-        messages.success(request, "Successfully submitted remark")
+        messages.success(request, _("Successfully submitted remark"))
         return redirect(document.permalink)
 
     return TemplateResponse(template="forms/form.html", request=request, context=context)
@@ -146,9 +147,9 @@ def rename_document(request, name, path=None):
 
     context = browser_base_context(request)
     context.update({
-        "form_title": "Rename document",
+        "form_title": _("Rename document"),
         "form": form,
-        "submit_title": "Rename",
+        "submit_title": _("Rename"),
         "validator_url": reverse("documents:validator-rename-document"),
     })
 
@@ -166,7 +167,7 @@ def rename_document(request, name, path=None):
             )
 
         form.save()
-        messages.success(request, "Successfully renamed")
+        messages.success(request, _("Successfully renamed"))
 
         if redirect_next == "list":
             return redirect(document.parent.permalink)
@@ -190,9 +191,9 @@ def rename_folder(request, path=None):
 
     context = browser_base_context(request)
     context.update({
-        "form_title": "Rename folder",
+        "form_title": _("Rename folder"),
         "form": form,
-        "submit_title": "Rename",
+        "submit_title": _("Rename"),
         "validator_url": reverse("documents:validator-rename-folder"),
     })
 
@@ -211,7 +212,7 @@ def rename_folder(request, path=None):
 
         form.save()
 
-        messages.success(request, "Successfully renamed")
+        messages.success(request, _("Successfully renamed"))
 
         if redirect_next == "list":
             return redirect(folder.parent.permalink)
@@ -234,15 +235,15 @@ def update_document_status(request, name, path=None):
 
     context = browser_base_context(request)
     context.update({
-        "form_title": "Update document status",
+        "form_title": _("Update document status"),
         "form": form,
-        "submit_title": "Update",
+        "submit_title": _("Update"),
         "validator_url": reverse("documents:validator-update-document-status"),
     })
 
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Successfully updated")
+        messages.success(request, _("Successfully updated"))
         return redirect(document.permalink)
 
     return TemplateResponse(template="forms/form.html", request=request, context=context)

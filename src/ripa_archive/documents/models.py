@@ -3,6 +3,7 @@ import os
 from django.db import models
 from django.db.models import Q
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 
 from ripa_archive.accounts.models import User
 from ripa_archive.documents.validators import NAME_MAX_LENGTH
@@ -11,7 +12,7 @@ from ripa_archive.permissions.models_abstract import ModelCustomPermission, Mode
 
 
 class FoldersManager(models.Manager):
-    ALREADY_EXIST_ERROR = 'Folder with name "%s" already exist in this folder'
+    ALREADY_EXIST_ERROR = _('Folder with name "%s" already exist in this folder')
 
     def get_by_path(self, path):
         parent_folder = self.filter(name="Root", parent=None).first()
@@ -56,7 +57,7 @@ class FoldersManager(models.Manager):
 
 
 class DocumentsManager(models.Manager):
-    ALREADY_EXIST_ERROR = 'Document with name "%s" already exist in this folder'
+    ALREADY_EXIST_ERROR = _('Document with name "%s" already exist in this folder')
 
     def exist_with_name(self, parent, name, instance=None):
         qs = self.get_queryset().filter(parent=parent, name__iexact=name)
@@ -101,7 +102,7 @@ class Folder(ModelWhichHaveCustomPermissionsMixin, models.Model):
 
     custom_permission_model = FolderCustomPermission
     parent = models.ForeignKey('Folder', null=True, blank=True)
-    name = models.CharField(verbose_name="name", help_text="this is a help text", max_length=NAME_MAX_LENGTH)
+    name = models.CharField(verbose_name=_("Name"), max_length=NAME_MAX_LENGTH)
     objects = FoldersManager()
 
     @property
@@ -173,12 +174,20 @@ class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
         FINAL = "3"
         CLOSE = "4"
 
-        CHOICES = (
-            (OPEN, "Open"),
+        FORM_CHOICES = (
+            (OPEN, _("Open")),
             # (IN_PROGRESS, "In progress"),
-            (PROJECT, "Project"),
-            (FINAL, "Final"),
-            (CLOSE, "Close"),
+            (PROJECT, _("Project")),
+            (FINAL, _("Final")),
+            (CLOSE, _("Close")),
+        )
+
+        ALL_CHOICES = (
+            (OPEN, _("Open")),
+            (IN_PROGRESS, _("In progress")),
+            (PROJECT, _("Project")),
+            (FINAL, _("Final")),
+            (CLOSE, _("Close")),
         )
 
     content_type = "documents.Document"
@@ -193,7 +202,7 @@ class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
     current_edit_meta = models.ForeignKey("DocumentEditMeta", null=True, default=None)
     accepted_edit_meta = models.ForeignKey("DocumentEditMeta", null=True, default=None, related_name="accepted_edit_meta")
     parent = models.ForeignKey(Folder)
-    status = models.CharField(max_length=2, default=Status.OPEN, choices=Status.CHOICES)
+    status = models.CharField(verbose_name=_("Status"), max_length=2, default=Status.OPEN, choices=Status.FORM_CHOICES)
 
     objects = DocumentsManager()
 
@@ -213,7 +222,7 @@ class Document(ModelWhichHaveCustomPermissionsMixin, models.Model):
 
     @property
     def status_str(self):
-        return dict(Document.Status.CHOICES).get(self.status, "Undefined")
+        return dict(Document.Status.ALL_CHOICES).get(self.status, "Undefined")
 
     @property
     def permalink(self):
@@ -292,7 +301,7 @@ class DocumentData(models.Model):
         default_related_name = "document_data_set"
 
     document = models.ForeignKey(Document)
-    file = models.FileField(upload_to="documents/")
+    file = models.FileField(verbose_name=_("File"), upload_to="documents/")
     datetime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 from django.contrib.auth import login
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -45,7 +47,7 @@ class LoginView(TemplateView):
 
 
 USERS_ADD_MENU = (
-    {"name": "User", "permalink": "!action:create-user"},
+    {"name": _("User"), "permalink": "!action:create-user"},
 )
 
 
@@ -63,7 +65,7 @@ def users(request):
     context.update({
         "items": User.objects.all(),
         "module_name": "user",
-        "title": "Users"
+        "title": _("Users")
     })
     return TemplateResponse(template="users/list.html", request=request, context=context)
 
@@ -79,7 +81,7 @@ def profile(request, user_id):
     context.update({
         "items": User.objects.all(),
         "module_name": "user",
-        "title": "Users",
+        "title": _("Users"),
         "profile_user": user,
         "recent_activity": Activity.objects.filter(user=user)[:5],
         "worked_on_documents_edit_metas": DocumentEditMeta.objects.filter(editor=user).order_by("-end_datetime")
@@ -94,9 +96,9 @@ def create(request):
     form = UserForm(request.POST, request.FILES)
     context = users_base_context(request)
     context.update({
-        "form_title": "Create user",
+        "form_title": _("Create user"),
         "form": form,
-        "submit_title": "Create",
+        "submit_title": _("Create"),
         "validator_url": reverse("accounts:validator-create"),
     })
 
@@ -105,7 +107,7 @@ def create(request):
         user.set_password("123321")  # TODO: send email with generated password
         user.save()
 
-        messages.success(request, "Success added")
+        messages.success(request, _("Success added"))
         return redirect("accounts:index")
 
     return TemplateResponse(template="forms/form.html", request=request, context=context)
@@ -124,15 +126,15 @@ def update(request, user_id):
 
     context = users_base_context(request)
     context.update({
-        "form_title": "Update user",
+        "form_title": _("Update user"),
         "form": form,
-        "submit_title": "Update",
+        "submit_title": _("Update"),
         "validator_url": reverse("accounts:validator-update", kwargs={"id": user_id}),
     })
 
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Success added")
+        messages.success(request, _("Success added"))
         return redirect("accounts:index")
 
     return TemplateResponse(template="forms/form.html", request=request, context=context)

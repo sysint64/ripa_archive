@@ -1,5 +1,6 @@
 from django import forms
-from django.core.exceptions import ValidationError, SuspiciousOperation
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 from forms.ajax import AjaxModelForm
 from ripa_archive.documents import validators
@@ -14,15 +15,15 @@ class UploadNewVersionForm(AjaxModelForm):
 
     name = forms.CharField(max_length=255)
     message = forms.CharField(
-        label="Details",
-        help_text="What was done in this revision",
+        label=_("Details"),
+        help_text=_("What was done in this revision"),
         required=True,
         widget=forms.Textarea(attrs={"rows": 2})
     )
 
     file = forms.FileField(
-        label="File",
-        help_text="New version of document"
+        label=_("File"),
+        help_text=_("New version of document")
     )
 
 
@@ -40,7 +41,7 @@ class RenameFolderForm(AjaxModelForm):
         validators=[validators.name_validator],
         max_length=validators.NAME_MAX_LENGTH,
         required=True,
-        label="Name"
+        label=_("Name")
     )
 
     # Check uniqueness in folder
@@ -68,7 +69,7 @@ class RenameDocumentForm(AjaxModelForm):
         validators=[validators.name_validator],
         max_length=validators.NAME_MAX_LENGTH,
         required=True,
-        label="Name"
+        label=_("Name")
     )
 
     # Check uniqueness in folder
@@ -88,7 +89,7 @@ class RemarkForm(AjaxModelForm):
         fields = "text",
 
     text = forms.CharField(
-        label="Remark",
+        label=_("Remark"),
         required=True,
         widget=forms.Textarea(attrs={"rows": 2})
     )

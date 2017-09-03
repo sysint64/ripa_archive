@@ -3,6 +3,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -29,7 +30,7 @@ def take_for_revision(request, name, path=None):
     document = get_document(name=name, path=path)
 
     if document.is_under_edition:
-        raise ValidationError("Already under edition")
+        raise ValidationError(_("Already under edition"))
 
     # Attach editor to document
     edit_meta = DocumentEditMeta.objects.create(
@@ -42,7 +43,7 @@ def take_for_revision(request, name, path=None):
     document.status = Document.Status.IN_PROGRESS
     document.save()
 
-    messages.success(request._request, "Successfully took")
+    messages.success(request._request, _("Successfully took"))
     return Response({}, status=status.HTTP_200_OK)
 
 
@@ -73,7 +74,7 @@ def accept_remark(request, name, path=None):
     remark = get_object_or_404(Remark, id=remark_id)
 
     if remark.is_accepted:
-        raise ValidationError({"details": "Already accepted"})
+        raise ValidationError({"details": _("Already accepted")})
 
     remark.status = Remark.Status.ACCEPTED
     remark.save()
@@ -125,10 +126,10 @@ def revert_document(request, name, path=None):
     activity = get_object_or_404(Activity, id=activity_id)
 
     if activity.document_data is None:
-        raise ValidationError("Activity does not provide data")
+        raise ValidationError(_("Activity does not provide data"))
 
     if document.data.id == activity.document_data.id:
-        raise ValidationError("Already this version")
+        raise ValidationError(_("Already this version"))
 
     document.data = activity.document_data
     document.save()

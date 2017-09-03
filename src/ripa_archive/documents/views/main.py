@@ -4,13 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import Http404
-from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
+from django.utils.translation import ugettext_lazy as _
+
 from haystack.inputs import Exact
 from haystack.query import SearchQuerySet
 
-from ripa_archive.activity.models import Activity
-from ripa_archive.documents.models import Folder, Document, Remark
+from ripa_archive.documents.models import Folder, Document
 from ripa_archive.permissions import codes
 
 
@@ -43,13 +43,13 @@ class SearchPlaceCode(Enum):
 
 
 BROWSER_SEARCH_PLACES = (
-    {"name": "This folder", "code": SearchPlaceCode.THIS_FOLDER.value},
-    {"name": "Everywhere", "code": SearchPlaceCode.EVERYWHERE.value},
+    {"name": _("This folder"), "code": SearchPlaceCode.THIS_FOLDER.value},
+    {"name": _("Everywhere"), "code": SearchPlaceCode.EVERYWHERE.value},
 )
 
 BROWSER_ADD_MENU = (
-    {"name": "Folder(s)", "permalink": "!action:create-folders"},
-    {"name": "Document(s)", "permalink": "!action:create-documents"},
+    {"name": _("Folder(s)"), "permalink": "!action:create-folders"},
+    {"name": _("Document(s)"), "permalink": "!action:create-documents"},
 )
 
 

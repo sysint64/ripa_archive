@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.template.response import TemplateResponse
+from django.utils.translation import ugettext_lazy as _
 
 from ripa_archive.activity.models import Activity
 from ripa_archive.permissions import codes
@@ -13,6 +14,6 @@ def users_activity(request):
         "users_activity": Activity.objects.all(),
         "active_url_name": "activity",
         "module_name": "activity",
-        "title": "Users activity"
+        "title": _("Users activity")
     }
     return TemplateResponse(template="activity.html", request=request, context=context)

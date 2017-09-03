@@ -3,6 +3,7 @@ from io import UnsupportedOperation
 from django.core.exceptions import SuspiciousOperation
 from django.shortcuts import redirect
 from django.db import transaction
+from django.utils.translation import ugettext_lazy as _
 
 from ripa_archive.activity import activity_factory
 from ripa_archive.activity.models import Activity
@@ -62,7 +63,7 @@ class BrowserMultiFormCreation(MultiFormCreationWithPermissions):
 
 
 class CreateFolders(BrowserMultiFormCreation):
-    title = "Create folders"
+    title = _("Create folders")
     validator_url = "documents:validator-create-folders"
     form_class = CreateFolderForm
     permissions_form_class = FolderPermissionsCreateForm
@@ -83,7 +84,7 @@ class CreateFolders(BrowserMultiFormCreation):
 
 
 class CreateDocuments(BrowserMultiFormCreation):
-    title = "Create documents"
+    title = _("Create documents")
     validator_url = "documents:validator-create-documents"
     form_class = CreateDocumentForm
     permissions_form_class = DocumentPermissionsCreateForm
@@ -119,7 +120,7 @@ class CreateDocuments(BrowserMultiFormCreation):
 
 
 class EditPermissions(MultiFormView):
-    title = "Edit permissions"
+    title = _("Edit permissions")
     form_class = None
     instance_class = None
 
@@ -129,8 +130,8 @@ class EditPermissions(MultiFormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            "submit_title": "Update permissions",
-            "add_title": "Add another permission"
+            "submit_title": _("Update permissions"),
+            "add_title": _("Add another permission")
         })
         return context
 

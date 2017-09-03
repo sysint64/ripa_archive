@@ -5,20 +5,21 @@ from forms.ajax import AjaxForm, AjaxModelForm
 from forms.consts import YES_NO_CHOICES
 from ripa_archive.accounts.models import User
 from ripa_archive.permissions.models import Group
+from django.utils.translation import ugettext_lazy as _
 
 
 class LoginForm(AjaxForm):
     email = forms.EmailField(
         max_length=60,
         widget=forms.TextInput(
-            attrs={"placeholder": "Номер телефона или E-mail"}
+            attrs={"placeholder": _("E-mail")}
         ),
     )
     password = forms.CharField(
         strip=False,
         min_length=4,
         widget=forms.PasswordInput(
-            attrs={"placeholder": "Не менее 4 символов"}
+            attrs={"placeholder": _("At least 4 characters")}
         )
     )
 
@@ -33,7 +34,7 @@ class LoginForm(AjaxForm):
 
         if self.user is None:
             raise forms.ValidationError(
-                "invalid email or password",
+                _("invalid email or password"),
                 code='invalid_login',
                 params={'username': "email"},
             )
@@ -47,7 +48,7 @@ class UserForm(AjaxModelForm):
                  "avatar_image"
 
     gender = forms.ChoiceField(
-        label="Gender",
+        label=_("Gender"),
         required=False,
         choices=User.Gender.CHOICES,
         widget=forms.Select(attrs={
@@ -56,7 +57,7 @@ class UserForm(AjaxModelForm):
     )
 
     group = forms.ModelChoiceField(
-        label="Group",
+        label=_("Group"),
         required=False,
         empty_label=None,
         queryset=Group.objects.all(),
@@ -67,7 +68,7 @@ class UserForm(AjaxModelForm):
 
     is_active = forms.ChoiceField(
         choices=YES_NO_CHOICES,
-        label="Is active",
+        label=_("Is active"),
         widget=forms.Select(attrs={
             "data-width": "fit",
         }),

@@ -5,6 +5,8 @@ from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -17,7 +19,7 @@ from ripa_archive.permissions.models import Group
 
 
 PERMISSIONS_ADD_MENU = (
-    {"name": "Group", "permalink": "!action:create-group"},
+    {"name": _("Group"), "permalink": "!action:create-group"},
 )
 
 
@@ -36,7 +38,7 @@ def permissions(request):
     context.update({
         "items": Group.objects.all(),
         "module_name": "group",
-        "title": "User groups"
+        "title": _("User groups")
     })
     return TemplateResponse(template="groups.html", request=request, context=context)
 
@@ -49,9 +51,9 @@ def create_group(request):
 
     context = permissions_base_context(request)
     context.update({
-        "form_title": "Create group",
+        "form_title": _("Create group"),
         "form": form,
-        "submit_title": "Create",
+        "submit_title": _("Create"),
         "validator_url": reverse("permissions:validator-create"),
     })
 
@@ -60,7 +62,7 @@ def create_group(request):
         group.permissions = form.permissions
         group.save()
 
-        messages.success(request, "Success added")
+        messages.success(request, _("Success added"))
         return redirect("permissions:index")
 
     return TemplateResponse(template="forms/form.html", request=request, context=context)
@@ -82,9 +84,9 @@ def update_group(request, name):
 
     context = permissions_base_context(request)
     context.update({
-        "form_title": "Update group",
+        "form_title": _("Update group"),
         "form": form,
-        "submit_title": "Update",
+        "submit_title": _("Update"),
         "validator_url": reverse("permissions:validator-update", kwargs={"name": name}),
     })
 
@@ -93,7 +95,7 @@ def update_group(request, name):
         group.permissions = form.permissions
         group.save()
 
-        messages.success(request, "Success added")
+        messages.success(request, _("Success added"))
         return redirect("permissions:index")
 
     return TemplateResponse(template="forms/form.html", request=request, context=context)

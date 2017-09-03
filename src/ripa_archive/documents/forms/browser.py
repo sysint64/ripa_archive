@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 from forms.ajax import AjaxModelForm
 from ripa_archive.accounts.models import User
@@ -23,7 +24,7 @@ class CreateFolderForm(AjaxModelForm):
         validators=[validators.name_validator],
         max_length=validators.NAME_MAX_LENGTH,
         required=True,
-        label="Name"
+        label=_("Name")
     )
 
     # Check uniqueness in folder
@@ -51,9 +52,9 @@ class CreateDocumentForm(AjaxModelForm):
         validators=[validators.name_validator],
         max_length=validators.NAME_MAX_LENGTH,
         required=True,
-        label="Name"
+        label=_("Name")
     )
-    status = forms.ChoiceField(choices=Document.Status.CHOICES, label="Status")
+    status = forms.ChoiceField(choices=Document.Status.FORM_CHOICES, label="Status")
 
     # Check uniqueness in folder
     def clean_name(self):
@@ -68,7 +69,7 @@ class CreateDocumentForm(AjaxModelForm):
 
 class PermissionsFormMixin:
     users_attrs = {
-        "label": "Users",
+        "label": _("Users"),
         "queryset": User.objects.all(),
         "widget": forms.SelectMultiple(attrs={
             "data-actions-box": "true",
@@ -79,7 +80,7 @@ class PermissionsFormMixin:
     }
 
     groups_attrs = {
-        "label": "Groups",
+        "label": _("Groups"),
         "queryset": Group.objects.all(),
         "widget": forms.SelectMultiple(attrs={
             "data-actions-box": "true",
@@ -92,7 +93,7 @@ class PermissionsFormMixin:
     @staticmethod
     def permissions_attrs(queryset):
         return {
-            "label": "Permissions",
+            "label": _("Permissions"),
             "widget": forms.CheckboxSelectMultiple(),
             "required": False,
             "queryset": queryset,
@@ -103,7 +104,7 @@ class PermissionsFormMixin:
         groups = self.cleaned_data["groups"]
 
         if users.count() == 0 and groups.count() == 0:
-            self.add_error("groups", "At least one field must be filled in")
+            self.add_error("groups", _("At least one field must be filled in"))
             self.add_error("users", "")
 
         return self.cleaned_data
