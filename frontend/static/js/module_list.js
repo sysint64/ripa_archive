@@ -39,7 +39,7 @@ var onSelectChange = function() {
             null,
             "delete",
             getSelectedItemsData(),
-            "Delete selected items?",
+            _("Delete selected items?"),
             function() {
                 $(".selected").remove();
             }

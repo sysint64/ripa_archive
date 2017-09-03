@@ -125,7 +125,7 @@ function rebindEvents() {
         hideWaitDialog();
 
         if (statusCode != 400)
-            showErrorDialog("Something went wrong! Please contact with administrator.<br>Status code: " + statusCode);
+            showErrorDialog(_("Something went wrong! Please contact with administrator.<br>Status code: ") + statusCode);
     });
 
     bindEvents();

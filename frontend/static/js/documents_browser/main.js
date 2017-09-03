@@ -48,7 +48,7 @@ var onSelectChange = null;
                         "documents",
                         "delete",
                         getSelectedItemsData(),
-                        "Delete selected items?",
+                        _("Delete selected items?"),
                         function() {
                             $(".selected").remove();
                         }
@@ -99,33 +99,33 @@ var onSelectChange = null;
         },
         items: {
             "rename": {
-                name: "Rename",
+                name: _("Rename"),
                 icon: "edit",
                 disabled: function() { return contextMenuItemIsDisabled($(".selected"), "edit"); }
             },
             "edit_permissions": {
-                name: "Edit permissions",
+                name: _("Edit permissions"),
                 icon: "fa-key",
                 disabled: function() { return contextMenuItemIsDisabled($(".selected"), "edit_permissions"); }
             },
             "update_status": {
-                name: "Update status",
+                name: _("Update status"),
                 // icon: "fa-check",
                 disabled: function() { return contextMenuItemIsDisabled($(".selected"), "edit"); }
             },
             "sep": "-",
             "cut": {
-                name: "Cut",
+                name: _("Cut"),
                 icon: "cut",
                 disabled: function () { return contextMenuItemIsBulkDisabled($(".selected"), "edit"); }
             },
             "copy": {
-                name: "Copy",
+                name: _("Copy"),
                 icon: "copy",
                 disabled: function () { return contextMenuItemIsBulkDisabled($(".selected"), "edit"); }
             },
             "delete": {
-                name: "Delete",
+                name: _("Delete"),
                 icon: "delete",
                 disabled: function () { return contextMenuItemIsBulkDisabled($(".selected"), "delete"); }
             }
@@ -163,7 +163,7 @@ var onSelectChange = null;
         },
         items: {
             "create_folders": {
-                name: "Create folder(s)",
+                name: _("Create folder(s)"),
                 icon: "fa-folder",
                 disabled: function () { return contextMenuItemIsDisabled($parentFolderPermissions, "create_folders"); }
             },
@@ -174,7 +174,7 @@ var onSelectChange = null;
             },
             "sep": "-",
             "paste": {
-                name: "Paste", icon: "paste",
+                name: _("Paste"), icon: "paste",
                 disabled: function () { return contextMenuItemIsDisabled($parentFolderPermissions, "edit"); }
             }
         },

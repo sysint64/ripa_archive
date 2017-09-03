@@ -37,7 +37,8 @@ def common(request):
         context.update({
             "have_notifications": Notification.objects.filter(to=request.user, is_read=False).count() > 0,
             "project_title": settings.PROJECT_TITLE,
-            "project_version": settings.PROJECT_VERSION
+            "project_version": settings.PROJECT_VERSION,
+            "language_code": request.session.get("language", settings.LANGUAGE_CODE)
         })
 
     return context

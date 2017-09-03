@@ -49,11 +49,11 @@
         <div class="x_title">
             <h2>{{ document.name }}</h2>
             {% if user_is_follow %}
-                <a href="#" id="toggle-follow" title="Do not follow">
+                <a href="#" id="toggle-follow" title="{% trans "Do not follow" %}">
                     <i class="fa fa-eye-slash"></i>
                 </a>
             {% else %}
-                <a href="#" id="toggle-follow" title="Follow">
+                <a href="#" id="toggle-follow" title="{% trans "Follow" %} ">
                     <i class="fa fa-eye"></i>
                 </a>
             {% endif %}

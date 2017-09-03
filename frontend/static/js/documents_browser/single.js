@@ -4,7 +4,7 @@
             null,
             "take-for-revision",
             null,
-            "Take this document for revision?",
+            _("Take this document for revision?"),
             function () {
                 showWaitDialog();
                 location.reload();
@@ -19,7 +19,7 @@
             null,
             "accept-document",
             null,
-            "Accept new version of document?",
+            _("Accept new version of document?"),
             function () {
                 showWaitDialog();
                 location.reload();
@@ -34,7 +34,7 @@
             null,
             "reject-document",
             null,
-            "Reject new version of document and revert previous?",
+            _("Reject new version of document and revert previous?"),
             function () {
                 showWaitDialog();
                 location.reload();
@@ -55,10 +55,10 @@
 
                 if ($icon.hasClass("fa-eye")) {
                     $icon.removeClass("fa-eye").addClass("fa-eye-slash");
-                    $icon.attr("title", "Do not follow");
+                    $icon.attr("title", _("Do not follow"));
                 } else {
                     $icon.removeClass("fa-eye-slash").addClass("fa-eye");
-                    $icon.attr("title", "Follow");
+                    $icon.attr("title", _("Follow"));
                 }
             }
         );
@@ -73,7 +73,7 @@
             {
                 "activity_id": $(this).data("activity-id")
             },
-            "Revert this version of document?",
+            _("Revert this version of document?"),
             function () {
                 location.reload();
             }
@@ -90,7 +90,7 @@
             {
                 "remark_id": $(this).data("remark-id")
             },
-            "Accept this remark?",
+            _("Accept this remark?"),
             function () {
                 $conteiner.find(".reviewer-tools, .editor-tools").hide();
                 $conteiner.find(".remark").removeClass("finished").removeClass("rejected").addClass("accepted");
@@ -103,7 +103,7 @@
     $(".reject-remark").click(function(event) {
         const href = $(this).attr("href");
 
-        showYesNoDialog("Reject this remark, and write another one?", function() {
+        showYesNoDialog(_("Reject this remark, and write another one?"), function() {
             location.href = href;
         });
 
@@ -118,7 +118,7 @@
             {
                 "remark_id": $(this).data("remark-id")
             },
-            "Mark this remark as \"finished\" and send notification to reviewer?",
+            _("Mark this remark as \"finished\" and send notification to reviewer?"),
             function () {
                 $conteiner.find(".reviewer-tools, .editor-tools").hide();
                 $conteiner.find(".remark").removeClass("rejected").addClass("finished");

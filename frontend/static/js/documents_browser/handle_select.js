@@ -16,7 +16,7 @@ function handleSelect($this, event) {
                 $lastElement = $lastSelected;
             }
 
-            $firstElement.nextUntil($lastElement).andSelf().add($lastElement).addClass("selected");
+            $firstElement.nextUntil($lastElement).addBack().add($lastElement).addClass("selected");
             $this.addClass("selected");
         }
     } else {

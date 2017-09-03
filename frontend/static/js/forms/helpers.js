@@ -1,28 +1,13 @@
-function ajaxErrorHandler(info, selector) {
-    if (info.status >= 500) {
-        $(selector).html("Неизвестная ошибка");
-        setTimeout(function () {
-            $(selector).html("");
-        }, 5000);
-    } else {
-        var data = $.parseJSON(info.responseText);
-        $(selector).html(data.error);
-        setTimeout(function () {
-            $(selector).html("");
-        }, 5000);
-    }
-}
-
 function getAjaxTextError(info) {
     switch (info.status) {
         case 400:
             return $.parseJSON(info.responseText)[0];
 
         case 403:
-            return "Permission denied";
+            return _("Permission denied");
 
         default:
-            return "Unexpected error (server respond with status code " + info.status + ")";
+            return _("Unexpected error (server respond with status code ") + info.status + ")";
     }
 }
 

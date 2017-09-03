@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-03 17:01+0000\n"
+"POT-Creation-Date: 2017-09-03 17:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,6 +164,14 @@ msgstr "Обновить статус"
 #: frontend/templates/documents_browser/single/index.html:39
 msgid "Document details"
 msgstr "Детали документа"
+
+#: frontend/templates/documents_browser/single/index.html:52
+msgid "Do not follow"
+msgstr "Не отслеживать"
+
+#: frontend/templates/documents_browser/single/index.html:56
+msgid "Follow"
+msgstr "Отслеживать"
 
 #: frontend/templates/documents_browser/single/index.html:66
 msgid "Remarks"
@@ -452,7 +460,9 @@ msgstr "Веб сайт"
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
-msgstr "Указывате, должен ли пользователь быть активным. Выберете \"да\", вместо удаления пользователя"
+msgstr ""
+"Указывате, должен ли пользователь быть активным. Выберете \"да\", вместо "
+"удаления пользователя"
 
 #: src/ripa_archive/accounts/models.py:60
 msgid "Date joined"
