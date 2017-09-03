@@ -20,7 +20,7 @@ class Activity(models.Model):
 
     user = models.ForeignKey(User)
     content_type = models.CharField(max_length=100, blank=True)
-    document_data = models.ForeignKey(DocumentData, null=True)
+    document_data = models.ForeignKey(DocumentData, null=True, on_delete=models.SET_NULL)
     document_edit_meta = models.ForeignKey(DocumentEditMeta, null=True)
     target_id = models.PositiveIntegerField(null=True)
     datetime = models.DateTimeField(auto_now_add=True)

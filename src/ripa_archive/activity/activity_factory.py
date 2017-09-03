@@ -3,11 +3,11 @@ from django.core.exceptions import SuspiciousOperation
 from ripa_archive.activity.models import Activity, ActivityTranslation
 from ripa_archive.documents import strings
 from ripa_archive.documents.models import Document, Folder
-from ripa_archive.documents.strings import get_activity_text
+from ripa_archive.documents.strings import get_activity_text, get_activity_ref_text
 from ripa_archive.notifications import notifications_factory
 
 
-def _destructure_ref(ref):
+def _destruct_ref(ref):
     ref_id = None
     ref_content_type = ""
     ref_text = ""
@@ -29,46 +29,45 @@ def create_translation(activity, details, ref_text):
     ActivityTranslation.objects.create(
         activity=activity,
         language_code="en",
-        title=get_activity_text(details, "en"),
-        ref_text=ref_text,
+        details=get_activity_text(details, "en"),
+        ref_text=get_activity_ref_text(ref_text, "en"),
     )
 
     ActivityTranslation.objects.create(
         activity=activity,
         language_code="ru",
-        title=get_activity_text(details, "ru"),
-        ref_text=ref_text,
+        details=get_activity_text(details, "ru"),
+        ref_text=get_activity_ref_text(ref_text, "en"),
     )
 
 
 def for_document(user, document, detail, document_data=None, ref=None):
-    ref_id, ref_content_type, ref_text = _destructure_ref(ref)
-    Activity._factory_objects.create(
+    ref_id, ref_content_type, ref_text = _destruct_ref(ref)
+    activity = Activity._factory_objects.create(
         user=user,
         content_type=Document.content_type,
         document_data=document_data,
         target_id=document.pk,
-        # details=detail,
         document_edit_meta=document.current_edit_meta,
         ref_id=ref_id,
-        # ref_text=ref_text,
         ref_content_type=ref_content_type,
     )
 
+    create_translation(activity, detail, ref_text)
     notifications_factory.notification_document(user, document, detail, to_followers=True)
 
 
 def for_folder(user, folder, detail, ref=None):
-    ref_id, ref_content_type, ref_text = _destructure_ref(ref)
-    Activity._factory_objects.create(
+    ref_id, ref_content_type, ref_text = _destruct_ref(ref)
+    activity = Activity._factory_objects.create(
         user=user,
         content_type=Folder.content_type,
         target_id=folder.pk,
-        # details=detail,
         ref_id=ref_id,
-        # ref_text=ref_text,
         ref_content_type=ref_content_type,
     )
+
+    create_translation(activity, detail, ref_text)
 
 
 def delete(request, item):

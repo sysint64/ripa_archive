@@ -13,7 +13,12 @@ class UploadNewVersionForm(AjaxModelForm):
         model = DocumentData
         fields = "file",
 
-    name = forms.CharField(max_length=255)
+    parent = forms.ModelChoiceField(
+        queryset=Folder.objects.all(),
+        required=True,
+        widget=forms.HiddenInput()
+    )
+    name = forms.CharField(label=_("Name"), max_length=255)
     message = forms.CharField(
         label=_("Details"),
         help_text=_("What was done in this revision"),
@@ -25,6 +30,16 @@ class UploadNewVersionForm(AjaxModelForm):
         label=_("File"),
         help_text=_("New version of document")
     )
+
+    # Check uniqueness in folder
+    def clean_name(self):
+        name = self.cleaned_data["name"]
+        parent = self.cleaned_data["parent"]
+
+        if Document.objects.exist_with_name(parent, name):
+            raise ValidationError(DocumentsManager.ALREADY_EXIST_ERROR % name)
+
+        return name
 
 
 class RenameFolderForm(AjaxModelForm):

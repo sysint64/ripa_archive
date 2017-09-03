@@ -33,7 +33,10 @@ def upload_new_version(request, name, path=None):
         # No instance because need new version of document and save old version
         form = UploadNewVersionForm(request.POST, request.FILES)
     else:
-        form = UploadNewVersionForm(instance=document.data)
+        form = UploadNewVersionForm(
+            instance=document.data,
+            initial={"name": name, "parent": document.parent}
+        )
 
     context = browser_base_context(request)
     context.update({
@@ -49,7 +52,6 @@ def upload_new_version(request, name, path=None):
         data.save()
 
         document.data = data
-        document.save()
 
         activity_factory.for_document(
             request.user,
@@ -59,6 +61,7 @@ def upload_new_version(request, name, path=None):
         )
 
         if document.name != form.cleaned_data["name"]:
+            document.name = form.cleaned_data["name"]
             activity_factory.for_document(
                 request.user,
                 document,
@@ -69,6 +72,7 @@ def upload_new_version(request, name, path=None):
                 )
             )
 
+        document.save()
         messages.success(request, _("Successfully uploaded"))
         return redirect(document.permalink)
 
