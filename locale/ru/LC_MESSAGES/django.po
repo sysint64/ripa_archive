@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-03 17:19+0000\n"
+"POT-Creation-Date: 2017-09-03 20:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,39 +76,40 @@ msgstr "Да"
 msgid "No"
 msgstr "Нет"
 
-#: frontend/templates/documents_browser/list.html:46
+#: frontend/templates/documents_browser/list.html:45
 #: frontend/templates/documents_browser/single/index.html:36
 msgid "Go to parent folder"
 msgstr "Вернуться в родительскую папку"
 
-#: frontend/templates/documents_browser/list.html:49
+#: frontend/templates/documents_browser/list.html:48
 #: frontend/templates/side_menu.html:26
 msgid "Documents"
 msgstr "Документы"
 
-#: frontend/templates/documents_browser/list.html:52
+#: frontend/templates/documents_browser/list.html:51
 msgid "Folder is empty"
 msgstr "Папка пуста"
 
-#: frontend/templates/documents_browser/list.html:58
+#: frontend/templates/documents_browser/list.html:57
 #: frontend/templates/module_list.html:80
 #: src/ripa_archive/documents/forms/browser.py:27
 #: src/ripa_archive/documents/forms/browser.py:55
-#: src/ripa_archive/documents/forms/single.py:44
-#: src/ripa_archive/documents/forms/single.py:72
+#: src/ripa_archive/documents/forms/single.py:21
+#: src/ripa_archive/documents/forms/single.py:59
+#: src/ripa_archive/documents/forms/single.py:87
 #: src/ripa_archive/documents/models.py:105
-#: src/ripa_archive/permissions/models.py:41
+#: src/ripa_archive/permissions/models.py:43
 msgid "Name"
 msgstr "Имя"
 
-#: frontend/templates/documents_browser/list.html:59
+#: frontend/templates/documents_browser/list.html:58
 #: frontend/templates/documents_browser/single/details.html:22
 #: frontend/templates/search/results/document.html:10
 #: src/ripa_archive/documents/models.py:205
 msgid "Status"
 msgstr "Статус"
 
-#: frontend/templates/documents_browser/list.html:60
+#: frontend/templates/documents_browser/list.html:59
 msgid "Datetime"
 msgstr "Дата и время"
 
@@ -127,14 +128,14 @@ msgid "Last version"
 msgstr "Последняя версия"
 
 #: frontend/templates/documents_browser/single/details.html:48
-#: src/ripa_archive/documents/views/single/forms.py:40
+#: src/ripa_archive/documents/views/single/forms.py:43
 msgid "Upload new version"
 msgstr "Загрузить новую версию"
 
 #: frontend/templates/documents_browser/single/details.html:51
 #: frontend/templates/documents_browser/single/details.html:60
-#: src/ripa_archive/documents/views/single/forms.py:152
-#: src/ripa_archive/documents/views/single/forms.py:196
+#: src/ripa_archive/documents/views/single/forms.py:157
+#: src/ripa_archive/documents/views/single/forms.py:202
 msgid "Rename"
 msgstr "Переименовать"
 
@@ -143,7 +144,7 @@ msgid "Take for revision"
 msgstr "Взять на доработку"
 
 #: frontend/templates/documents_browser/single/details.html:66
-#: src/ripa_archive/documents/views/single/forms.py:99
+#: src/ripa_archive/documents/views/single/forms.py:104
 msgid "Write remark"
 msgstr "Написать замечание"
 
@@ -179,7 +180,7 @@ msgstr "Замечания"
 
 #: frontend/templates/documents_browser/single/index.html:79
 #: frontend/templates/notifications.html:25
-#: src/ripa_archive/documents/forms/single.py:18
+#: src/ripa_archive/documents/forms/single.py:23
 msgid "Details"
 msgstr "Детали"
 
@@ -214,18 +215,6 @@ msgstr "Потеряли свой пароль?"
 msgid "All Rights Reserved. Ripa Archive!"
 msgstr "Все права зарезервированы. Ripa Archive!"
 
-#: frontend/templates/module_list.html:41
-msgid "Edit "
-msgstr "Редактировать "
-
-#: frontend/templates/module_list.html:52
-msgid "Delete "
-msgstr "Удалить "
-
-#: frontend/templates/module_list.html:63
-msgid "Add "
-msgstr "Создать "
-
 #: frontend/templates/notifications.html:11
 msgid "Notifications"
 msgstr "Уведомления"
@@ -252,7 +241,7 @@ msgid "Next page"
 msgstr "Следующая страница"
 
 #: frontend/templates/search/results/document.html:13
-#: src/ripa_archive/documents/forms/single.py:25
+#: src/ripa_archive/documents/forms/single.py:30
 #: src/ripa_archive/documents/models.py:304
 msgid "File"
 msgstr "Файл"
@@ -271,7 +260,7 @@ msgid "Archive"
 msgstr "Архив"
 
 #: frontend/templates/side_menu.html:45 src/ripa_archive/accounts/views.py:68
-#: src/ripa_archive/accounts/views.py:84
+#: src/ripa_archive/accounts/views.py:87
 #: src/ripa_archive/documents/forms/browser.py:72
 msgid "Users"
 msgstr "Аккаунты"
@@ -472,29 +461,41 @@ msgstr "Дата регистрации"
 msgid "User"
 msgstr "Пользователь"
 
-#: src/ripa_archive/accounts/views.py:99
+#: src/ripa_archive/accounts/views.py:69
+msgid "Edit user"
+msgstr "Редактировать пользователя"
+
+#: src/ripa_archive/accounts/views.py:70
+msgid "Delete user(s)"
+msgstr "Удалить пользователя(ей)"
+
+#: src/ripa_archive/accounts/views.py:71
+msgid "Add user"
+msgstr "Создать пользователя"
+
+#: src/ripa_archive/accounts/views.py:102
 msgid "Create user"
 msgstr "Создать пользователя"
 
-#: src/ripa_archive/accounts/views.py:101
-#: src/ripa_archive/permissions/views.py:56
+#: src/ripa_archive/accounts/views.py:104
+#: src/ripa_archive/permissions/views.py:59
 msgid "Create"
 msgstr "Создать"
 
-#: src/ripa_archive/accounts/views.py:110
-#: src/ripa_archive/accounts/views.py:137
-#: src/ripa_archive/permissions/views.py:65
-#: src/ripa_archive/permissions/views.py:98
+#: src/ripa_archive/accounts/views.py:113
+#: src/ripa_archive/accounts/views.py:140
+#: src/ripa_archive/permissions/views.py:68
+#: src/ripa_archive/permissions/views.py:101
 msgid "Success added"
 msgstr "Успешно добавлен"
 
-#: src/ripa_archive/accounts/views.py:129
+#: src/ripa_archive/accounts/views.py:132
 msgid "Update user"
 msgstr "Обновить пользователя"
 
-#: src/ripa_archive/accounts/views.py:131
-#: src/ripa_archive/documents/views/single/forms.py:240
-#: src/ripa_archive/permissions/views.py:89
+#: src/ripa_archive/accounts/views.py:134
+#: src/ripa_archive/documents/views/single/forms.py:247
+#: src/ripa_archive/permissions/views.py:92
 msgid "Update"
 msgstr "Обновить"
 
@@ -510,15 +511,15 @@ msgstr "Групп"
 msgid "At least one field must be filled in"
 msgstr "По крайне мере одно поле должно быть заполнено"
 
-#: src/ripa_archive/documents/forms/single.py:19
+#: src/ripa_archive/documents/forms/single.py:24
 msgid "What was done in this revision"
 msgstr "Что было сделанно в этой версии"
 
-#: src/ripa_archive/documents/forms/single.py:26
+#: src/ripa_archive/documents/forms/single.py:31
 msgid "New version of document"
 msgstr "Новая верси документа"
 
-#: src/ripa_archive/documents/forms/single.py:92
+#: src/ripa_archive/documents/forms/single.py:107
 msgid "Remark"
 msgstr "Замечание"
 
@@ -555,19 +556,19 @@ msgstr "Не допустимые спец символы"
 msgid "Create folders"
 msgstr "Создать директории"
 
-#: src/ripa_archive/documents/views/forms.py:87
+#: src/ripa_archive/documents/views/forms.py:88
 msgid "Create documents"
 msgstr "Создать документы"
 
-#: src/ripa_archive/documents/views/forms.py:123
+#: src/ripa_archive/documents/views/forms.py:125
 msgid "Edit permissions"
 msgstr "Редактировать привилегии"
 
-#: src/ripa_archive/documents/views/forms.py:133
+#: src/ripa_archive/documents/views/forms.py:135
 msgid "Update permissions"
 msgstr "Обновить привилегии"
 
-#: src/ripa_archive/documents/views/forms.py:134
+#: src/ripa_archive/documents/views/forms.py:136
 msgid "Add another permission"
 msgstr "Добавить еще привилегии"
 
@@ -607,40 +608,40 @@ msgstr "Нет данных для отката"
 msgid "Already this version"
 msgstr "Уже эта версия документа"
 
-#: src/ripa_archive/documents/views/single/forms.py:42
+#: src/ripa_archive/documents/views/single/forms.py:45
 msgid "Upload"
 msgstr "Загрузить"
 
-#: src/ripa_archive/documents/views/single/forms.py:71
+#: src/ripa_archive/documents/views/single/forms.py:76
 msgid "Successfully uploaded"
 msgstr "Успешно загружен"
 
-#: src/ripa_archive/documents/views/single/forms.py:101
+#: src/ripa_archive/documents/views/single/forms.py:106
 msgid "Submit"
 msgstr "Отправить"
 
-#: src/ripa_archive/documents/views/single/forms.py:130
+#: src/ripa_archive/documents/views/single/forms.py:135
 msgid "Successfully submitted remark"
 msgstr "Успешно отправлено замечание"
 
-#: src/ripa_archive/documents/views/single/forms.py:150
+#: src/ripa_archive/documents/views/single/forms.py:155
 msgid "Rename document"
 msgstr "Переименовать документ"
 
-#: src/ripa_archive/documents/views/single/forms.py:170
-#: src/ripa_archive/documents/views/single/forms.py:215
+#: src/ripa_archive/documents/views/single/forms.py:176
+#: src/ripa_archive/documents/views/single/forms.py:222
 msgid "Successfully renamed"
 msgstr "Успешно переименован"
 
-#: src/ripa_archive/documents/views/single/forms.py:194
+#: src/ripa_archive/documents/views/single/forms.py:200
 msgid "Rename folder"
 msgstr "Переименовать папку"
 
-#: src/ripa_archive/documents/views/single/forms.py:238
+#: src/ripa_archive/documents/views/single/forms.py:245
 msgid "Update document status"
 msgstr "Обновить статус документа"
 
-#: src/ripa_archive/documents/views/single/forms.py:246
+#: src/ripa_archive/documents/views/single/forms.py:253
 msgid "Successfully updated"
 msgstr "Успешно обновлено"
 
@@ -664,10 +665,22 @@ msgstr "Привилегии для документов"
 msgid "User groups"
 msgstr "Группы"
 
-#: src/ripa_archive/permissions/views.py:54
+#: src/ripa_archive/permissions/views.py:42
+msgid "Edit group"
+msgstr "Редактировать группу"
+
+#: src/ripa_archive/permissions/views.py:43
+msgid "Delete group(s)"
+msgstr "Удалить группу(ы)"
+
+#: src/ripa_archive/permissions/views.py:44
+msgid "Add group"
+msgstr "Создать группу"
+
+#: src/ripa_archive/permissions/views.py:57
 msgid "Create group"
 msgstr "Создать группу"
 
-#: src/ripa_archive/permissions/views.py:87
+#: src/ripa_archive/permissions/views.py:90
 msgid "Update group"
 msgstr "Обновить группу"

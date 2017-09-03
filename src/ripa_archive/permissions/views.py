@@ -38,7 +38,10 @@ def permissions(request):
     context.update({
         "items": Group.objects.all(),
         "module_name": "group",
-        "title": _("User groups")
+        "title": _("User groups"),
+        "edit_text": _("Edit group"),
+        "delete_text": _("Delete group(s)"),
+        "add_text": _("Add group"),
     })
     return TemplateResponse(template="groups.html", request=request, context=context)
 

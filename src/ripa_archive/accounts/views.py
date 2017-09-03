@@ -65,7 +65,10 @@ def users(request):
     context.update({
         "items": User.objects.all(),
         "module_name": "user",
-        "title": _("Users")
+        "title": _("Users"),
+        "edit_text": _("Edit user"),
+        "delete_text": _("Delete user(s)"),
+        "add_text": _("Add user"),
     })
     return TemplateResponse(template="users/list.html", request=request, context=context)
 

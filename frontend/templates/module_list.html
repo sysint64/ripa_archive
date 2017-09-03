@@ -38,7 +38,7 @@
             {% block edit_tool %}
                 <li class="one-selected-tools" id="edit-tool">
                     <a href="">
-                        {% trans "Edit "|add:module_name %}
+                        {{ edit_text }}
                         <i class="fa fa-pencil"></i>
                     </a>
                 </li>
@@ -49,7 +49,7 @@
             {% block delete_tool %}
                 <li class="at-least-one-selected-tools">
                     <a href="">
-                        {% trans "Delete "|add:module_name|add:"(s)" %}
+                        {{ delete_text }}
                         <i class="fa fa-times"></i>
                     </a>
                 </li>
@@ -60,7 +60,7 @@
             {% block create_tool %}
                 <li class="fix-tools">
                     <a href="!action:create/">
-                        {% trans "Add "|add:module_name %}
+                        {{ add_text }}
                         <i class="fa fa-plus"></i>
                     </a>
                 </li>
