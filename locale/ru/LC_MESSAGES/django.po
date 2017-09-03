@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-03 16:03+0000\n"
+"POT-Creation-Date: 2017-09-03 16:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,8 +28,6 @@ msgid "Revert"
 msgstr "Откатить"
 
 #: frontend/templates/activity_items.html:64
-#, fuzzy
-#| msgid "Documents"
 msgid "Document version"
 msgstr "Вермия документа"
 
@@ -39,8 +37,6 @@ msgid "Accepted by"
 msgstr "Принял"
 
 #: frontend/templates/activity_items.html:89
-#, fuzzy
-#| msgid "Accepted by"
 msgid "Rejected by"
 msgstr "Отверг"
 
@@ -100,8 +96,6 @@ msgstr "Имя"
 #: frontend/templates/documents_browser/list.html:59
 #: frontend/templates/documents_browser/single/details.html:22
 #: frontend/templates/search/results/document.html:10
-#, fuzzy
-#| msgid "Statistics"
 msgid "Status"
 msgstr "Статус"
 
@@ -112,8 +106,6 @@ msgstr "Дата и время"
 #: frontend/templates/documents_browser/single/details.html:5
 #: frontend/templates/statistics.html:158
 #: frontend/templates/statistics.html:194
-#, fuzzy
-#| msgid "Edit "
 msgid "Editor"
 msgstr "Редактор"
 
@@ -144,8 +136,6 @@ msgstr "Написать замечание"
 
 #: frontend/templates/documents_browser/single/details.html:69
 #: frontend/templates/documents_browser/single/remarks.html:45
-#, fuzzy
-#| msgid "Accepted by"
 msgid "Accept"
 msgstr "Принять"
 
@@ -159,8 +149,6 @@ msgid "Update status"
 msgstr "Обновить статус"
 
 #: frontend/templates/documents_browser/single/index.html:39
-#, fuzzy
-#| msgid "Documents"
 msgid "Document details"
 msgstr "Детали документа"
 
@@ -267,8 +255,6 @@ msgid "Permissions"
 msgstr "Привилегии"
 
 #: frontend/templates/statistics.html:39
-#, fuzzy
-#| msgid "Users"
 msgid "Total Users"
 msgstr "Всего пользователей"
 
@@ -281,8 +267,6 @@ msgid "Total Females"
 msgstr "Всего женщин"
 
 #: frontend/templates/statistics.html:54
-#, fuzzy
-#| msgid "Documents"
 msgid "Total Documents"
 msgstr "Всего документов"
 
@@ -299,8 +283,6 @@ msgid "Rejected documents"
 msgstr "Отвергнутых документы"
 
 #: frontend/templates/statistics.html:131
-#, fuzzy
-#| msgid "Activity"
 msgid "Recent Activity"
 msgstr "Активность"
 
@@ -317,14 +299,10 @@ msgid "Last took on revision documents"
 msgstr "Последний взятые на доработку документы"
 
 #: frontend/templates/statistics.html:201
-#, fuzzy
-#| msgid "Documents"
 msgid "No took documents"
 msgstr "Нет документов"
 
 #: frontend/templates/top_menu.html:32
-#, fuzzy
-#| msgid "View profile"
 msgid "Profile"
 msgstr "Профиль"
 
@@ -341,8 +319,6 @@ msgid "Email"
 msgstr "Email"
 
 #: frontend/templates/users/list.html:24
-#, fuzzy
-#| msgid "Activity"
 msgid "Active"
 msgstr "Активный"
 
@@ -351,38 +327,26 @@ msgid "View profile"
 msgstr "Просмотреть профиль"
 
 #: frontend/templates/users/profile.html:24
-#, fuzzy
-#| msgid "View profile"
 msgid "User profile"
 msgstr "Профиль пользователя"
 
 #: frontend/templates/users/profile.html:74
-#, fuzzy
-#| msgid "View profile"
 msgid "Edit Profile"
 msgstr "Редактировать профиль"
 
 #: frontend/templates/users/profile.html:103
-#, fuzzy
-#| msgid "Activity"
 msgid "Recent activity"
 msgstr "Недавняя активность"
 
 #: frontend/templates/users/profile.html:108
-#, fuzzy
-#| msgid "Documents"
 msgid "Documents worked on"
 msgstr "Документы, над которыми ратает/работал"
 
 #: frontend/templates/users/profile.html:122
-#, fuzzy
-#| msgid "Documents"
 msgid "No documents"
 msgstr "Нет документов"
 
 #: frontend/templates/users/profile.html:128
-#, fuzzy
-#| msgid "Documents"
 msgid "Document name"
 msgstr "Имя документа"
 
