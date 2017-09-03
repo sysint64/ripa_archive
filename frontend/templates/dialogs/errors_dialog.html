@@ -1,11 +1,13 @@
+{% load i18n %}
+
 <div class="dialog" id="error-dialog">
     <div class="inner">
 {#        <button class="close-dialog float-close"><i class="fa fa-times-thin"></i></button>#}
-        <h3>Error</h3>
+        <h3>{% trans "Error" %}</h3>
         <div class="content error">
-            An error occurred
+            {% trans "An error occurred" %}
         </div>
-        <button class="close-dialog primary">Close</button>
+        <button class="close-dialog primary">{% trans "Close" %}</button>
         <div class="clearfix"></div>
     </div>
 </div>

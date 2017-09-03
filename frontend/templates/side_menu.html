@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load permissions %}
+{% load i18n %}
 
 <div class="left_col scroll-view">
     <div class="clearfix"></div>
@@ -12,7 +13,7 @@
                 {% if statistics_can_read %}
                     <li{% if active_url_name == "statistics" %} class="active"{% endif %}>
                         <a href="{% url "statistics" %}">
-                            <i class="fa fa-bar-chart-o"></i> Statistics
+                            <i class="fa fa-bar-chart-o"></i> {% trans "Statistics" %}
                         </a>
                     </li>
                 {% endif %}
@@ -22,13 +23,13 @@
                 {% if documents_can_read %}
                     <li{% if active_url_name == "documents" %} class="active"{% endif %}>
                         <a href="{% url "documents:index" %}">
-                            <i class="fa fa-files-o"></i> Documents
+                            <i class="fa fa-files-o"></i> {% trans "Documents" %}
                         </a>
                     </li>
 
                     <li{% if active_url_name == "archive" %} class="active"{% endif %}>
                         <a href="{% url "documents:archive" %}">
-                            <i class="fa fa-archive"></i> Archive
+                            <i class="fa fa-archive"></i> {% trans "Archive" %}
                         </a>
                     </li>
                 {% endif %}
@@ -41,7 +42,7 @@
                 {% if users_can_read_profile or users_can_edit or users_can_delete or users_can_create %}
                     <li{% if active_url_name == "users" %} class="active"{% endif %}>
                         <a href="{% url "accounts:index" %}">
-                            <i class="fa fa-users"></i> Users
+                            <i class="fa fa-users"></i> {% trans "Users" %}
                         </a>
                     </li>
                 {% endif %}
@@ -53,7 +54,7 @@
                 {% if groups_can_create or groups_can_edit or groups_can_delete  %}
                     <li{% if active_url_name == "permissions" %} class="active"{% endif %}>
                         <a href="{% url "permissions:index" %}">
-                            <i class="fa fa-key"></i> Permissions
+                            <i class="fa fa-key"></i> {% trans "Permissions" %}
                         </a>
                     </li>
                 {% endif %}
@@ -63,7 +64,7 @@
                 {% if activity_can_read %}
                     <li{% if active_url_name == "activity" %} class="active"{% endif %}>
                         <a href="{% url "activity" %}">
-                            <i class="fa fa-history"></i> Activity
+                            <i class="fa fa-history"></i> {% trans "Activity" %}
                         </a>
                     </li>
                 {% endif %}

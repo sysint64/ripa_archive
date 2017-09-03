@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block styles %}
     {{ block.super }}
@@ -7,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Notifications</h3>
+    <h3>{% trans "Notifications" %}</h3>
     {% for notification in notifications %}
         <a href="{{ notification.permalink }}">
             <div class="notification {% if notification.is_read %}is-read{% endif %}">
@@ -21,12 +22,12 @@
                 <div class="content">{{ notification.text|linebreaksbr }}</div>
                 {% if notification.detail != "" %}
                     <div class="details">
-                        <b>Details:</b> {{ notification.detail|linebreaksbr }}
+                        <b>{% trans "Details" %}:</b> {{ notification.detail|linebreaksbr }}
                     </div>
                 {% endif %}
             </div>
         </a>
     {% empty %}
-        No new notifications
+        {% trans "No new notifications" %}
     {% endfor %}
 {% endblock %}

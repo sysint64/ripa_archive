@@ -1,7 +1,9 @@
 {% extends "base.html" %}
+
 {% load staticfiles %}
 {% load thumbnail %}
 {% load permissions %}
+{% load i18n %}
 
 {% block styles %}
     {{ block.super }}
@@ -31,10 +33,10 @@
 {% block content %}
     <a href="{{ up_action_url }}{% if archive %}!archive/{% endif %}" class="go-back">
         <i class="fa fa-long-arrow-up"></i>
-        Go to parent folder
+        {% trans "Go to parent folder" %}
     </a>
 
-    <h3>Document detail:
+    <h3>{% trans "Document details" %}:
         <small>{% include "documents_browser/document_breadcrumbs.html" %}</small>
     </h3>
 
@@ -61,20 +63,20 @@
             <div class="col-md-9 col-sm-9 col-xs-12">
                 {% if documents_can_take_document_for_revision or documents_can_review %}
                     {% if document.is_under_edition and remarks.count > 0 %}
-                        <h4>Remarks</h4>
+                        <h4>{% trans "Remarks" %}</h4>
                         {% include "documents_browser/single/remarks.html" %}
                     {% endif %}
                 {% endif %}
 
                 {% if activity_can_read %}
-                    <h4>Activity</h4>
+                    <h4>{% trans "Activity" %}</h4>
                     {% include "activity_items.html" with show_revert_button=True %}
                 {% endif %}
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12">
                 <section class="panel">
                     <div class="x_title">
-                        <h2>Details</h2>
+                        <h2>{% trans "Details" %}</h2>
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-body">

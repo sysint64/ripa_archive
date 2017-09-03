@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load staticfiles %}
+{% load i18n %}
 
 {% block styles %}
     {{ block.super }}
@@ -35,27 +36,27 @@
 {% block content %}
     <div class="row tile_count">
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
+            <span class="count_top"><i class="fa fa-user"></i> {% trans "Total Users" %}</span>
             <div class="count">{{ total_users }}</div>
             {#            <span class="count_bottom"><i class="green">4% </i> From last Week</span>#}
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-user"></i> Total Males</span>
+            <span class="count_top"><i class="fa fa-user"></i> {% trans "Total Males" %}</span>
             <div class="count">{{ total_males }}</div>
             {#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-user"></i> Total Females</span>
+            <span class="count_top"><i class="fa fa-user"></i> {% trans "Total Females" %}</span>
             <div class="count">{{ total_females }}</div>
             {#            <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span>#}
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-file-o"></i> Total Documents</span>
+            <span class="count_top"><i class="fa fa-file-o"></i> {% trans "Total Documents" %}</span>
             <div class="count">{{ total_documents }}</div>
             {#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-file-o"></i> Total Finished documents</span>
+            <span class="count_top"><i class="fa fa-file-o"></i> {% trans "Total Finished documents" %}</span>
             <div class="count">{{ total_finished_documents }}</div>
             {#            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>#}
         </div>
@@ -66,7 +67,7 @@
             <div class="dashboard_graph">
                 <div class="row x_title">
                     <div class="col-md-6">
-                        <h3>Activities</h3>
+                        <h3>{% trans "Activity" %}</h3>
                     </div>
                     <div class="col-md-6">
                         <div id="reportrange" class="pull-right"
@@ -95,7 +96,7 @@
                 <div class="col-md-3 col-sm-3 col-xs-12 bg-white">
                     <div class="col-md-12 col-sm-12 col-xs-6">
                         <div>
-                            <p>Accepted documents</p>
+                            <p>{% trans "Accepted documents" %}</p>
                             <div class="">
                                 <div class="progress progress_sm" style="width: 76%;">
                                     <div class="progress-bar bg-green" role="progressbar" style="width: {{ accepted_documents_percent }}%"></div>
@@ -103,7 +104,7 @@
                             </div>
                         </div>
                         <div>
-                            <p>Rejected documents</p>
+                            <p>{% trans "Rejected documents" %}</p>
                             <div class="">
                                 <div class="progress progress_sm" style="width: 76%;">
                                     <div class="progress-bar bg-green" role="progressbar" style="width: {{ rejected_documents_percent }}%; background: #f78f9b !important; border-color: #de5162 !important;"></div>
@@ -127,7 +128,7 @@
             <div class="dashboard_graph">
                 <div class="row x_title">
                     <div class="col-md-12">
-                        <h3>Recent Activity</h3>
+                        <h3>{% trans "Recent Activity" %}</h3>
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -141,7 +142,7 @@
             <div class="dashboard_graph">
                 <div class="row x_title">
                     <div class="col-md-12">
-                        <h3>Last accepted documents</h3>
+                        <h3>{% trans "Last accepted documents" %}</h3>
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -154,20 +155,20 @@
                                 </div>
                             </a>
                             <div>
-                                <b>Editor:</b>
+                                <b>{% trans "Editor" %}:</b>
                                 <a href="{{ document.accepted_edit_meta.editor.permalink }}">
                                     {{ document.accepted_edit_meta.editor }}
                                 </a>
                             </div>
                             <div>
-                                <b>Accepted by:</b>
+                                <b>{% trans "Accepted by" %}:</b>
                                 <a href="{{ document.accepted_edit_meta.closed_by.permalink }}">
                                     {{ document.accepted_edit_meta.closed_by }}
                                 </a>
                             </div>
                         </div>
                     {% empty %}
-                        No accepted documents
+                        {% trans "No accepted documents" %}
                     {% endfor %}
                 </div>
                 <div class="clearfix"></div>
@@ -177,7 +178,7 @@
             <div class="dashboard_graph">
                 <div class="row x_title">
                     <div class="col-md-12">
-                        <h3>Last took on revision documents</h3>
+                        <h3>{% trans "Last took on revision documents" %}</h3>
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -190,14 +191,14 @@
                                 </div>
                             </a>
                             <div>
-                                <b>Editor:</b>
+                                <b>{% trans "Editor" %}:</b>
                                 <a href="{{ document.current_edit_meta.editor.permalink }}">
                                     {{ document.current_edit_meta.editor }}
                                 </a>
                             </div>
                         </div>
                     {% empty %}
-                        No took documents
+                        {% trans "No took documents" %}
                     {% endfor %}
                 </div>
                 <div class="clearfix"></div>

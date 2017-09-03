@@ -1,6 +1,7 @@
 {% load thumbnail %}
 {% load staticfiles %}
 {% load permissions %}
+{% load i18n %}
 
 {% if users_activity.count > 0 %}
     <ul class="messages">
@@ -50,7 +51,7 @@
                             <li>
                                 <a href="" class="revert-document"
                                    data-activity-id="{{ activity.pk }}">
-                                    Revert <i class="fa fa-undo"></i>
+                                    {% trans "Revert" %} <i class="fa fa-undo"></i>
                                 </a>
                             </li>
                         </ul>
@@ -60,7 +61,7 @@
                     {% if activity.document_data is not None %}
                         <p class="url">
                             <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                            Document version:
+                            {% trans "Document version" %}:
                             <a href="{{ activity.document_data.permalink }}">
                                 <i class="fa fa-paperclip"></i>
                                 {{ activity.document_data.filename }}
@@ -81,11 +82,11 @@
 
                     {% if activity.document_edit_meta.closed_by is not None and activity.document_edit_meta.is_accepted %}
                         <div class="accepted_by">
-                            Accepted by: <a href="{{ activity.document_edit_meta.closed_by.permalink }}">{{ activity.document_edit_meta.closed_by }}</a>
+                            {% trans "Accepted by" %}: <a href="{{ activity.document_edit_meta.closed_by.permalink }}">{{ activity.document_edit_meta.closed_by }}</a>
                         </div>
                     {% elif activity.document_edit_meta.closed_by is not None and activity.document_edit_meta.is_rejected %}
                         <div class="accepted_by">
-                            Rejected by: <a href="{{ activity.document_edit_meta.closed_by.permalink }}">{{ activity.document_edit_meta.closed_by }}</a>
+                            {% trans "Rejected by" %}: <a href="{{ activity.document_edit_meta.closed_by.permalink }}">{{ activity.document_edit_meta.closed_by }}</a>
                         </div>
                     {% endif %}
                 </div>
@@ -93,5 +94,5 @@
         {% endfor %}
     </ul>
 {% elif show_empty_text %}
-    No users activity
+    {% trans "No users activity" %}
 {% endif %}

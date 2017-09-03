@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load thumbnail %}
+{% load i18n %}
 
 <ul class="messages">
     {% for remark in remarks %}
@@ -30,7 +31,7 @@
                                 <li>
                                     <a href="#" class="mark-as-finished"
                                        data-remark-id="{{ remark.pk }}">
-                                        Mark as finished <i class="fa fa-check"></i>
+                                        {% trans "Mark as finished" %} <i class="fa fa-check"></i>
                                     </a>
                                 </li>
                             {% endif %}
@@ -41,7 +42,7 @@
                                 <li>
                                     <a href="#" class="accept-remark"
                                        data-remark-id="{{ remark.pk }}">
-                                        Accept <i class="fa fa-check"></i>
+                                        {% trans "Accept" %} <i class="fa fa-check"></i>
                                     </a>
                                 </li>
 
@@ -50,7 +51,7 @@
                                         <a href="!action:write-remark/?reject_remark_id={{ remark.pk }}"
                                            class="reject-remark"
                                         >
-                                            Reject <i class="fa fa-times"></i>
+                                            {% trans "Reject" %} <i class="fa fa-times"></i>
                                         </a>
                                     </li>
                                 {% endif %}

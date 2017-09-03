@@ -11,3 +11,4 @@ src/ripa_archive/settings/local.py
 __pycache__/
 gentelella/
 frontend/static/vendors/
+*.mo

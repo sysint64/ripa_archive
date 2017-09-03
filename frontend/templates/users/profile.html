@@ -3,6 +3,7 @@
 {% load thumbnail %}
 {% load staticfiles %}
 {% load humanize %}
+{% load i18n %}
 
 {% block styles %}
     {{ block.super }}
@@ -20,16 +21,11 @@
 
 
 {% block content %}
-    <h3>User profile</h3>
+    <h3>{% trans "User profile" %}</h3>
 
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
-            <div class="x_title">
-                <h2>User Report
-                    <small>Activity report</small>
-                </h2>
-                <div class="clearfix"></div>
-            </div>
+            <br>
             <div class="x_content">
                 <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
                     <div class="profile_img">
@@ -75,7 +71,7 @@
 
                     <a class="btn btn-success" href="!action:update/">
                         <i class="fa fa-edit m-right-xs"></i>
-                        Edit Profile
+                        {% trans "Edit Profile" %}
                     </a>
                     <br>
                 </div>
@@ -104,12 +100,12 @@
                         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
                             <li role="presentation" class="active">
                                 <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">
-                                    Recent activity
+                                    {% trans "Recent activity" %}
                                 </a>
                             </li>
                             <li role="presentation" class="">
                                 <a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">
-                                    Documents worked on
+                                    {% trans "Documents worked on" %}
                                 </a>
                             </li>
                         </ul>
@@ -123,15 +119,15 @@
 
                                 <!-- start user projects -->
                                 {% if worked_on_documents_edit_metas.count == 0 %}
-                                    No documents
+                                    {% trans "No documents" %}
                                 {% else %}
                                     <table class="data table table-striped no-margin">
                                         <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Project name</th>
-                                            <th>Date and time</th>
-                                            <th class="hidden-phone">Time spent</th>
+                                            <th>{% trans "Document name" %}</th>
+                                            <th>{% trans "Date and time" %}</th>
+                                            <th class="hidden-phone">{% trans "Time spent" %}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -146,7 +142,7 @@
                                                 <td>{{ document_edit_meta.start_datetime|naturaltime }}</td>
                                                 <td class="hidden-phone">
                                                     {% if document_edit_meta.end_datetime is None %}
-                                                        In progress
+                                                        {% trans "In progress" %}
                                                     {% else %}
                                                         {{ document_edit_meta.start_datetime|timesince:document_edit_meta.end_datetime }}
                                                     {% endif %}

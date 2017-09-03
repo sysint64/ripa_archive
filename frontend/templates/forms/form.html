@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block styles %}
     {{ block.super }}
@@ -26,7 +27,7 @@
 {% block content %}
     <a href="{{ up_action_url }}" class="go-back">
         <i class="fa fa-long-arrow-left"></i>
-        Go back
+        {% trans "Go back" %}
     </a>
     <h3>{{ form_title }}:
         <small>{% include "documents_browser/folder_breadcrumbs.html" %}</small>
@@ -51,7 +52,7 @@
             {% block form_content %}
                 <div class="block">
                     <div class="header">
-                        New item
+                        {% trans "New item" %}
                     </div>
                     <div class="form-wrapper">
                         {% for field, field_meta in form %}

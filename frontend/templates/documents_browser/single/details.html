@@ -1,6 +1,8 @@
+{% load i18n %}
+
 {% if document.is_under_edition %}
     <div class="project_detail">
-        <p class="title">Editor</p>
+        <p class="title">{% trans "Editor" %}</p>
         <p>
             <a href="{{ document.current_edit_meta.editor.permalink }}">
                 <i class="fa fa-user"></i>
@@ -11,18 +13,18 @@
     </div>
 
     <div class="project_detail">
-        <p class="title">Start edition datetime</p>
+        <p class="title">{% trans "Start edition datetime" %}</p>
         <p><i class="fa fa-clock-o"></i> {{ document.current_edit_meta.start_datetime }}</p>
     </div>
 {% endif %}
 
 <div class="project_detail">
-    <p class="title">Status</p>
+    <p class="title">{% trans "Status" %}</p>
     <p>{{ document.status_str }}</p>
 </div>
 
 <div class="project_detail">
-    <p class="title">Last version</p>
+    <p class="title">{% trans "Last version" %}</p>
     <p>
         <a href="{{ document.last_version_file_permalink }}" target="_blank">
             <i class="fa {{ document.data.icon }}"></i>
@@ -42,25 +44,37 @@
 <div class="text-center mtop20">
     {% if not archive %}
         {% if user_is_editor and documents_can_take_document_for_revision and documents_can_edit %}
-            <a href="{{ document.upload_new_version_permalink }}" class="btn btn-sm btn-primary"
-               id="upload-new-version">Upload new version</a>
-            <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
+            <a href="{{ document.upload_new_version_permalink }}" class="btn btn-sm btn-primary" id="upload-new-version">
+                {% trans "Upload new version" %}
+            </a>
+            <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">
+                {% trans "Rename" %}
+            </a>
         {% endif %}
 
         {% if not document.is_under_edition and documents_can_take_document_for_revision and documents_can_edit %}
-            <a href="#" class="btn btn-sm btn-primary" id="take-for-revision">Take for revision</a>
-            <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">Rename</a>
+            <a href="#" class="btn btn-sm btn-primary" id="take-for-revision">
+                {% trans "Take for revision" %}
+            </a>
+            <a href="!action:rename/" class="btn btn-sm btn-primary" id="write-remark">
+                {% trans "Rename" %}
+            </a>
         {% endif %}
 
         {% if not user_is_editor and document.is_under_edition and documents_can_review %}
-            <a href="!action:write-remark/" class="btn btn-sm btn-primary" id="write-remark">Write
-                remark</a>
-            <a href="#" class="btn btn-sm btn-success" id="accept-document">Accept</a>
-            <a href="#" class="btn btn-sm btn-danger" id="reject-document">Reject</a>
+            <a href="!action:write-remark/" class="btn btn-sm btn-primary" id="write-remark">
+                {% trans "Write remark" %}
+            </a>
+            <a href="#" class="btn btn-sm btn-success" id="accept-document">
+                {% trans "Accept" %}
+            </a>
+            <a href="#" class="btn btn-sm btn-danger" id="reject-document">
+                {% trans "Reject" %}
+            </a>
         {% endif %}
     {% endif %}
 
     {% if documents_can_edit %}
-        <a href="!action:update-document-status/" class="btn btn-sm btn-primary">Update status</a>
+        <a href="!action:update-document-status/" class="btn btn-sm btn-primary">{% trans "Update status" %}</a>
     {% endif %}
 </div>

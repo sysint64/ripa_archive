@@ -1,0 +1,413 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-03 16:03+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: frontend/templates/activity.html:12
+#: frontend/templates/documents_browser/single/index.html:72
+#: frontend/templates/side_menu.html:67 frontend/templates/statistics.html:70
+msgid "Activity"
+msgstr "Активность"
+
+#: frontend/templates/activity_items.html:54
+msgid "Revert"
+msgstr "Откатить"
+
+#: frontend/templates/activity_items.html:64
+#, fuzzy
+#| msgid "Documents"
+msgid "Document version"
+msgstr "Вермия документа"
+
+#: frontend/templates/activity_items.html:85
+#: frontend/templates/statistics.html:164
+msgid "Accepted by"
+msgstr "Принял"
+
+#: frontend/templates/activity_items.html:89
+#, fuzzy
+#| msgid "Accepted by"
+msgid "Rejected by"
+msgstr "Отверг"
+
+#: frontend/templates/activity_items.html:97
+msgid "No users activity"
+msgstr "Нет активности"
+
+#: frontend/templates/dialogs/errors_dialog.html:6
+msgid "Error"
+msgstr "Ошибка"
+
+#: frontend/templates/dialogs/errors_dialog.html:8
+msgid "An error occurred"
+msgstr "Возникла ошибка"
+
+#: frontend/templates/dialogs/errors_dialog.html:10
+#: frontend/templates/dialogs/success_dialog.html:9
+msgid "Close"
+msgstr "Закрыть"
+
+#: frontend/templates/dialogs/success_dialog.html:5
+#: frontend/templates/dialogs/success_dialog.html:7
+msgid "Success"
+msgstr "Успех"
+
+#: frontend/templates/dialogs/yes_no_dialog.html:6
+msgid "Are you sure?"
+msgstr "Вы уверены?"
+
+#: frontend/templates/dialogs/yes_no_dialog.html:10
+msgid "Yes"
+msgstr "Да"
+
+#: frontend/templates/dialogs/yes_no_dialog.html:11
+msgid "No"
+msgstr "Нет"
+
+#: frontend/templates/documents_browser/list.html:46
+#: frontend/templates/documents_browser/single/index.html:36
+msgid "Go to parent folder"
+msgstr "Вернуться в родительской директории"
+
+#: frontend/templates/documents_browser/list.html:49
+#: frontend/templates/side_menu.html:26
+msgid "Documents"
+msgstr "Документы"
+
+#: frontend/templates/documents_browser/list.html:52
+msgid "Folder is empty"
+msgstr "Папка пуста"
+
+#: frontend/templates/documents_browser/list.html:58
+#: frontend/templates/module_list.html:80
+msgid "Name"
+msgstr "Имя"
+
+#: frontend/templates/documents_browser/list.html:59
+#: frontend/templates/documents_browser/single/details.html:22
+#: frontend/templates/search/results/document.html:10
+#, fuzzy
+#| msgid "Statistics"
+msgid "Status"
+msgstr "Статус"
+
+#: frontend/templates/documents_browser/list.html:60
+msgid "Datetime"
+msgstr "Дата и время"
+
+#: frontend/templates/documents_browser/single/details.html:5
+#: frontend/templates/statistics.html:158
+#: frontend/templates/statistics.html:194
+#, fuzzy
+#| msgid "Edit "
+msgid "Editor"
+msgstr "Редактор"
+
+#: frontend/templates/documents_browser/single/details.html:16
+msgid "Start edition datetime"
+msgstr "Время начала редактирования"
+
+#: frontend/templates/documents_browser/single/details.html:27
+msgid "Last version"
+msgstr "Последняя версия"
+
+#: frontend/templates/documents_browser/single/details.html:48
+msgid "Upload new version"
+msgstr "Загрузить новую версию"
+
+#: frontend/templates/documents_browser/single/details.html:51
+#: frontend/templates/documents_browser/single/details.html:60
+msgid "Rename"
+msgstr "Переименовать"
+
+#: frontend/templates/documents_browser/single/details.html:57
+msgid "Take for revision"
+msgstr "Взять на доработку"
+
+#: frontend/templates/documents_browser/single/details.html:66
+msgid "Write remark"
+msgstr "Написать замечание"
+
+#: frontend/templates/documents_browser/single/details.html:69
+#: frontend/templates/documents_browser/single/remarks.html:45
+#, fuzzy
+#| msgid "Accepted by"
+msgid "Accept"
+msgstr "Принять"
+
+#: frontend/templates/documents_browser/single/details.html:72
+#: frontend/templates/documents_browser/single/remarks.html:54
+msgid "Reject"
+msgstr "Отвергнуть"
+
+#: frontend/templates/documents_browser/single/details.html:78
+msgid "Update status"
+msgstr "Обновить статус"
+
+#: frontend/templates/documents_browser/single/index.html:39
+#, fuzzy
+#| msgid "Documents"
+msgid "Document details"
+msgstr "Детали документа"
+
+#: frontend/templates/documents_browser/single/index.html:66
+msgid "Remarks"
+msgstr "Замечания"
+
+#: frontend/templates/documents_browser/single/index.html:79
+#: frontend/templates/notifications.html:25
+msgid "Details"
+msgstr "Детали"
+
+#: frontend/templates/documents_browser/single/remarks.html:34
+msgid "Mark as finished"
+msgstr "Отметить как выполненную"
+
+#: frontend/templates/forms/form.html:30
+#: frontend/templates/forms/multi-form.html:34
+#: frontend/templates/search/index.html:13
+msgid "Go back"
+msgstr "Вернуться назад"
+
+#: frontend/templates/forms/form.html:55
+#: frontend/templates/forms/multi-form.html:66
+msgid "New item"
+msgstr "Новый"
+
+#: frontend/templates/forms/multi-form-permissions.html:43
+msgid "Add custom permission"
+msgstr "Добавить пользовательские привилегии"
+
+#: frontend/templates/login.html:31
+msgid "Login Form"
+msgstr "Форма входа"
+
+#: frontend/templates/login.html:41
+msgid "Lost your password?"
+msgstr "Потеряли свой пароль?"
+
+#: frontend/templates/login.html:56
+msgid "All Rights Reserved. Ripa Archive!"
+msgstr "Все права зарезервированы. Ripa Archive!"
+
+#: frontend/templates/module_list.html:41
+msgid "Edit "
+msgstr "Редактировать "
+
+#: frontend/templates/module_list.html:52
+msgid "Delete "
+msgstr "Удалить "
+
+#: frontend/templates/module_list.html:63
+msgid "Add "
+msgstr "Создать "
+
+#: frontend/templates/notifications.html:11
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: frontend/templates/notifications.html:31
+msgid "No new notifications"
+msgstr "Нет новых уведомлений"
+
+#: frontend/templates/search/index.html:15
+msgid "Search results for"
+msgstr "Результаты поиска для"
+
+#: frontend/templates/search/index.html:29
+#: frontend/templates/search/index.html:40
+msgid "No results found."
+msgstr "Ничего не найдено"
+
+#: frontend/templates/search/index.html:34
+msgid "Previous page"
+msgstr "Предыдущая страница"
+
+#: frontend/templates/search/index.html:36
+msgid "Next page"
+msgstr "Следующая страница"
+
+#: frontend/templates/search/results/document.html:13
+msgid "File"
+msgstr "Файл"
+
+#: frontend/templates/search_input.html:22
+#: frontend/templates/search_input.html:26
+msgid "Search"
+msgstr "Поиск"
+
+#: frontend/templates/side_menu.html:16
+msgid "Statistics"
+msgstr "Статистика"
+
+#: frontend/templates/side_menu.html:32
+msgid "Archive"
+msgstr "Архив"
+
+#: frontend/templates/side_menu.html:45
+msgid "Users"
+msgstr "Пользователи"
+
+#: frontend/templates/side_menu.html:57
+msgid "Permissions"
+msgstr "Привилегии"
+
+#: frontend/templates/statistics.html:39
+#, fuzzy
+#| msgid "Users"
+msgid "Total Users"
+msgstr "Всего пользователей"
+
+#: frontend/templates/statistics.html:44
+msgid "Total Males"
+msgstr "Всего мужчин"
+
+#: frontend/templates/statistics.html:49
+msgid "Total Females"
+msgstr "Всего женщин"
+
+#: frontend/templates/statistics.html:54
+#, fuzzy
+#| msgid "Documents"
+msgid "Total Documents"
+msgstr "Всего документов"
+
+#: frontend/templates/statistics.html:59
+msgid "Total Finished documents"
+msgstr "Всего завершенных документов"
+
+#: frontend/templates/statistics.html:99
+msgid "Accepted documents"
+msgstr "Подтвержденные документы"
+
+#: frontend/templates/statistics.html:107
+msgid "Rejected documents"
+msgstr "Отвергнутых документы"
+
+#: frontend/templates/statistics.html:131
+#, fuzzy
+#| msgid "Activity"
+msgid "Recent Activity"
+msgstr "Активность"
+
+#: frontend/templates/statistics.html:145
+msgid "Last accepted documents"
+msgstr "Последние принятые документы"
+
+#: frontend/templates/statistics.html:171
+msgid "No accepted documents"
+msgstr "Нет подтвержденных документов"
+
+#: frontend/templates/statistics.html:181
+msgid "Last took on revision documents"
+msgstr "Последний взятые на доработку документы"
+
+#: frontend/templates/statistics.html:201
+#, fuzzy
+#| msgid "Documents"
+msgid "No took documents"
+msgstr "Нет документов"
+
+#: frontend/templates/top_menu.html:32
+#, fuzzy
+#| msgid "View profile"
+msgid "Profile"
+msgstr "Профиль"
+
+#: frontend/templates/top_menu.html:37
+msgid "Log Out"
+msgstr "Выход"
+
+#: frontend/templates/users/list.html:22
+msgid "Full name"
+msgstr "Полное имя"
+
+#: frontend/templates/users/list.html:23
+msgid "Email"
+msgstr "Email"
+
+#: frontend/templates/users/list.html:24
+#, fuzzy
+#| msgid "Activity"
+msgid "Active"
+msgstr "Активный"
+
+#: frontend/templates/users/list.html:38
+msgid "View profile"
+msgstr "Просмотреть профиль"
+
+#: frontend/templates/users/profile.html:24
+#, fuzzy
+#| msgid "View profile"
+msgid "User profile"
+msgstr "Профиль пользователя"
+
+#: frontend/templates/users/profile.html:74
+#, fuzzy
+#| msgid "View profile"
+msgid "Edit Profile"
+msgstr "Редактировать профиль"
+
+#: frontend/templates/users/profile.html:103
+#, fuzzy
+#| msgid "Activity"
+msgid "Recent activity"
+msgstr "Недавняя активность"
+
+#: frontend/templates/users/profile.html:108
+#, fuzzy
+#| msgid "Documents"
+msgid "Documents worked on"
+msgstr "Документы, над которыми ратает/работал"
+
+#: frontend/templates/users/profile.html:122
+#, fuzzy
+#| msgid "Documents"
+msgid "No documents"
+msgstr "Нет документов"
+
+#: frontend/templates/users/profile.html:128
+#, fuzzy
+#| msgid "Documents"
+msgid "Document name"
+msgstr "Имя документа"
+
+#: frontend/templates/users/profile.html:129
+msgid "Date and time"
+msgstr "Дата и время"
+
+#: frontend/templates/users/profile.html:130
+msgid "Time spent"
+msgstr "Потрачено времени"
+
+#: frontend/templates/users/profile.html:145
+msgid "In progress"
+msgstr "В процессе"
+
+#: src/ripa_archive/accounts/models.py:53
+msgid "active"
+msgstr "активный"
+
+#: src/ripa_archive/accounts/models.py:56
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr ""
+
+#: src/ripa_archive/accounts/models.py:60
+msgid "date joined"
+msgstr ""

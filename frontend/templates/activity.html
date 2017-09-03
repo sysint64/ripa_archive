@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block styles %}
     {{ block.super }}
@@ -8,6 +9,6 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Users activity</h3>
+    <h3>{% trans "Activity" %}</h3>
     {% include "activity_items.html" with show_empty_text=True show_activity_permalink=True %}
 {% endblock %}

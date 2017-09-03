@@ -1,4 +1,5 @@
 {% load permissions %}
+{% load i18n %}
 
 {% user_has_permission "documents_can_read" as documents_can_read %}
 {% if documents_can_read %}
@@ -18,11 +19,11 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    <input type="text" class="form-control" placeholder="Search" name="q"
+                    <input type="text" class="form-control" placeholder="{% trans "Search" %}" name="q"
                            value="{{ query }}">
                 </div>
             {% else %}
-                <input type="text" class="form-control" placeholder="Search" name="q">
+                <input type="text" class="form-control" placeholder="{% trans "Search" %}" name="q">
             {% endif %}
             <input type="hidden" class="form-control" name="place" value="{{ search_place }}">
         </form>

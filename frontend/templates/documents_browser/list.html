@@ -1,7 +1,9 @@
 {% extends "base.html" %}
+
 {% load staticfiles %}
 {% load states %}
 {% load permissions %}
+{% load i18n %}
 
 {% block styles %}
     {{ block.super }}
@@ -41,21 +43,21 @@
     {% if parent_folder_url != "" %}
         <a href="{{ parent_folder_url }}" class="go-back">
             <i class="fa fa-long-arrow-up"></i>
-            Go to parent folder
+            {% trans "Go to parent folder" %}
         </a>
     {% endif %}
-    <h3>Documents: <small>{% include "documents_browser/folder_breadcrumbs.html" %}</small></h3>
+    <h3>{% trans "Documents" %}: <small>{% include "documents_browser/folder_breadcrumbs.html" %}</small></h3>
 
     {% if parent_folder.folders.all.count == 0 and parent_folder.documents.all.count == 0 %}
-        Folder is empty
+        {% trans "Folder is empty" %}
     {% else %}
         <table class="table documents-browser-table">
             <thead>
             <tr>
                 <th width="20"></th>
-                <th class="sorting {{ sorting_name_css_classes }}" data-sort-field="name">Name</th>
-                <th width="100" class="sorting {{ sorting_status_css_classes }}" data-sort-field="status">Status</th>
-                <th width="180" class="sorting {{ sorting_datetime_css_classes }}" data-sort-field="datetime">Datetime</th>
+                <th class="sorting {{ sorting_name_css_classes }}" data-sort-field="name">{% trans "Name" %}</th>
+                <th width="100" class="sorting {{ sorting_status_css_classes }}" data-sort-field="status">{% trans "Status" %}</th>
+                <th width="180" class="sorting {{ sorting_datetime_css_classes }}" data-sort-field="datetime">{% trans "Datetime" %}"</th>
             </tr>
             </thead>
 
