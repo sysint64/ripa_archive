@@ -1,3 +1,4 @@
+from celery_haystack.indexes import CelerySearchIndex
 from django.template import Context
 from django.template import loader
 from haystack import indexes
@@ -16,7 +17,7 @@ def _parent_ids(object):
     return parents
 
 
-class FolderIndex(indexes.SearchIndex, indexes.Indexable):
+class FolderIndex(CelerySearchIndex, indexes.Indexable):
     text = indexes.CharField(model_attr="name", document=True)
     suggestions = indexes.FacetCharField()
     parent_ids = indexes.MultiValueField()
@@ -36,7 +37,7 @@ class FolderIndex(indexes.SearchIndex, indexes.Indexable):
         return _parent_ids(obj)
 
 
-class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
+class DocumentIndex(CelerySearchIndex, indexes.Indexable):
     text = indexes.CharField(use_template=True, document=True)
     datetime = indexes.DateTimeField(model_attr="data__datetime")
     parent_ids = indexes.MultiValueField()

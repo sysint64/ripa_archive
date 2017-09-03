@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'compressor',
     'sorl.thumbnail',
     'haystack',
+    'celery_haystack',
 
     'ripa_archive.accounts.apps.AccountsConfig',
     'ripa_archive.documents',

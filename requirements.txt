@@ -11,3 +11,4 @@ git+https://github.com/django-haystack/django-haystack
 pysolr
 celery==4.1.0
 sorl-thumbnail==12.3
+celery-haystack
