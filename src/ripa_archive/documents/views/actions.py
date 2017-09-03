@@ -89,7 +89,7 @@ def paste(request, path=None):
                     ref={
                         "id": src_folder_id,
                         "content_type": Folder.content_type,
-                        "text": "Source folder",
+                        "text": strings.ACTIVITY_REF_SOURCE_FOLDER,
                     }
                 )
 
@@ -119,7 +119,7 @@ def paste(request, path=None):
             strings.ACTIVITY_COPY_DOCUMENT,
             ref={
                 "instance": src_document,
-                "text": "Source document",
+                "text": strings.ACTIVITY_REF_SOURCE_DOCUMENT,
             }
         )
 

@@ -2,7 +2,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from ripa_archive.accounts.models import User
-from ripa_archive.documents.models import Folder, FolderCustomPermission, Document, Status
+from ripa_archive.documents import strings
+from ripa_archive.documents.models import Folder, FolderCustomPermission, Document
 from ripa_archive.permissions import codes
 from ripa_archive.permissions.models import Permission, Group
 
@@ -14,21 +15,130 @@ class ActionsTestCase(APITestCase):
         self.folder_2 = Folder.objects.create(name="Folder 2", parent=self.root_folder)
         self.folder_3 = Folder.objects.create(name="Folder 3", parent=self.root_folder)
 
-    def test_change_folder(self):
-        input_data = {
-            "to_folder": self.folder_1.pk,
-            "folders": [self.folder_2.pk, self.folder_3.pk]
+    # def test_change_folder(self):
+    #     input_data = {
+    #         "to_folder": self.folder_1.pk,
+    #         "folders": [self.folder_2.pk, self.folder_3.pk]
+    #     }
+    #
+    #     res = self.client.post("/documents/!action:change-folder/", input_data)
+    #
+    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
+    #
+    #     self.folder_2.refresh_from_db()
+    #     self.folder_3.refresh_from_db()
+    #
+    #     self.assertEqual(self.folder_2.parent.pk, self.folder_1.pk)
+    #     self.assertEqual(self.folder_3.parent.pk, self.folder_1.pk)
+
+
+class I18NTestCase(APITestCase):
+    def test_(self):
+        # i18n_format
+        expected = {
+            "__code_string": "test {arg1}, {arg2}",
+            "arg1": "hello",
+            "arg2": "world"
         }
+        f = strings.i18n_format("test {arg1}, {arg2}", arg1="hello", arg2="world")
+        self.assertEqual(expected, f)
 
-        res = self.client.post("/documents/!action:change-folder/", input_data)
+        # _parse_string
+        self.assertEqual(strings._parse_string(f), "test hello, world")
+        self.assertEqual(strings._parse_string("Hello world"), "Hello world")
 
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        # _get_code
+        self.assertEqual(strings._get_code(f), "test {arg1}, {arg2}")
+        self.assertEqual(strings._get_code("Hello world"), "Hello world")
 
-        self.folder_2.refresh_from_db()
-        self.folder_3.refresh_from_db()
+        # _get_text
+        f = strings.i18n_format(strings.ACTIVITY_MOVE_FOLDER, new_path="", old_path="a")
+        self.assertEqual(
+            strings._get_text(f, strings.ACTIVITY_STRINGS, "en"),
+            strings.ACTIVITY_MOVE_FOLDER.format(new_path="", old_path="a")
+        )
+        self.assertEqual(
+            strings._get_text("Hello world!", strings.ACTIVITY_STRINGS, "en"),
+            "Hello world!"
+        )
+        self.assertEqual(
+            strings._get_text(f, strings.ACTIVITY_STRINGS, "ru"),
+            strings.ACTIVITY_STRINGS[strings.ACTIVITY_MOVE_FOLDER]["ru"].format(new_path="", old_path="a")
+        )
+        self.assertEqual(
+            strings._get_text("Hello world!", strings.ACTIVITY_STRINGS, "en", True),
+            None
+        )
 
-        self.assertEqual(self.folder_2.parent.pk, self.folder_1.pk)
-        self.assertEqual(self.folder_3.parent.pk, self.folder_1.pk)
+        # get_activity_text
+
+        self.assertEqual(
+            strings.get_activity_text(strings.ACTIVITY_COPY_DOCUMENT, "en"),
+            strings.ACTIVITY_COPY_DOCUMENT
+        )
+
+        self.assertEqual(
+            strings.get_activity_text(strings.ACTIVITY_COPY_DOCUMENT, "ru"),
+            strings.ACTIVITY_STRINGS[strings.ACTIVITY_COPY_DOCUMENT]["ru"]
+        )
+
+        self.assertEqual(
+            strings.get_activity_text("Hello, my name is Andrey!", "ru"),
+            "Hello, my name is Andrey!"
+        )
+
+        self.assertEqual(
+            strings.get_activity_text("Hello, my name is Andrey!", "en"),
+            "Hello, my name is Andrey!"
+        )
+
+        f = strings.i18n_format(strings.ACTIVITY_MOVE_FOLDER, new_path="test", old_path="test_old")
+        self.assertEqual(
+            strings.get_activity_text(f, "en"),
+            strings.ACTIVITY_MOVE_FOLDER.format(new_path="test", old_path="test_old")
+        )
+
+        self.assertEqual(
+            strings.get_activity_text(f, "ru"),
+            strings.ACTIVITY_STRINGS[strings.ACTIVITY_MOVE_FOLDER]["ru"].format(new_path="test", old_path="test_old")
+        )
+
+        # get_notification_text
+
+        self.assertEqual(
+            strings.get_notification_text(strings.ACTIVITY_COPY_DOCUMENT, "en"),
+            strings.ACTIVITY_COPY_DOCUMENT
+        )
+
+        self.assertEqual(
+            strings.get_notification_text(f, "en"),
+            strings.ACTIVITY_MOVE_FOLDER.format(new_path="test", old_path="test_old")
+        )
+
+        self.assertEqual(
+            strings.get_notification_text(f, "ru"),
+            strings.ACTIVITY_STRINGS[strings.ACTIVITY_MOVE_FOLDER]["ru"].format(new_path="test", old_path="test_old")
+        )
+
+        self.assertEqual(
+            strings.get_notification_text("Regular text", "ru"),
+            "Regular text"
+        )
+
+        self.assertEqual(
+            strings.get_notification_text("Regular text", "en"),
+            "Regular text"
+        )
+
+        self.assertEqual(
+            strings.get_notification_text(strings.NOTIFICATION_REMARK_ACCEPTED, "en"),
+            strings.NOTIFICATION_REMARK_ACCEPTED
+        )
+
+        self.assertEqual(
+            strings.get_notification_text(strings.NOTIFICATION_REMARK_ACCEPTED, "ru"),
+            strings.NOTIFICATION_STRINGS[strings.NOTIFICATION_REMARK_ACCEPTED]["ru"]
+        )
 
 
 class PermissionsTestCase(APITestCase):
@@ -38,7 +148,7 @@ class PermissionsTestCase(APITestCase):
         self.folder_2 = Folder.objects.create(name="Folder 2", parent=self.root_folder)
         self.folder_3 = Folder.objects.create(name="Folder 3", parent=self.root_folder)
 
-        self.status_open = Status.objects.create(name="Open", allow_delete=False)
+        self.status_open = Document.Status.OPEN
         self.document_1 = Document.objects.create(parent=self.root_folder, status=self.status_open)
         self.document_2 = Document.objects.create(parent=self.root_folder, status=self.status_open)
         self.document_3 = Document.objects.create(parent=self.folder_1, status=self.status_open)

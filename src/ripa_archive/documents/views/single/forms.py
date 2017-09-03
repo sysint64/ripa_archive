@@ -62,7 +62,8 @@ def upload_new_version(request, name, path=None):
             activity_factory.for_document(
                 request.user,
                 document,
-                strings.ACTIVITY_RENAME_DOCUMENT.format(
+                strings.i18n_format(
+                    strings.ACTIVITY_RENAME_DOCUMENT,
                     old_name=document.name,
                     new_name=form.cleaned_data["name"]
                 )
@@ -160,7 +161,8 @@ def rename_document(request, name, path=None):
             activity_factory.for_document(
                 request.user,
                 document,
-                strings.ACTIVITY_RENAME_DOCUMENT.format(
+                strings.i18n_format(
+                    strings.ACTIVITY_RENAME_DOCUMENT,
                     old_name=old_name,
                     new_name=document.name
                 )
@@ -204,7 +206,8 @@ def rename_folder(request, path=None):
             activity_factory.for_folder(
                 request.user,
                 folder,
-                strings.ACTIVITY_RENAME_FOLDER.format(
+                strings.i18n_format(
+                    strings.ACTIVITY_RENAME_FOLDER,
                     old_name=old_name,
                     new_name=form.cleaned_data["name"]
                 )

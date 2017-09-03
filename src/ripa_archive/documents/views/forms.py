@@ -74,7 +74,8 @@ class CreateFolders(BrowserMultiFormCreation):
         activity_factory.for_folder(
             self.request.user,
             folder,
-            strings.ACTIVITY_CREATE_FOLDER.format(
+            strings.i18n_format(
+                strings.ACTIVITY_CREATE_FOLDER,
                 name=folder.name,
                 path=folder.path
             )
@@ -109,7 +110,8 @@ class CreateDocuments(BrowserMultiFormCreation):
         activity_factory.for_document(
             self.request.user,
             document,
-            strings.ACTIVITY_CREATE_DOCUMENT.format(
+            strings.i18n_format(
+                strings.ACTIVITY_CREATE_DOCUMENT,
                 name=document.name,
                 path=document.path
             ),

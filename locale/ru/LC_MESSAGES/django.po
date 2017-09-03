@@ -29,7 +29,7 @@ msgstr "Откатить"
 
 #: frontend/templates/activity_items.html:64
 msgid "Document version"
-msgstr "Вермия документа"
+msgstr "Версия документа"
 
 #: frontend/templates/activity_items.html:85
 #: frontend/templates/statistics.html:164
@@ -38,7 +38,7 @@ msgstr "Принял"
 
 #: frontend/templates/activity_items.html:89
 msgid "Rejected by"
-msgstr "Отверг"
+msgstr "Отклонил"
 
 #: frontend/templates/activity_items.html:97
 msgid "No users activity"
@@ -155,7 +155,7 @@ msgstr "Принять"
 #: frontend/templates/documents_browser/single/details.html:72
 #: frontend/templates/documents_browser/single/remarks.html:54
 msgid "Reject"
-msgstr "Отвергнуть"
+msgstr "Отклонить"
 
 #: frontend/templates/documents_browser/single/details.html:78
 msgid "Update status"
@@ -307,7 +307,7 @@ msgstr "Подтвержденные документы"
 
 #: frontend/templates/statistics.html:107
 msgid "Rejected documents"
-msgstr "Отвергнутых документы"
+msgstr "Отклоненных документы"
 
 #: frontend/templates/statistics.html:131
 msgid "Recent Activity"

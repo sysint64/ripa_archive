@@ -10,12 +10,16 @@ ACTIVITY_COPY_FOLDER = "Copy folder"
 ACTIVITY_DELETE_FOLDER = "Delete folder \"Root/{path}\""
 ACTIVITY_DELETE_DOCUMENT = "Delete document \"Root/{path}\""
 
+ACTIVITY_REF_SOURCE_FOLDER = "Source folder"
+ACTIVITY_REF_SOURCE_DOCUMENT = "Source document"
+
 NOTIFICATION_REMARK_ACCEPTED = "Was accepted remark"
 NOTIFICATION_REMARK_FINISHED = "Remark was marked as \"finished\""
 NOTIFICATION_REMARK_REJECTED = "Was rejected remark"
 NOTIFICATION_REMARK_WROTE = "Was wrote remark"
 NOTIFICATION_DOCUMENT_ACCEPTED = "Was accepted new version of document"
 NOTIFICATION_DOCUMENT_REJECTED = "Was rejected new version of document"
+
 
 # Internationalization
 
@@ -55,6 +59,15 @@ ACTIVITY_STRINGS = {
     },
 }
 
+ACTIVITY_REF_STRINGS = {
+    ACTIVITY_REF_SOURCE_FOLDER: {
+        "ru": "Исходная папка"
+    },
+    ACTIVITY_REF_SOURCE_DOCUMENT: {
+        "ru": "Иходный документ"
+    }
+}
+
 NOTIFICATION_STRINGS = {
     NOTIFICATION_REMARK_ACCEPTED: {
         "ru": "Одобрено замечание"
@@ -77,15 +90,64 @@ NOTIFICATION_STRINGS = {
 }
 
 
-def get_activity_text(code, lang):
-    if lang == "en":
-        return code
+def i18n_format(str, **kwargs):
+    new_kwargs = kwargs.copy()
+    new_kwargs.update({"__code_string": str})
+    return new_kwargs
 
-    return ACTIVITY_STRINGS[code][lang]
+
+def _parse_string(string, new_format_string=None):
+    if isinstance(string, str):
+        return new_format_string if new_format_string is not None else string
+    elif isinstance(string, dict):
+        if new_format_string is not None:
+            format_string = new_format_string
+        else:
+            format_string = string["__code_string"]
+
+        kwargs = string.copy()
+        kwargs.pop("__code_string")
+
+        assert format_string is not None
+        return format_string.format(**kwargs)
+    else:
+        raise AssertionError("Unknown instance type")
+
+
+def _get_code(string):
+    if isinstance(string, str):
+        return string
+    elif isinstance(string, dict):
+        return string["__code_string"]
+    else:
+        raise AssertionError("Unknown instance type")
+
+
+def _get_text(code, strings, lang, default_none=False):
+    str_code = _get_code(code)
+    string = strings.get(str_code)
+
+    if string is None:
+        return None if default_none else str_code
+
+    if lang == "en":
+        return _parse_string(code)
+    else:
+        return _parse_string(code, string[lang])
+
+
+def get_activity_text(code, lang):
+    return _get_text(code, ACTIVITY_STRINGS, lang)
+
+
+def get_activity_ref_text(code, lang):
+    return _get_text(code, ACTIVITY_REF_STRINGS, lang)
 
 
 def get_notification_text(code, lang):
-    if lang == "en":
-        return code
+    string = _get_text(code, NOTIFICATION_STRINGS, lang, True)
 
-    return NOTIFICATION_STRINGS[code][lang]
+    if string is None:
+        return get_activity_text(code, lang)
+    else:
+        return string

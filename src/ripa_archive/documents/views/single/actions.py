@@ -137,7 +137,7 @@ def revert_document(request, name, path=None):
     activity_factory.for_document(
         request.user,
         document,
-        strings.ACTIVITY_REVERT_DOCUMENT.format(datetime=activity.datetime),
+        strings.i18n_format(strings.ACTIVITY_REVERT_DOCUMENT, datetime=activity.datetime),
         document_data=activity.document_data
     )
 
@@ -203,7 +203,8 @@ def reject_document(request, name, path=None):
     activity_factory.for_document(
         request.user,
         document,
-        strings.ACTIVITY_REVERT_DOCUMENT.format(
+        strings.i18n_format(
+            strings.ACTIVITY_REVERT_DOCUMENT,
             datetime=edit_meta.previous_document_data.datetime
         ),
         document_data=edit_meta.previous_document_data

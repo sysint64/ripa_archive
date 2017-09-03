@@ -8,19 +8,19 @@ def walk_by_followers(document, sender, create_notification_functor):
         create_notification_functor(follower)
 
 
-def create_notification_translation(notification, title, detail):
+def _create_translation(notification, title, detail):
     NotificationTranslation.objects.create(
         notification=notification,
+        language_code="en",
         title=title,
         text=get_notification_text(detail, "en"),
-        language_code="en"
     )
 
     NotificationTranslation.objects.create(
         notification=notification,
+        language_code="ru",
         title=title,
         text=get_notification_text(detail, "ru"),
-        language_code="ru"
     )
 
 
@@ -33,7 +33,7 @@ def notification_remark(user, document, remark, detail, to_followers=False):
             target_id=document.id,
             detail=remark.text
         )
-        create_notification_translation(notification, str(document), detail)
+        _create_translation(notification, str(document), detail)
 
     if to_followers:
         walk_by_followers(document, user, create_notification)
@@ -52,7 +52,7 @@ def notification_document(user, document, detail, to_followers=False):
             content_type=Document.content_type,
             target_id=document.id,
         )
-        create_notification_translation(notification, str(document), detail)
+        _create_translation(notification, str(document), detail)
 
     if to_followers:
         walk_by_followers(document, user, create_notification)

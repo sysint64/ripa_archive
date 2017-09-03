@@ -2,6 +2,7 @@ from django.db import models
 
 from ripa_archive.accounts.models import User
 from ripa_archive.documents.models import DocumentEditMeta, Remark, DocumentData, Document, Folder
+from ripa_archive.middleware import LanguageMiddleware
 from ripa_archive.notifications.models import Notification
 
 
@@ -23,13 +24,29 @@ class Activity(models.Model):
     document_edit_meta = models.ForeignKey(DocumentEditMeta, null=True)
     target_id = models.PositiveIntegerField(null=True)
     datetime = models.DateTimeField(auto_now_add=True)
-    details = models.TextField()
     ref_id = models.PositiveIntegerField(null=True)
     ref_content_type = models.CharField(blank=True, max_length=100)
-    ref_text = models.CharField(blank=True, max_length=100)
 
     objects = ActivityManager()
     _factory_objects = models.Manager()
+
+    @property
+    def ref_text(self):
+        translation = self.translations.filter(language_code=LanguageMiddleware.code).first()
+
+        if translation is None:
+            return ""
+
+        return translation.ref_text
+
+    @property
+    def details(self):
+        translation = self.translations.filter(language_code=LanguageMiddleware.code).first()
+
+        if translation is None:
+            return ""
+
+        return translation.details
 
     @property
     def target_instance(self):
@@ -62,3 +79,13 @@ class Activity(models.Model):
             return ""
         else:
             return str(self.target_instance)
+
+
+class ActivityTranslation(models.Model):
+    class Meta:
+        default_related_name = "translations"
+
+    activity = models.ForeignKey(Activity)
+    language_code = models.CharField(max_length=4)
+    ref_text = models.CharField(blank=True, max_length=100)
+    details = models.TextField(default="")

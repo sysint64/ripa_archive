@@ -22,11 +22,21 @@ class Notification(models.Model):
 
     @property
     def title(self):
-        return self.translations.get(language_code=LanguageMiddleware.code).title
+        translation = self.translations.filter(language_code=LanguageMiddleware.code).first()
+
+        if translation is None:
+            return ""
+
+        return translation.title
 
     @property
     def text(self):
-        return self.translations.get(language_code=LanguageMiddleware.code).text
+        translation = self.translations.filter(language_code=LanguageMiddleware.code).first()
+
+        if translation is None:
+            return ""
+
+        return translation.text
 
     @property
     def permalink(self):
@@ -48,6 +58,6 @@ class NotificationTranslation(models.Model):
         default_related_name = "translations"
 
     notification = models.ForeignKey(Notification)
+    language_code = models.CharField(max_length=4)
     text = models.TextField(default="")
     title = models.CharField(max_length=255, blank=True)
-    language_code = models.CharField(max_length=4)
