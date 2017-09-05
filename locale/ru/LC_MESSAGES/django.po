@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-05 16:49+0000\n"
+"POT-Creation-Date: 2017-09-05 20:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,8 +54,8 @@ msgstr "Возникла ошибка"
 
 #: frontend/templates/dialogs/errors_dialog.html:10
 #: frontend/templates/dialogs/success_dialog.html:9
-#: src/ripa_archive/documents/models.py:182
-#: src/ripa_archive/documents/models.py:190
+#: src/ripa_archive/documents/models.py:181
+#: src/ripa_archive/documents/models.py:189
 msgid "Close"
 msgstr "Закрыть"
 
@@ -97,7 +97,7 @@ msgstr "Папка пуста"
 #: src/ripa_archive/documents/forms/single.py:21
 #: src/ripa_archive/documents/forms/single.py:59
 #: src/ripa_archive/documents/forms/single.py:87
-#: src/ripa_archive/documents/models.py:105
+#: src/ripa_archive/documents/models.py:104
 #: src/ripa_archive/permissions/models.py:43
 msgid "Name"
 msgstr "Имя"
@@ -105,7 +105,7 @@ msgstr "Имя"
 #: frontend/templates/documents_browser/list.html:58
 #: frontend/templates/documents_browser/single/details.html:22
 #: frontend/templates/search/results/document.html:10
-#: src/ripa_archive/documents/models.py:205
+#: src/ripa_archive/documents/models.py:204
 msgid "Status"
 msgstr "Статус"
 
@@ -242,7 +242,7 @@ msgstr "Следующая страница"
 
 #: frontend/templates/search/results/document.html:13
 #: src/ripa_archive/documents/forms/single.py:30
-#: src/ripa_archive/documents/models.py:304
+#: src/ripa_archive/documents/models.py:303
 msgid "File"
 msgstr "Файл"
 
@@ -326,7 +326,7 @@ msgstr "Профиль"
 msgid "Log Out"
 msgstr "Выход"
 
-#: frontend/templates/top_menu.html:44 src/ripa_archive/views_settings.py:17
+#: frontend/templates/top_menu.html:44 src/ripa_archive/views_settings.py:23
 msgid "Settings"
 msgstr "Настройки"
 
@@ -379,7 +379,7 @@ msgid "Time spent"
 msgstr "Потрачено времени"
 
 #: frontend/templates/users/profile.html:145
-#: src/ripa_archive/documents/models.py:187
+#: src/ripa_archive/documents/models.py:186
 msgid "In progress"
 msgstr "В процессе"
 
@@ -527,28 +527,28 @@ msgstr "Новая верси документа"
 msgid "Remark"
 msgstr "Замечание"
 
-#: src/ripa_archive/documents/models.py:15
+#: src/ripa_archive/documents/models.py:14
 #, python-format
 msgid "Folder with name \"%s\" already exist in this folder"
 msgstr "Папка с именем \"%s\" уже существует в этой папке"
 
-#: src/ripa_archive/documents/models.py:60
+#: src/ripa_archive/documents/models.py:59
 #, python-format
 msgid "Document with name \"%s\" already exist in this folder"
 msgstr "Документ с именем \"%s\" уже существует в это папке"
 
-#: src/ripa_archive/documents/models.py:178
-#: src/ripa_archive/documents/models.py:186
+#: src/ripa_archive/documents/models.py:177
+#: src/ripa_archive/documents/models.py:185
 msgid "Open"
 msgstr "Открыт"
 
-#: src/ripa_archive/documents/models.py:180
-#: src/ripa_archive/documents/models.py:188
+#: src/ripa_archive/documents/models.py:179
+#: src/ripa_archive/documents/models.py:187
 msgid "Project"
 msgstr "Проект"
 
-#: src/ripa_archive/documents/models.py:181
-#: src/ripa_archive/documents/models.py:189
+#: src/ripa_archive/documents/models.py:180
+#: src/ripa_archive/documents/models.py:188
 msgid "Final"
 msgstr "Финальный"
 
@@ -592,23 +592,23 @@ msgstr "Папка(и)"
 msgid "Document(s)"
 msgstr "Документ(ы)"
 
-#: src/ripa_archive/documents/views/single/actions.py:33
+#: src/ripa_archive/documents/views/single/actions.py:31
 msgid "Already under edition"
 msgstr "Документ уже редатируется"
 
-#: src/ripa_archive/documents/views/single/actions.py:46
+#: src/ripa_archive/documents/views/single/actions.py:44
 msgid "Successfully took"
 msgstr "Успешно взят на доработку"
 
-#: src/ripa_archive/documents/views/single/actions.py:77
+#: src/ripa_archive/documents/views/single/actions.py:75
 msgid "Already accepted"
 msgstr "Уже подтвержден"
 
-#: src/ripa_archive/documents/views/single/actions.py:129
+#: src/ripa_archive/documents/views/single/actions.py:127
 msgid "Activity does not provide data"
 msgstr "Нет данных для отката"
 
-#: src/ripa_archive/documents/views/single/actions.py:132
+#: src/ripa_archive/documents/views/single/actions.py:130
 msgid "Already this version"
 msgstr "Уже эта версия документа"
 
@@ -649,9 +649,13 @@ msgstr "Обновить статус документа"
 msgid "Successfully updated"
 msgstr "Успешно обновлено"
 
-#: src/ripa_archive/forms.py:15
+#: src/ripa_archive/forms.py:17
 msgid "Language"
 msgstr "Язык"
+
+#: src/ripa_archive/forms.py:26
+msgid "Timezone"
+msgstr "Временная зона"
 
 #: src/ripa_archive/permissions/forms.py:15
 msgid "Inherit from"
@@ -693,6 +697,6 @@ msgstr "Создать группу"
 msgid "Update group"
 msgstr "Обновить группу"
 
-#: src/ripa_archive/views_settings.py:19
+#: src/ripa_archive/views_settings.py:25
 msgid "Save"
 msgstr "Сохранить"
