@@ -15,9 +15,7 @@ from ripa_archive.activity import activity_factory
 from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.models import Document, DocumentEditMeta, Remark
-from ripa_archive.documents.views.main import get_folder_or_404
 from ripa_archive.documents.views.single.main import get_document
-from ripa_archive.notifications.models import Notification
 from ripa_archive.notifications import notifications_factory
 from ripa_archive.permissions import codes
 from ripa_archive.permissions.decorators import require_permissions

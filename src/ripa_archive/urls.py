@@ -3,9 +3,12 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.shortcuts import redirect
 
+from forms.ajax import CompositeAjaxFormValidator
 from ripa_archive import views, views_test
 from ripa_archive.activity.views import users_activity
+from ripa_archive.forms import SettingsForm
 from ripa_archive.notifications.views import notifications
+from ripa_archive.views_settings import settings_view
 from ripa_archive.views_statistics import statistics
 
 
@@ -21,8 +24,11 @@ urlpatterns = [
     url(r'^notifications/$', notifications, name="notifications"),
     url(r'^activity/$', users_activity, name="activity"),
     url(r'^statistics/$', statistics, name="statistics"),
-    url(r'^ru/$', views_test.set_ru_lang),
-    url(r'^en/$', views_test.set_en_lang),
+    url(r'^settings/$', settings_view, name="settings"),
+
+    url(r'^!validator:settings/$',
+        CompositeAjaxFormValidator.as_view(forms=[SettingsForm]),
+        name="validator-settings"),
 ]
 
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-03 20:11+0000\n"
+"POT-Creation-Date: 2017-09-05 16:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -215,7 +215,7 @@ msgstr "Потеряли свой пароль?"
 msgid "All Rights Reserved. Ripa Archive!"
 msgstr "Все права зарезервированы. Ripa Archive!"
 
-#: frontend/templates/notifications.html:11
+#: frontend/templates/notifications.html:11 frontend/templates/top_menu.html:69
 msgid "Notifications"
 msgstr "Уведомления"
 
@@ -325,6 +325,10 @@ msgstr "Профиль"
 #: frontend/templates/top_menu.html:37
 msgid "Log Out"
 msgstr "Выход"
+
+#: frontend/templates/top_menu.html:44 src/ripa_archive/views_settings.py:17
+msgid "Settings"
+msgstr "Настройки"
 
 #: frontend/templates/users/list.html:22
 msgid "Full name"
@@ -645,6 +649,10 @@ msgstr "Обновить статус документа"
 msgid "Successfully updated"
 msgstr "Успешно обновлено"
 
+#: src/ripa_archive/forms.py:15
+msgid "Language"
+msgstr "Язык"
+
 #: src/ripa_archive/permissions/forms.py:15
 msgid "Inherit from"
 msgstr "Наследовать от"
@@ -684,3 +692,7 @@ msgstr "Создать группу"
 #: src/ripa_archive/permissions/views.py:90
 msgid "Update group"
 msgstr "Обновить группу"
+
+#: src/ripa_archive/views_settings.py:19
+msgid "Save"
+msgstr "Сохранить"
