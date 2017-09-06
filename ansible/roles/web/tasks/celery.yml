@@ -1,15 +1,4 @@
 ---
-- name: celery group
-  group:
-    name: "{{ celery_linux_group }}"
-    state: present
-
-- name: celery user
-  user:
-    name: "{{ celery_linux_user }}"
-    group: "{{ celery_linux_group }}"
-    password: "{{ celery_passwd }}"
-
 - name: celery log directory
   file: path=/var/log/celery owner={{ celery_linux_user }} group={{ celery_linux_group }} state=directory
 

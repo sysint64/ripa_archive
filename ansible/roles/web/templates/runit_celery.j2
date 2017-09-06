@@ -2,4 +2,7 @@
 
 if [ -f $PID ]; then rm $PID; fi
 
+export DJANGO_SETTINGS_MODULE="{{ DJANGO_SETTINGS_MODULE }}"
+
+cd {{ project_work_tree }}/src
 exec chpst -u {{ celery_linux_user }}:{{ celery_linux_group }} {{ project_virtualenv_dir }}/bin/celery -A {{ project_namespace }} worker -l info -f /var/log/celery/{{ env_name }}

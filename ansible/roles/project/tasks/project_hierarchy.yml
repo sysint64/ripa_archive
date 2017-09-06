@@ -29,3 +29,4 @@
     accept_hostkey: yes
   notify:
     - restart gunicorn
+    - restart celery

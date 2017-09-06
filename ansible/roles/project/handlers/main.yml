@@ -1,3 +1,6 @@
 ---
 - name: restart gunicorn
   runit: name={{ env_name }}_gunicorn state=restarted
+
+- name: restart celery
+  runit: name={{ env_name }}_gunicorn state=restarted
