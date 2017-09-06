@@ -1,0 +1,26 @@
+---
+- name: celery group
+  group:
+    name: "{{ celery_linux_group }}"
+    state: present
+
+- name: celery user
+  user:
+    name: "{{ celery_linux_user }}"
+    group: "{{ celery_linux_group }}"
+    password: "{{ celery_passwd }}"
+
+- name: celery log directory
+  file: path=/var/log/celery owner={{ celery_linux_user }} group={{ celery_linux_group }} state=directory
+
+# Runit
+- name: celery directory
+  file: path=/etc/sv/{{ env_name }}_celery state=directory
+
+- name: celery config
+  template: src=runit_celery.j2 dest=/etc/sv/{{ env_name }}_celery/run mode=0755
+  notify:
+    - restart celery
+
+- name: symlink runit celery config
+  file: src=/etc/sv/{{ env_name }}_celery dest=/etc/service/{{ env_name }}_celery state=link

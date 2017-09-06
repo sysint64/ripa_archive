@@ -22,7 +22,7 @@
 - name: create gunicorn run directory
   file: path=/var/run/gunicorn owner={{ project_linux_user }} group={{ project_linux_group }} state=directory
 
-# Gunicorn
+# Gunicorn runit
 - name: create gunicorn directory
   file: path=/etc/sv/{{ env_name }}_gunicorn state=directory
 

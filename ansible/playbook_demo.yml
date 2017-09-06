@@ -11,5 +11,5 @@
     DJANGO_SETTINGS_MODULE: "{{ project_namespace }}.settings.demo"
 
   roles:
-#    - web
+    - web
     - project
