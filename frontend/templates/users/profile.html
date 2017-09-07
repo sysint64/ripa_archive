@@ -41,29 +41,29 @@
 
                     <ul class="list-unstyled user_data">
                         <li class="m-top-xs">
-                            <i class="fa {{ user.gender_icon }} user-profile-icon"></i>
-                            {{ user.gender_str }}
+                            <i class="fa {{ profile_user.gender_icon }} user-profile-icon"></i>
+                            {{ profile_user.gender_str }}
                         </li>
 
-                        {% if user.location.strip != "" %}
+                        {% if profile_user.location.strip != "" %}
                             <li>
                                 <i class="fa fa-map-marker user-profile-icon"></i>
-                                {{ user.location }}
+                                {{ profile_user.location }}
                             </li>
                         {% endif %}
 
-                        {% if user.position.strip != "" %}
+                        {% if profile_user.position.strip != "" %}
                             <li>
                                 <i class="fa fa-briefcase user-profile-icon"></i>
-                                {{ user.position }}
+                                {{ profile_user.position }}
                             </li>
                         {% endif %}
 
-                        {% if user.web_site.strip != "" %}
+                        {% if profile_user.web_site.strip != "" %}
                             <li class="m-top-xs">
                                 <i class="fa fa-external-link user-profile-icon"></i>
-                                <a href="{{ user.web_site }}" target="_blank">
-                                    {{ user.web_site }}
+                                <a href="{{ profile_user.web_site }}" target="_blank">
+                                    {{ profile_user.web_site }}
                                 </a>
                             </li>
                         {% endif %}

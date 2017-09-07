@@ -16,7 +16,7 @@ from ripa_archive.accounts.forms import LoginForm, UserForm
 from ripa_archive.accounts.input_serializers import BulkInputSerializer
 from ripa_archive.accounts.models import User
 from ripa_archive.activity.models import Activity
-from ripa_archive.documents.models import Document, DocumentEditMeta
+from ripa_archive.documents.models import DocumentEditMeta
 from ripa_archive.permissions import codes
 from ripa_archive.permissions.decorators import require_permissions, check_permissions
 
@@ -82,7 +82,6 @@ def profile(request, user_id):
 
     context = users_base_context(request)
     context.update({
-        "items": User.objects.all(),
         "module_name": "user",
         "title": _("Users"),
         "profile_user": user,
