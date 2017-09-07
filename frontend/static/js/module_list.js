@@ -3,6 +3,8 @@ const $oneSelectedTools = $(".one-selected-tools");
 const $atLeastOneSelectedTools = $(".at-least-one-selected-tools");
 const $editTool = $("#edit-tool");
 
+var onSelectChangeHooks = [];
+
 var onSelectChange = function() {
     const $selected = $(".selected");
     const selectedCount = $selected.length;
@@ -18,6 +20,10 @@ var onSelectChange = function() {
         $oneSelectedTools.hide();
         $atLeastOneSelectedTools.show();
     }
+
+    onSelectChangeHooks.forEach(function(element, index, array) {
+        element($selected, selectedCount);
+    });
 };
 
 (function ($) {

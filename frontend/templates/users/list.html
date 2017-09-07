@@ -1,6 +1,13 @@
 {% extends "module_list.html" %}
 {% load i18n %}
 {% load permissions %}
+{% load staticfiles %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static "js/users.js" %}" charset="utf-8"></script>
+{% endblock %}
+
 
 {#{% block filter %}#}
 {#    <h3>Is active</h3>#}
@@ -34,7 +41,7 @@
     {% user_has_permission "users_can_read_profile" as users_can_read_profile %}
     {% if users_can_read_profile %}
         <li class="one-selected-tools">
-            <a href="">
+            <a href="" id="profile-link">
                 {% trans "View profile" %}
                 <i class="fa fa-user"></i>
             </a>
