@@ -34,7 +34,13 @@
 {% block table_detail %}
     <td>{{ item.get_full_name }}</td>
     <td>{{ item.email }}</td>
-    <td><i class="fa fa-check-circle"></i></td>
+    <td>
+        {% if item.is_active %}
+            <i class="fa fa-check-circle"></i>
+        {% else %}
+            <i class="fa fa-times-circle"></i>
+        {% endif %}
+    </td>
 {% endblock %}
 
 {% block one_selected_tools %}
