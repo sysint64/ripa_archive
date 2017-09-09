@@ -18,7 +18,7 @@ from request_helper import get_request_int_or_none
 
 
 def layout(request, template):
-    return render_to_response("layout/{}.html".format(template))
+    return TemplateResponse(template="layout/{}.html".format(template), request=request)
 
 
 class MultiFormView(View):

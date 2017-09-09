@@ -60,17 +60,17 @@ def upload_new_version(request, name, path=None):
             document_data=data
         )
 
-        if document.name != form.cleaned_data["name"]:
-            document.name = form.cleaned_data["name"]
-            activity_factory.for_document(
-                request.user,
-                document,
-                strings.i18n_format(
-                    strings.ACTIVITY_RENAME_DOCUMENT,
-                    old_name=document.name,
-                    new_name=form.cleaned_data["name"]
-                )
-            )
+        # if document.name != form.cleaned_data["name"]:
+        #     document.name = form.cleaned_data["name"]
+        #     activity_factory.for_document(
+        #         request.user,
+        #         document,
+        #         strings.i18n_format(
+        #             strings.ACTIVITY_RENAME_DOCUMENT,
+        #             old_name=document.name,
+        #             new_name=form.cleaned_data["name"]
+        #         )
+        #     )
 
         document.save()
         messages.success(request, _("Successfully uploaded"))

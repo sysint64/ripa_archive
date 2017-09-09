@@ -69,6 +69,14 @@ class CreateFolders(BrowserMultiFormCreation):
     permissions_form_class = FolderPermissionsCreateForm
     redirect_url_name = "create-folders"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            "submit_title": _("Create"),
+            "add_title": _("Add another folder")
+        })
+        return context
+
     def perform_save(self, form):
         folder = super().perform_save(form)
         activity_factory.for_folder(
@@ -90,6 +98,14 @@ class CreateDocuments(BrowserMultiFormCreation):
     form_class = CreateDocumentForm
     permissions_form_class = DocumentPermissionsCreateForm
     redirect_url_name = "create-documents"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            "submit_title": _("Create"),
+            "add_title": _("Add another document")
+        })
+        return context
 
     def perform_save(self, form):
         document = Document.objects.create(

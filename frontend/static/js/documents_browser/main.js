@@ -168,7 +168,7 @@ var onSelectChange = null;
                 disabled: function () { return contextMenuItemIsDisabled($parentFolderPermissions, "create_folders"); }
             },
             "create_documents": {
-                name: "Create document(s)",
+                name: _("Create document(s)"),
                 icon: "fa-file-o",
                 disabled: function () { return contextMenuItemIsDisabled($parentFolderPermissions, "create_documents"); }
             },

@@ -18,7 +18,7 @@ class UploadNewVersionForm(AjaxModelForm):
         required=True,
         widget=forms.HiddenInput()
     )
-    name = forms.CharField(label=_("Name"), max_length=255)
+    # name = forms.CharField(label=_("Name"), max_length=255)
     message = forms.CharField(
         label=_("Details"),
         help_text=_("What was done in this revision"),

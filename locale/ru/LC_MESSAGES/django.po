@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-05 20:36+0300\n"
+"POT-Creation-Date: 2017-09-09 21:16+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -260,7 +260,7 @@ msgid "Archive"
 msgstr "Архив"
 
 #: frontend/templates/side_menu.html:45 src/ripa_archive/accounts/views.py:68
-#: src/ripa_archive/accounts/views.py:87
+#: src/ripa_archive/accounts/views.py:86
 #: src/ripa_archive/documents/forms/browser.py:72
 msgid "Users"
 msgstr "Аккаунты"
@@ -330,19 +330,19 @@ msgstr "Выход"
 msgid "Settings"
 msgstr "Настройки"
 
-#: frontend/templates/users/list.html:22
+#: frontend/templates/users/list.html:29
 msgid "Full name"
 msgstr "Полное имя"
 
-#: frontend/templates/users/list.html:23
+#: frontend/templates/users/list.html:30
 msgid "Email"
 msgstr "Email"
 
-#: frontend/templates/users/list.html:24
+#: frontend/templates/users/list.html:31
 msgid "Active"
 msgstr "Активный"
 
-#: frontend/templates/users/list.html:38
+#: frontend/templates/users/list.html:51
 msgid "View profile"
 msgstr "Просмотреть профиль"
 
@@ -477,27 +477,29 @@ msgstr "Удалить пользователя(ей)"
 msgid "Add user"
 msgstr "Создать пользователя"
 
-#: src/ripa_archive/accounts/views.py:102
+#: src/ripa_archive/accounts/views.py:101
 msgid "Create user"
 msgstr "Создать пользователя"
 
-#: src/ripa_archive/accounts/views.py:104
+#: src/ripa_archive/accounts/views.py:103
+#: src/ripa_archive/documents/views/forms.py:75
+#: src/ripa_archive/documents/views/forms.py:105
 #: src/ripa_archive/permissions/views.py:59
 msgid "Create"
 msgstr "Создать"
 
-#: src/ripa_archive/accounts/views.py:113
-#: src/ripa_archive/accounts/views.py:140
+#: src/ripa_archive/accounts/views.py:112
+#: src/ripa_archive/accounts/views.py:139
 #: src/ripa_archive/permissions/views.py:68
 #: src/ripa_archive/permissions/views.py:101
 msgid "Success added"
 msgstr "Успешно добавлен"
 
-#: src/ripa_archive/accounts/views.py:132
+#: src/ripa_archive/accounts/views.py:131
 msgid "Update user"
 msgstr "Обновить пользователя"
 
-#: src/ripa_archive/accounts/views.py:134
+#: src/ripa_archive/accounts/views.py:133
 #: src/ripa_archive/documents/views/single/forms.py:247
 #: src/ripa_archive/permissions/views.py:92
 msgid "Update"
@@ -509,7 +511,7 @@ msgstr "Активность"
 
 #: src/ripa_archive/documents/forms/browser.py:83
 msgid "Groups"
-msgstr "Групп"
+msgstr "Группы"
 
 #: src/ripa_archive/documents/forms/browser.py:107
 msgid "At least one field must be filled in"
@@ -560,19 +562,29 @@ msgstr "Не допустимые спец символы"
 msgid "Create folders"
 msgstr "Создать директории"
 
-#: src/ripa_archive/documents/views/forms.py:88
+#: src/ripa_archive/documents/views/forms.py:76
+#| msgid "Add another permission"
+msgid "Add another folder"
+msgstr "Добавить еще папку"
+
+#: src/ripa_archive/documents/views/forms.py:96
 msgid "Create documents"
 msgstr "Создать документы"
 
-#: src/ripa_archive/documents/views/forms.py:125
+#: src/ripa_archive/documents/views/forms.py:106
+#| msgid "Add another permission"
+msgid "Add another document"
+msgstr "Добавить еще документ"
+
+#: src/ripa_archive/documents/views/forms.py:141
 msgid "Edit permissions"
 msgstr "Редактировать привилегии"
 
-#: src/ripa_archive/documents/views/forms.py:135
+#: src/ripa_archive/documents/views/forms.py:151
 msgid "Update permissions"
 msgstr "Обновить привилегии"
 
-#: src/ripa_archive/documents/views/forms.py:136
+#: src/ripa_archive/documents/views/forms.py:152
 msgid "Add another permission"
 msgstr "Добавить еще привилегии"
 
