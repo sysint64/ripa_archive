@@ -1,6 +1,7 @@
 import os
 
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect
@@ -19,6 +20,11 @@ from request_helper import get_request_int_or_none
 
 def layout(request, template):
     return TemplateResponse(template="layout/{}.html".format(template), request=request)
+
+
+@login_required(login_url="accounts:login")
+def help(request):
+    return TemplateResponse(template="help.html", request=request)
 
 
 class MultiFormView(View):

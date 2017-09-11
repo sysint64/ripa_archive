@@ -7,10 +7,10 @@
         {% include "search_input.html" %}
 
         <ul class="nav navbar-nav navbar-left" style="margin-left: 5px">
-{#            <li><a href="#">Help</a></li>#}
 {#            <li><a href="#">Shortcuts</a></li>#}
 {#            <li><a href="#">Issues</a></li>#}
             <li><a href="#">{{ project_title }} {{ project_version }}</a></li>
+            <li><a href="{% url "help" %}">Help</a></li>
 {#            <li><a href="https://andrey.kabylin.ru/" style="color: #aaa !important">Made by Andrey Kabylin</a></li>#}
         </ul>
 

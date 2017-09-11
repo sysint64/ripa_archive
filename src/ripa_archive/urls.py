@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^activity/$', users_activity, name="activity"),
     url(r'^statistics/$', statistics, name="statistics"),
     url(r'^settings/$', settings_view, name="settings"),
+    url(r'^help/$', views.help, name="help"),
 
     url(r'^!validator:settings/$',
         CompositeAjaxFormValidator.as_view(forms=[SettingsForm]),
