@@ -15,8 +15,8 @@ Application wrote with Django and python.
 - Drag and drop documents and folders moving
 - Multilanguage
 
-demo: http://13.75.126.239
+demo: http://82.165.77.211/
 
-login: admin@admin.ru
+login: andrey@kabylin.ru
 
 passwd: 123321
