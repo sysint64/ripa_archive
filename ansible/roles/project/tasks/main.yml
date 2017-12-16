@@ -1,3 +1,3 @@
 ---
-- include: project_hierarchy.yml
-- include: django.yml
+- import_tasks: project_hierarchy.yml
+- import_tasks: django.yml

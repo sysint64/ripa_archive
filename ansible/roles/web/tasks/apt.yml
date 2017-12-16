@@ -1,7 +1,44 @@
 ---
-- apt_repository:
-    repo: "ppa:jonathonf/python-3.6"
 
+# PostgreSQL Debian
+- name: add an apt key for postgresql
+  when: ansible_distribution == 'Debian'
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+
+- name: manually update apt-key until bus is fixed
+  shell: apt-key update
+
+- name: add apt repository for postgresql for Debian Stretch
+  when: ansible_distribution_release == 'stretch'
+  apt_repository:
+    repo: deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main
+    codename: "stretch"
+
+- name: add apt repository for postgresql for Debian Jessie
+  when: ansible_distribution_release == 'jessie'
+  apt_repository:
+    repo: deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main
+    codename: "jessie"
+
+- name: add apt repository for postgresql for Debian Wheezy
+  when: ansible_distribution_release == 'wheezy'
+  apt_repository:
+    repo: deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main
+    codename: "wheezy"
+
+# Python
+- name: add apt repository for python for ubuntu 3.6
+  when: ansible_distribution == 'Ubuntu'
+  apt_repository:
+    repo: ppa:jonathonf/python-3.6
+
+- name: add apt repository for python 3.6 for ubuntu
+  when: ansible_distribution == 'Debian'
+  apt_repository:
+    repo: deb http://ftp.de.debian.org/debian testing main
+
+# Install
 - name: install packages
   when: ansible_os_family == "Debian"
   apt: pkg={{ item.name }} state=present

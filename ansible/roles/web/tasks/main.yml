@@ -1,6 +1,6 @@
 ---
-- include: apt.yml
-- include: db.yml
-- include: http.yml
-- include: solr.yml
-- include: celery.yml
+- import_tasks: apt.yml
+- import_tasks: db.yml
+- import_tasks: http.yml
+- import_tasks: solr.yml
+- import_tasks: celery.yml

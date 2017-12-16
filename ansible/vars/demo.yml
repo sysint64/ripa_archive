@@ -4,7 +4,7 @@ project_namespace: "ripa_archive"
 
 nginx_host: "localhost"
 nginx_port: "12340"
-nginx_server_name: "13.75.126.239"
+nginx_server_name: "82.165.77.211"
 nginx_listen_port: 80
 nginx_server_full_name: "{{ nginx_server_name }}"
 nginx_scheme: "http"
@@ -29,9 +29,9 @@ luna_vision_faces_list: "user_faces_staging"
 celery_vhost: "/"
 
 # Solr
-solr_archive_url: "http://apache-mirror.rbc.ru/pub/apache/lucene/solr/6.6.0/solr-6.6.0.zip"
+solr_archive_url: "http://apache-mirror.rbc.ru/pub/apache/lucene/solr/6.6.2/solr-6.6.2.zip"
 
-solr_version: "6.6.0"
+solr_version: "6.6.2"
 solr_linux_user: "www-data"
 solr_linux_group: "www-data"
 solr_port: "8983"

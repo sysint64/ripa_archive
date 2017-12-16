@@ -5,7 +5,6 @@
 
 - name: create solr directory
   file: path=/opt/solr owner={{ solr_linux_user }} group={{ solr_linux_group }} state=directory
-  when: "solr."
 
 - stat: path=/etc/shorewall/rules
   register: shorewall_rules
