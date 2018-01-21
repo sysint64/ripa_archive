@@ -73,7 +73,7 @@ class DocumentsManager(models.Manager):
             return queryset.none()
 
         if folder is not None:
-            if not folder.is_user_has_permission(user, codes.DOCUMENTS_CAN_READ):
+            if not folder.is_user_has_permission(user, codes.FOLDERS_CAN_READ):
                 return queryset.none()
 
             return queryset.filter(parent=folder)

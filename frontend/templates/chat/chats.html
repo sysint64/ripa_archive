@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "styles/chat.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block content %}
+    <h3>{% trans "Chats" %}</h3>
+{% endblock %}

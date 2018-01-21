@@ -8,6 +8,7 @@ from ripa_archive import views, views_test
 from ripa_archive.activity.views import users_activity
 from ripa_archive.forms import SettingsForm
 from ripa_archive.notifications.views import notifications
+from ripa_archive.chat.views import chat
 from ripa_archive.views_settings import settings_view
 from ripa_archive.views_statistics import statistics
 
@@ -22,6 +23,7 @@ urlpatterns = [
     url(r'^accounts/', include('ripa_archive.accounts.urls', namespace="accounts")),
     url(r'^permissions/', include('ripa_archive.permissions.urls', namespace="permissions")),
     url(r'^notifications/$', notifications, name="notifications"),
+    url(r'^chat/$', chat, name="chat"),
     url(r'^activity/$', users_activity, name="activity"),
     url(r'^statistics/$', statistics, name="statistics"),
     url(r'^settings/$', settings_view, name="settings"),

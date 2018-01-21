@@ -40,12 +40,14 @@
                 </ul>
             </li>
 
+            <!-- Settings -->
             <li role="presentation">
                 <a href="{% url "settings" %}" class="info-number" title="{% trans "Settings" %}">
                     <i class="fa fa-cogs"></i>
                 </a>
             </li>
 
+            <!-- Add menu -->
             {% if add_menu is not None %}
                 <li role="presentation" class="dropdown">
                     <a href="#" class="dropdown-toggle info-number"
@@ -65,9 +67,20 @@
                 </li>
             {% endif %}
 
+            <!-- Notifications -->
             <li role="presentation">
                 <a href="{% url "notifications" %}" class="info-number" title="{% trans "Notifications" %}">
                     <i class="fa fa-bell"></i>
+                    {% if have_notifications %}
+                        <span class="badge bg-green"></span>
+                    {% endif %}
+                </a>
+            </li>
+
+            <!-- Chat -->
+            <li role="presentation">
+                <a href="{% url "chat" %}" class="info-number" title="{% trans "Chat" %}">
+                    <i class="fa fa-comment"></i>
                     {% if have_notifications %}
                         <span class="badge bg-green"></span>
                     {% endif %}

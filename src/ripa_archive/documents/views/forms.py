@@ -2,16 +2,14 @@ from io import UnsupportedOperation
 
 from django.core.exceptions import SuspiciousOperation
 from django.shortcuts import redirect
-from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 
 from ripa_archive.activity import activity_factory
-from ripa_archive.activity.models import Activity
 from ripa_archive.documents import strings
 from ripa_archive.documents.forms.browser import CreateFolderForm, CreateDocumentForm, \
     FolderPermissionsCreateForm, DocumentPermissionsCreateForm, FolderPermissionsEditForm, \
     DocumentPermissionsEditForm
-from ripa_archive.documents.models import Document, Folder, FolderCustomPermission, \
+from ripa_archive.documents.models import Document, FolderCustomPermission, \
     DocumentCustomPermission
 from ripa_archive.documents.views.main import get_folder_or_404, browser_base_context
 from ripa_archive.documents.views.single.main import get_document

@@ -8,10 +8,12 @@ class ModelWhichHaveCustomPermissionsMixin:
     custom_permission_model = None
 
     def is_user_has_permission(self, user, permission):
-        if hasattr(self, "parent") and self.parent is not None:
-            if not self.parent.is_user_has_permission(user, permission):
-                return False
+        # TODO: Добавить флаг в привилегию `require_parent_perm` при котором будет выполняться закоментированный код
+        # if hasattr(self, "parent") and self.parent is not None:
+        #     if not self.parent.is_user_has_permission(user, permission):
+        #         return False
 
+        # Overriding permissions
         custom_permissions = self.custom_permission_model.objects.filter(for_instance=self)
 
         for custom_permission in custom_permissions:
@@ -21,7 +23,7 @@ class ModelWhichHaveCustomPermissionsMixin:
             if user.group in custom_permission.groups.all():
                 return custom_permission.has_permission(permission)
 
-        # return True  # No overrides
+        # No overrides
         return user.group.has_permission(permission)
 
 

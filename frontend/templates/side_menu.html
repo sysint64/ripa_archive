@@ -27,11 +27,11 @@
                         </a>
                     </li>
 
-                    <li{% if active_url_name == "archive" %} class="active"{% endif %}>
-                        <a href="{% url "documents:archive" %}">
-                            <i class="fa fa-archive"></i> {% trans "Archive" %}
-                        </a>
-                    </li>
+{#                    <li{% if active_url_name == "archive" %} class="active"{% endif %}>#}
+{#                        <a href="{% url "documents:archive" %}">#}
+{#                            <i class="fa fa-archive"></i> {% trans "Archive" %}#}
+{#                        </a>#}
+{#                    </li>#}
                 {% endif %}
 
                 {% user_has_permission "users_can_read_profile" as users_can_read_profile %}

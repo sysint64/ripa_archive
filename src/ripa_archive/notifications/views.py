@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.shortcuts import render
 from django.template.response import TemplateResponse
 
 from ripa_archive.notifications.models import Notification
@@ -20,7 +19,4 @@ def notifications(request):
         "notifications": notifications
     }
 
-    response = TemplateResponse(template="notifications.html", request=request,
-                                context=context)
-
-    return response
+    return TemplateResponse(template="notifications.html", request=request, context=context)
