@@ -34,6 +34,12 @@
 {#                    </li>#}
                 {% endif %}
 
+                <li{% if active_url_name == "issues" %} class="active"{% endif %}>
+                    <a href="{% url "issues:index" %}">
+                        <i class="fa fa-tasks"></i> {% trans "Issues" %}
+                    </a>
+                </li>
+
                 {% user_has_permission "users_can_read_profile" as users_can_read_profile %}
                 {% user_has_permission "users_can_edit" as users_can_edit %}
                 {% user_has_permission "users_can_edit" as users_can_delete %}

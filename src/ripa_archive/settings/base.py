@@ -4,7 +4,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = False
 
-PROJECT_VERSION = "1.0 Technology Preview"
+PROJECT_VERSION = "1.0 Technical Preview"
 PROJECT_TITLE = "Ripa Archive"
 
 ALLOWED_HOSTS = []
@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     'ripa_archive.permissions.apps.PermissionsConfig',
     'ripa_archive.activity.apps.ActivityConfig',
     'ripa_archive.notifications.apps.NotificationsConfig',
+    'ripa_archive.chat.apps.ChatConfig',
+    'ripa_archive.issues.apps.IssuesConfig',
 ]
 
 MIDDLEWARE = [

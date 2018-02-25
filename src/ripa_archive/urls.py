@@ -17,11 +17,16 @@ def redirect_to_browser(request):
     return redirect("documents:index")
 
 
+def redirect_to_issues(request):
+    return redirect("issues:index")
+
+
 urlpatterns = [
-    url(r'^$', redirect_to_browser),
+    url(r'^$', redirect_to_issues),
     url(r'^documents/', include('ripa_archive.documents.urls', namespace="documents")),
     url(r'^accounts/', include('ripa_archive.accounts.urls', namespace="accounts")),
     url(r'^permissions/', include('ripa_archive.permissions.urls', namespace="permissions")),
+    url(r'^issues/', include('ripa_archive.issues.urls', namespace="issues")),
     url(r'^notifications/$', notifications, name="notifications"),
     url(r'^chat/$', chat, name="chat"),
     url(r'^activity/$', users_activity, name="activity"),

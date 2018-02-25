@@ -1,0 +1,15 @@
+{% extends "module_list.html" %}
+
+{% load i18n %}
+{% load permissions %}
+{% load staticfiles %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static "js/issues.js" %}" charset="utf-8"></script>
+{% endblock %}
+
+{% block table_header %}
+    <th>{% trans "Name" %}</th>
+    <th>{% trans "Author" %}</th>
+{% endblock %}

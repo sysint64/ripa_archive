@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class ChatConfig(AppConfig):
-    name = 'chat'
+    name = 'ripa_archive.chat'

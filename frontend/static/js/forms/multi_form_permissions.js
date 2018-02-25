@@ -17,7 +17,7 @@ var permissionsFormsPrefixes = [];
         var $block = $("<div/>", {"class": "block permissions-block", "html": permissionBlockHtml, "data-prefix": prefix});
         const addPrefix = function(index, attr) { return prefix + "-" + attr; };
         $block.find("label").attr("for", addPrefix);
-        $block.find("input,select").attr("name", addPrefix).attr("id", addPrefix);
+        $block.find("input,select,textarea").attr("name", addPrefix).attr("id", addPrefix);
         $block.find(".form-error").attr("data-name", addPrefix);
         $block.find("select[multiple]").addClass("selectpicker").selectpicker();
 

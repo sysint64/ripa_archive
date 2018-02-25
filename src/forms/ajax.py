@@ -77,6 +77,7 @@ class AjaxModelForm(AjaxFormMixin, forms.ModelForm):
 
 class FormAjaxValidator(View):
     form = None
+    prefix = ""
 
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect('/')
@@ -91,13 +92,74 @@ class FormAjaxValidator(View):
 
         return errors
 
+    def _collect_errors(self, request, *args, **kwargs):
+        errors = []
+        form = self.form(prefix=self.prefix, data=request.POST)
+
+        if not form.is_valid():
+            errors += self.get_errors(form)
+
+        return errors
+
     def post(self, request, *args, **kwargs):
+        errors = self._collect_errors(request, *args, **kwargs)
+
+        if len(errors) == 0:
+            return JsonResponse({}, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MultiFormAjaxValidator(View):
+    form = None
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect('/')
+
+    def get_errors(self, form):
+        errors = []
+        prefix = "" if form.prefix is None else form.prefix + "-"
+
+        for k, v in form._errors.items():
+            text = {'desc': ', '.join(v), 'key': prefix + k}
+            errors.append(text)
+
+        return errors
+
+    def _collect_errors(self, request, *args, **kwargs):
         forms = get_multi_form(self.form, request.POST)
         errors = []
 
         for form in forms:
             if not form.is_valid():
                 errors += self.get_errors(form)
+
+        return errors
+
+    def post(self, request, *args, **kwargs):
+        errors = self._collect_errors(request, *args, **kwargs)
+
+        if len(errors) == 0:
+            return JsonResponse({}, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CompositeViewsAjaxFormValidator(View):
+    views = []
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect('/')
+
+    def post(self, request, *args, **kwargs):
+        errors = []
+
+        for view in self.views:
+            view.request = request
+            errors.extend(view._collect_errors(request, *args, **kwargs))
+
+        print("ERRORS:")
+        print(errors)
 
         if len(errors) == 0:
             return JsonResponse({}, status=status.HTTP_200_OK)
@@ -134,7 +196,7 @@ class CompositeAjaxFormValidator(View):
 
         return errors
 
-    def post(self, request, *args, **kwargs):
+    def _collect_errors(self, request, *args, **kwargs):
         if self.instance_query_field is not None:
             query_kwargs = {
                 self.instance_query_field: kwargs[self.instance_query_field]
@@ -147,6 +209,11 @@ class CompositeAjaxFormValidator(View):
 
         for form_class in self.forms:
             errors += self.get_forms_errors(form_class, instance, form_class != self.forms[0])
+
+        return errors
+
+    def post(self, request, *args, **kwargs):
+        errors = self._collect_errors(request, *args, **kwargs)
 
         if len(errors) == 0:
             return JsonResponse({}, status=status.HTTP_200_OK)

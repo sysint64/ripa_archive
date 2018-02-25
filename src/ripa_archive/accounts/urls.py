@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.contrib.auth.views import logout
 
-from forms.ajax import FormAjaxValidator, CompositeAjaxFormValidator
+from forms.ajax import MultiFormAjaxValidator, CompositeAjaxFormValidator
 from ripa_archive.accounts import views
 from ripa_archive.accounts.forms import LoginForm, UserForm
 from ripa_archive.accounts.models import User
