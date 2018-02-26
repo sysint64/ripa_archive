@@ -135,6 +135,7 @@ class CreateDocuments(BrowserMultiFormCreation):
         return document
 
 
+# TODO: make class generic for multi form edition
 class EditPermissions(MultiFormView):
     title = _("Edit permissions")
     form_class = None

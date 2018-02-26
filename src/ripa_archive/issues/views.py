@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import SuspiciousOperation
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -27,6 +28,7 @@ def issues_base_context(request):
 
 
 # TODO: Add permissions
+@login_required(login_url="accounts:login")
 def issues(request):
     context = issues_base_context(request)
     context.update({
@@ -62,7 +64,9 @@ class CreateIssue(MultiFormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            "main_data_form": CreateIssueForm(prefix="main")
+            "main_data_form": CreateIssueForm(prefix="main"),
+            "submit_title": _("Create issue"),
+            "add_title": _("Add another item")
         })
         return context
 
@@ -114,7 +118,9 @@ class UpdateIssue(EditPermissions):
         instance = self.get_instance_or_404(kwargs["issue_id"])
         context = super().get_context_data(**kwargs)
         context.update({
-            "main_data_form": CreateIssueForm(prefix="main", instance=instance)
+            "main_data_form": CreateIssueForm(prefix="main", instance=instance),
+            "submit_title": _("Update issue"),
+            "add_title": _("Add another item")
         })
         return context
 

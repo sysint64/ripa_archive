@@ -32,7 +32,7 @@ class MultiFormView(View):
     validator_url = None
     form_class = None
     instance_class = None
-    redirect_url_name = ""
+    redirect_url_name = "documents:index"
     template = "forms/multi-form.html"
 
     def get_forms(self, **kwargs):
@@ -81,7 +81,7 @@ class MultiFormView(View):
             success = True
 
         if success:
-            return self.do_redirect("index", **kwargs)
+            return self.do_redirect(self.redirect_url_name, **kwargs)
         else:
             context = self.get_context_data(**kwargs)
             return TemplateResponse(request=request, template=self.template, context=context)
@@ -90,8 +90,7 @@ class MultiFormView(View):
         instance.delete()
 
     def do_redirect(self, redirect_url_name, **kwargs):
-        return redirect("documents:index")
-        # return redirect(redirect_url_name)
+        return redirect(redirect_url_name)
 
     def perform_form(self, request, **kwargs):
         def get_instance(prefix=None):
