@@ -1,0 +1,2 @@
+project_dir: "/home/andrey/projects/test2"
+project_virtualenv_dir: "{{ project_dir }}/.env"

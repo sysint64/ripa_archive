@@ -1,0 +1,7 @@
+---
+- name: Depoy application to localhost
+  hosts: local
+  remote_user: andrey
+
+  roles:
+    - project

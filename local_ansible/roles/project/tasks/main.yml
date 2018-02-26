@@ -1,0 +1,47 @@
+---
+- name: create project directory
+  file: path={{ project_dir }} state=directory
+
+- name: get sources
+  git:
+    repo: "https://github.com/sysint64/ripa_archive"
+    version: "master"
+    dest: "{{ project_dir }}"
+    accept_hostkey: yes
+
+- name: create var directory
+  file: path={{ project_dir }}/var state=directory
+
+- name: create static directory
+  file: path={{ project_dir }}/var/static state=directory
+
+- name: create media directory
+  file: path={{ project_dir }}/var/media state=directory
+
+- name: create media/photos directory
+  file: path={{ project_dir }}/var/media/photos state=directory
+
+- name: install requirements.txt
+  pip:
+    virtualenv: "{{ project_virtualenv_dir }}"
+    virtualenv_python: python3.6
+    requirements: "{{ project_dir }}/requirements.txt"
+
+- name: install packages based on bower.json
+  bower:
+    path: "{{ project_dir }}/frontend/static"
+
+- name: copy settings config
+  template: src=local.py dest={{ project_dir }}/src/ripa_archive/settings/local.py
+
+- name: make migrations for thumbnail
+  command: "{{ project_virtualenv_dir }}/bin/python {{ project_dir }}/src/manage.py makemigrations thumbnail --noinput"
+
+- name: migrate
+  command: "{{ project_virtualenv_dir }}/bin/python {{ project_dir }}/src/manage.py migrate --noinput"
+
+- name: collectstatic
+  command: "{{ project_virtualenv_dir }}/bin/python {{ project_dir }}/src/manage.py collectstatic --noinput"
+
+- name: create admin
+  command: "{{ project_virtualenv_dir }}/bin/python {{ project_dir }}/src/manage.py create_admin yara@master.ru 123321"
