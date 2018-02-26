@@ -1,14 +1,13 @@
 from django import forms
-from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import safe
 from django.views import View
-from django.views.generic import FormView
 
 from forms import status
 from forms.multi_form import get_multi_form
+
 
 _GENERIC_ERRORS_DIV = '<div class="generic-errors" data-name="__all___error"></div>'
 _TOP_ERRORS_WRAPPER_DIV = '<div data-name="%s_error" class="form-error"></div>%s'
@@ -20,6 +19,7 @@ class AjaxFormErrorsLocation:
     BOTTOM = 1
 
 
+# noinspection PyArgumentList, PyUnresolvedReferences
 class AjaxFormMixin:
     error_orient = AjaxFormErrorsLocation.TOP
     generic_errors = safe(_GENERIC_ERRORS_DIV)
@@ -157,9 +157,6 @@ class CompositeViewsAjaxFormValidator(View):
         for view in self.views:
             view.request = request
             errors.extend(view._collect_errors(request, *args, **kwargs))
-
-        print("ERRORS:")
-        print(errors)
 
         if len(errors) == 0:
             return JsonResponse({}, status=status.HTTP_200_OK)

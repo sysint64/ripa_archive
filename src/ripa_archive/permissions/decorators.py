@@ -1,6 +1,8 @@
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 
 
+@transaction.atomic
 def check_permissions(request, permissions, instance=None, use_or=False):
     if request.user.is_anonymous:
         raise PermissionDenied()

@@ -154,11 +154,15 @@ class EditPermissions(MultiFormView):
     def get_for_instance(self, **kwargs):
         raise UnsupportedOperation()
 
+    def get_queryset(self, for_instance):
+        return self.instance_class.objects.filter(for_instance=for_instance)
+
     def get_forms(self, **kwargs):
         for_instance = self.get_for_instance(**kwargs)
         forms = []
 
-        permissions = self.instance_class.objects.filter(for_instance=for_instance)
+        # permissions = self.instance_class.objects.filter(for_instance=for_instance)
+        permissions = self.get_queryset(for_instance)
 
         for index, permission in enumerate(permissions):
             prefix = "block" + str(index) if index != 0 else ""
@@ -169,8 +173,9 @@ class EditPermissions(MultiFormView):
     def perform_delete(self, instance, **kwargs):
         for_instance = self.get_for_instance(**kwargs)
 
-        if instance.for_instance != for_instance:
-            raise SuspiciousOperation()
+        # TODO: uncomment
+        # if instance.for_instance != for_instance:
+        #     raise SuspiciousOperation()
 
         instance.delete()
 

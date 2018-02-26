@@ -58,7 +58,6 @@ def users_base_context(request):
     }
 
 
-@transaction.atomic
 @require_permissions([codes.USERS_CAN_READ_PROFILE])
 def users(request):
     context = users_base_context(request)
@@ -73,7 +72,6 @@ def users(request):
     return TemplateResponse(template="users/list.html", request=request, context=context)
 
 
-@transaction.atomic
 def profile(request, user_id):
     user = get_object_or_404(User, id=user_id)
 
@@ -92,7 +90,6 @@ def profile(request, user_id):
 
 
 @require_http_methods(["GET", "POST"])
-@transaction.atomic
 @require_permissions([codes.USERS_CAN_CREATE])
 def create(request):
     form = UserForm(request.POST, request.FILES)
@@ -116,7 +113,6 @@ def create(request):
 
 
 @require_http_methods(["GET", "POST"])
-@transaction.atomic
 @require_permissions([codes.USERS_CAN_EDIT])
 def update(request, user_id):
     instance = get_object_or_404(User, id=user_id)
@@ -143,7 +139,6 @@ def update(request, user_id):
 
 
 @api_view(["POST"])
-@transaction.atomic
 @require_permissions([codes.USERS_CAN_DELETE])
 def delete(request):
     serializer = BulkInputSerializer(data=request.data)
