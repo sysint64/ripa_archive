@@ -58,6 +58,8 @@ class Issue(models.Model):
             return " approved"
         elif self.is_finished:
             return " finished"
+        else:
+            return ""
 
 
 class IssueItem(models.Model):
