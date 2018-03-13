@@ -19,6 +19,19 @@ class CreateIssueForm(AjaxModelForm):
     )
 
 
+class CreateIssueWithOwnerForm(AjaxModelForm):
+    class Meta:
+        model = Issue
+        fields = "owner", "name",
+
+    name = forms.CharField(
+        validators=[validators.name_validator],
+        max_length=validators.NAME_MAX_LENGTH,
+        required=True,
+        label=_("Name")
+    )
+
+
 class IssueItemForm(AjaxModelForm):
     class Meta:
         model = IssueItem

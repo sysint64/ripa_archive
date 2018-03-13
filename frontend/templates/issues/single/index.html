@@ -37,6 +37,11 @@
                 {% for issue_item in issue.issueitem_set.all %}
                     <h2>{{ issue_item.name }}</h2>
                     <div>{{ issue_item.content|linebreaksbr }}</div>
+
+                    {% if remarks.count > 0 %}
+                        <h4>{% trans "Remarks" %}</h4>
+                        {% include "issues/single/remarks.html" %}
+                    {% endif %}
                     <hr>
                 {% endfor %}
             </div>

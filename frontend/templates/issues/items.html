@@ -1,0 +1,30 @@
+<ul>
+    {% for issue in issues %}
+        <li>
+            <div class="owner">Планы для пользователя {{ issue.owner }}</div>
+            {% if issue.issues.count > 0 %}
+                {% for item in issue.issues.all %}
+                    <div class="selectable context-menu data-double-click-link" data-id="{{ issue.id }}"
+                         data-ref="{{ item.ref }}" data-group="{{ module_name }}s"
+                         data-href="{{ item.permalink }}"
+                    >
+                        <span class="id"># {{ item.id }}</span>
+                        <span class="name">{{ item }}</span>
+                        <span class="fullness-block">
+                            <span class="finished fullness">Закончено: {{ item.fullness_percents.finished }}%</span>
+                            <span class="approved fullness">Одобрено: {{ item.fullness_percents.approved }}%</span>
+                        </span>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-active-issues">
+                    <span class="name">Нет активных планов</span>
+                </div>
+            {% endif %}
+            <hr>
+            {% if issue.issues %}
+                {% include "issues/items.html" with issues=issue.children depth=depth|add:1 %}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,66 @@
+{% load staticfiles %}
+{% load thumbnail %}
+{% load i18n %}
+
+<ul class="messages">
+    {% for remark in remarks %}
+        <li class="remark-li">
+            {% thumbnail remark.user.avatar_image "50x50" crop="center" as im %}
+                <img src="{{ im.url }}" class="avatar">
+            {% empty %}
+                <img src="{% static "images/noavatar.png" %}" class="avatar">
+            {% endthumbnail %}
+            <div class="message_wrapper">
+                <h4 class="heading">
+                    <a href="{{ remark.user.permalink }}">
+                        {{ remark.user }}
+                        <span class="email">({{ remark.user.email }})</span>
+                    </a>
+
+                    <span class="datetime">{{ remark.datetime }}</span>
+                </h4>
+
+                <blockquote class="message remark{{ remark.css_class }}">
+                    {{ remark.text }}
+                </blockquote>
+
+                {% if not remark.is_accepted %}
+                    {% if user_is_editor %}
+                        <ul class="editor-tools">
+                            {% if not remark.is_finished %}
+                                <li>
+                                    <a href="#" class="mark-as-finished"
+                                       data-remark-id="{{ remark.pk }}">
+                                        {% trans "Mark as finished" %} <i class="fa fa-check"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    {% else %}
+                        {% if not remark.is_active %}
+                            <ul class="reviewer-tools">
+                                <li>
+                                    <a href="#" class="accept-remark"
+                                       data-remark-id="{{ remark.pk }}">
+                                        {% trans "Accept" %} <i class="fa fa-check"></i>
+                                    </a>
+                                </li>
+
+                                {% if not remark.is_rejected %}
+                                    <li>
+                                        <a href="!action:write-remark/?reject_remark_id={{ remark.pk }}"
+                                           class="reject-remark"
+                                        >
+                                            {% trans "Reject" %} <i class="fa fa-times"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                <br>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

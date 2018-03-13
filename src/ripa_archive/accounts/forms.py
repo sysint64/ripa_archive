@@ -43,7 +43,8 @@ class LoginForm(AjaxForm):
 class UserForm(AjaxModelForm):
     class Meta:
         model = User
-        fields = "email", "first_name", "last_name", "gender", "location", "position", "web_site", \
+        fields = "parent", \
+                 "email", "first_name", "last_name", "gender", "location", "position", "web_site", \
                  "group", "is_active", \
                  "avatar_image"
 

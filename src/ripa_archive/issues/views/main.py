@@ -8,12 +8,12 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from ripa_archive.accounts.models import User
 from ripa_archive.issues.input_serializers import BulkInputSerializer
 from ripa_archive.documents.views.forms import EditPermissions
-from ripa_archive.issues.forms import CreateIssueForm, IssueItemForm
+from ripa_archive.issues.forms import CreateIssueForm, IssueItemForm, CreateIssueWithOwnerForm
 from ripa_archive.issues.models import Issue, IssueItem
 from ripa_archive.views import MultiFormView
-
 
 ISSUES_ADD_MENU = (
     {"name": _("Issue"), "permalink": "!action:create-issue"},
@@ -30,9 +30,29 @@ def issues_base_context(request):
 # TODO: Add permissions
 @login_required(login_url="accounts:login")
 def issues(request):
+    issues = []
+
+    def create_issue_payload(for_user):
+        return {
+            "owner": for_user,
+            "issues": Issue.objects.active_issues().filter(owner=for_user),
+            "children": []
+        }
+
+    def issues_tree_for_user(for_user):
+        payload = create_issue_payload(for_user)
+
+        for user in User.objects.filter(parent=for_user):
+            payload["children"].append(issues_tree_for_user(user))
+
+        return payload
+
+    with transaction.atomic():
+        issues.append(issues_tree_for_user(request.user))
+
     context = issues_base_context(request)
     context.update({
-        "items": Issue.objects.all(),
+        "issues": issues,
         "module_name": "issue",
         "title": _("Issues"),
         "edit_text": _("Edit issue"),
@@ -50,7 +70,7 @@ def issue(request, issue_id):
         "issue": issue,
         "title": issue.name
     })
-    return TemplateResponse(template="issues/single.html", request=request, context=context)
+    return TemplateResponse(template="issues/single/index.html", request=request, context=context)
 
 
 class CreateIssue(MultiFormView):
@@ -62,9 +82,10 @@ class CreateIssue(MultiFormView):
     template = "issues/create.html"
 
     def get_context_data(self, **kwargs):
+        form = CreateIssueWithOwnerForm(prefix="main")
         context = super().get_context_data(**kwargs)
         context.update({
-            "main_data_form": CreateIssueForm(prefix="main"),
+            "main_data_form": form,
             "submit_title": _("Create issue"),
             "add_title": _("Add another item")
         })
@@ -75,13 +96,17 @@ class CreateIssue(MultiFormView):
 
     @transaction.atomic
     def post(self, request, **kwargs):
-        form = CreateIssueForm(prefix="main", data=request.POST)
+        set_auto_owner = False
+        form = CreateIssueWithOwnerForm(prefix="main", data=request.POST)
 
         if not form.is_valid():
             raise SuspiciousOperation()
 
         self.issue = form.save(commit=False)
-        self.issue.owner = request.user
+
+        if set_auto_owner:
+            self.issue.owner = request.user
+
         self.issue.save()
 
         return super().post(request, **kwargs)

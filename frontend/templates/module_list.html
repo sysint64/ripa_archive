@@ -12,9 +12,11 @@
 
 {% block js %}
     {{ block.super }}
-    <script src="{% static 'vendors/jQuery-contextMenu/dist/jquery.contextMenu.min.js' %}" charset="utf-8"></script>
+    <script src="{% static 'vendors/jQuery-contextMenu/dist/jquery.contextMenu.min.js' %}"
+            charset="utf-8"></script>
     <script src="{% static 'vendors/js-cookie/src/js.cookie.js' %}" charset="utf-8"></script>
-    <script src="{% static 'vendors/jquery-json/dist/jquery.json.min.js' %}" charset="utf-8"></script>
+    <script src="{% static 'vendors/jquery-json/dist/jquery.json.min.js' %}"
+            charset="utf-8"></script>
 
     <script src="{% static 'js/forms/helpers.js' %}" charset="utf-8"></script>
     <script src="{% static 'js/dialogs.js' %}" charset="utf-8"></script>
@@ -73,26 +75,28 @@
         {% endblock %}
 
         <div class="results">
-            <table class="table">
-                <thead>
-                <tr>
-                    {% block table_header %}
-                        <th>{% trans "Name" %}</th>
-                    {% endblock %}
-                </tr>
-                </thead>
-                <tbody>
-                {% for item in items %}
-                    <tr class="selectable context-menu" data-id="{{ item.id }}" data-ref="{{ item.ref }}" data-group="{{ module_name }}s">
-                        {% block table_detail %}
-                            <td>
-                                {{ item }}
-                            </td>
+            {% block items_content %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        {% block table_header %}
+                            <th>{% trans "Name" %}</th>
                         {% endblock %}
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for item in items %}
+                        <tr class="selectable context-menu" data-id="{{ item.id }}"
+                            data-ref="{{ item.ref }}" data-group="{{ module_name }}s"
+                        >
+                            {% block table_detail %}
+                                <td>{{ item }}</td>
+                            {% endblock %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endblock %}
         </div>
     </div>
 {% endblock %}

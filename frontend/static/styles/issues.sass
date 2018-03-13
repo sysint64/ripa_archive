@@ -1,0 +1,54 @@
+.module
+    ul:nth-child(1)
+        padding-left: 0
+
+    ul
+        list-style-type: none
+        padding-left: 25px
+
+    li
+        .selectable
+            font-size: 14px
+            padding: 5px 10px
+
+            .id
+                display: inline-block
+                padding: 0 5px
+                color: #888
+
+        .selected
+            background: #1ABB9C
+            color: #fff
+
+            .id
+                color: #fff
+
+        .no-active-issues
+            padding: 5px 10px
+            color: #888
+
+        .owner
+            font-size: 16px
+
+        hr
+            margin: 5px 0
+
+        .name
+            display: inline-block
+            margin-right: 5px
+
+        .fullness-block
+            display: inline-block
+        .fullness
+            display: inline-block
+            padding: 0 3px
+            margin: 0 3px
+            font-size: 12px
+
+            &.finished
+                background: #00A1D9
+                color: #fff
+
+            &.approved
+                background: #1ABB9C
+                color: #fff
