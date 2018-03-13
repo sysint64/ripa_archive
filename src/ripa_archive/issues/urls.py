@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from forms.ajax import CompositeAjaxFormValidator, CompositeViewsAjaxFormValidator, \
     FormAjaxValidator
+from ripa_archive.documents.forms.single import RemarkForm
 
 from ripa_archive.issues.views import main as main_views
 from ripa_archive.issues.views import forms as forms_views
@@ -15,6 +16,7 @@ urlpatterns = [
 
     url(r'^(?P<issue_id>[0-9]+)/$', main_views.issue, name="single"),
     url(r'^(?P<issue_id>[0-9]+)/!action:update/$', forms_views.UpdateIssue.as_view(), name="update"),
+    url(r'^(?P<issue_id>[0-9]+)/(?P<issue_item_id>[0-9]+)/!action:write-remark/$', forms_views.write_remark, name="write-remark"),
     url(r'^(?P<issue_id>[0-9]+)/!action:start-working-on-item', actions_views.start_working_on_item, name="start-working-on-item"),
     url(r'^(?P<issue_id>[0-9]+)/!action:finish-working-on-item', actions_views.finish_working_on_item, name="finish-working-on-item"),
     url(r'^(?P<issue_id>[0-9]+)/!action:approve-working-on-item', actions_views.approve_working_on_item, name="approve-working-on-item"),
@@ -28,5 +30,11 @@ urlpatterns = [
             ]
         ),
         name="validator-create-issue"
-    )
+    ),
+
+    url(
+        r'^validator:write-remark/$',
+        CompositeAjaxFormValidator.as_view(forms=[RemarkForm]),
+        name="validator-write-remark"
+    ),
 ]

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static "styles/loading.css" %}">
     <link rel="stylesheet" href="{% static "styles/dialogs.sass" %}" type="text/x-sass">
     <link rel="stylesheet" href="{% static "styles/issues_single.sass" %}" type="text/x-sass">
+    <link rel="stylesheet" href="{% static "styles/document_single.sass" %}" type="text/x-sass">
 {% endblock %}
 
 {% block js %}
@@ -58,9 +59,9 @@
                         <h2>{{ issue_item.name }} {% if issue_item.is_approved %}<i class="fa fa-check approved-icon"></i>{% endif %}</h2>
                         <div>{{ issue_item.content|linebreaksbr }}</div>
 
-                        {% if remarks.count > 0 %}
+                        {% if issue_item.remark_set.count > 0 %}
                             <h4>{% trans "Remarks" %}</h4>
-                            {% include "issues/single/remarks.html" %}
+                            {% include "issues/single/remarks.html" with remarks=issue_item.remark_set.all %}
                         {% endif %}
 
                         {% if reviewer %}

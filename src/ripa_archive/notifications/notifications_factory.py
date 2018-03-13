@@ -1,5 +1,6 @@
 from ripa_archive.documents.models import Document
 from ripa_archive.documents.strings import get_notification_text
+from ripa_archive.issues.models import Issue
 from ripa_archive.notifications.models import Notification, NotificationTranslation
 
 
@@ -58,3 +59,22 @@ def notification_document(user, document, detail, to_followers=False):
         walk_by_followers(document, user, create_notification)
     else:
         create_notification(document.current_edit_meta.editor)
+
+
+def notification_issue_remark(user, issue, remark, detail, to_followers=False):
+    def create_notification(to_user):
+        notification = Notification.objects.create(
+            user=user,
+            to=to_user,
+            content_type=Issue.content_type,
+            target_id=issue.id,
+            detail=remark.text
+        )
+        _create_translation(notification, str(issue), detail)
+
+    # parent = issue.owner.parent
+    create_notification(issue.owner)
+
+    # while parent is not None:
+    #     create_notification(parent)
+    #     parent = parent.parent

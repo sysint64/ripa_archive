@@ -49,7 +49,7 @@ def issues(request):
         "title": _("Issues"),
         "edit_text": _("Edit issue"),
         "delete_text": _("Delete issue(s)"),
-        "add_text": _("Add issue"),
+        "add_text": _("Add issue")
     })
     return TemplateResponse(template="issues/list.html", request=request, context=context)
 

@@ -12,6 +12,7 @@ class IssuesManager(models.Manager):
 
 
 class Issue(models.Model):
+    content_type = "issues.Issue"
     owner = models.ForeignKey(User, related_name="issue_owner")
     datetime = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=60)
