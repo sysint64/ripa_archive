@@ -1,3 +1,5 @@
+{% load humanize %}
+
 <ul>
     {% for issue in issues %}
         <li>
@@ -12,8 +14,8 @@
                         <span class="id"># {{ item.id }}</span>
                         <span class="name">{{ item }}</span>
                         <span class="fullness-block">
-                            <span class="finished fullness">Закончено: {{ item.fullness_percents.finished }}%</span>
-                            <span class="approved fullness">Одобрено: {{ item.fullness_percents.approved }}%</span>
+                            <span class="finished fullness">Закончено: {{ item.fullness_percents.finished|floatformat:1|intcomma }}%</span>
+                            <span class="approved fullness">Одобрено: {{ item.fullness_percents.approved|floatformat:1|intcomma }}%</span>
                         </span>
                     </div>
                 {% endfor %}
