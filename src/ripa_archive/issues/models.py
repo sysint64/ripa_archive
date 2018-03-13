@@ -40,9 +40,23 @@ class Issue(models.Model):
         approved_count = self.issueitem_set.filter(status=IssueItem.Status.APPROVED).count()
 
         return {
-            "finished": finished_count / total * 100,
-            "approved": approved_count / total * 100
+            "finished": (finished_count + approved_count) / total * 100,
+            "approved": approved_count / total * 100,
         }
+
+    @property
+    def is_approved(self):
+        return int(self.fullness_percents["approved"]) == 100
+
+    @property
+    def is_finished(self):
+        return int(self.fullness_percents["finished"]) == 100
+
+    def css_class(self):
+        if self.is_approved:
+            return " approved"
+        elif self.is_finished:
+            return " finished"
 
 
 class IssueItem(models.Model):
@@ -89,7 +103,7 @@ class IssueItem(models.Model):
     def css_class(self):
         return {
             IssueItem.Status.OPEN: " open",
-            IssueItem.Status.IN_PROGRESS: " in_progress",
+            IssueItem.Status.IN_PROGRESS: " in-progress",
             IssueItem.Status.FINISHED: " finished",
             IssueItem.Status.APPROVED: " approved",
             IssueItem.Status.REJECTED: " rejected",

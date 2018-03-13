@@ -5,7 +5,26 @@
 
 {% block styles %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static "styles/document_single.sass" %}" type="text/x-sass">
+    <link rel="stylesheet" href="{% static "styles/loading.css" %}">
+    <link rel="stylesheet" href="{% static "styles/dialogs.sass" %}" type="text/x-sass">
+    <link rel="stylesheet" href="{% static "styles/issues_single.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'vendors/js-cookie/src/js.cookie.js' %}" charset="utf-8"></script>
+    <script src="{% static 'vendors/jquery-json/dist/jquery.json.min.js' %}" charset="utf-8"></script>
+
+    <script src="{% static 'js/forms/helpers.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/dialogs.js' %}" charset="utf-8"></script>
+    <script src="{% static 'js/issues/single.js' %}" charset="utf-8"></script>
+{% endblock %}
+
+{% block dialogs %}
+    {% include "dialogs/progress_dialog.html" %}
+    {% include "dialogs/yes_no_dialog.html" %}
+    {% include "dialogs/errors_dialog.html" %}
+    {% include "dialogs/success_dialog.html" %}
 {% endblock %}
 
 {% block content %}
@@ -21,28 +40,53 @@
     <div class="x_panel">
         <div class="x_title">
             <h2>{{ issue.name }}</h2>
-            {% if user_is_follow %}
-                <a href="#" id="toggle-follow" title="{% trans "Do not follow" %}">
-                    <i class="fa fa-eye-slash"></i>
-                </a>
-            {% else %}
-                <a href="#" id="toggle-follow" title="{% trans "Follow" %} ">
-                    <i class="fa fa-eye"></i>
-                </a>
-            {% endif %}
+{#            {% if user_is_follow %}#}
+{#                <a href="#" id="toggle-follow" title="{% trans "Do not follow" %}">#}
+{#                    <i class="fa fa-eye-slash"></i>#}
+{#                </a>#}
+{#            {% else %}#}
+{#                <a href="#" id="toggle-follow" title="{% trans "Follow" %} ">#}
+{#                    <i class="fa fa-eye"></i>#}
+{#                </a>#}
+{#            {% endif %}#}
             <div class="clearfix"></div>
         </div>
         <div class="document-content xcontent">
             <div class="col-md-9 col-sm-9 col-xs-12">
                 {% for issue_item in issue.issueitem_set.all %}
-                    <h2>{{ issue_item.name }}</h2>
-                    <div>{{ issue_item.content|linebreaksbr }}</div>
+                    <div class="issue-item{{ issue_item.css_class }}">
+                        <h2>{{ issue_item.name }} {% if issue_item.is_approved %}<i class="fa fa-check approved-icon"></i>{% endif %}</h2>
+                        <div>{{ issue_item.content|linebreaksbr }}</div>
 
-                    {% if remarks.count > 0 %}
-                        <h4>{% trans "Remarks" %}</h4>
-                        {% include "issues/single/remarks.html" %}
-                    {% endif %}
-                    <hr>
+                        {% if remarks.count > 0 %}
+                            <h4>{% trans "Remarks" %}</h4>
+                            {% include "issues/single/remarks.html" %}
+                        {% endif %}
+
+                        {% if reviewer %}
+                            <a href="!action:write-remark/" class="btn btn-sm btn-primary">
+                                {% trans "Write remark" %}
+                            </a>
+
+                            {% if issue_item.is_finished %}
+                                <a class="btn btn-sm btn-primary approve-issues-item" data-id="{{ issue_item.id }}">
+                                    Одобрить пункт
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            {% if issue_item.is_open %}
+                                <a class="btn btn-sm btn-primary start-issues-item" data-id="{{ issue_item.id }}">
+                                    Начать работу над пунктом
+                                </a>
+                            {% endif %}
+
+                            {% if issue_item.is_in_progress %}
+                                <a class="btn btn-sm btn-primary finish-issues-item" data-id="{{ issue_item.id }}">
+                                    Завершить работу над пунктом
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 {% endfor %}
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12">

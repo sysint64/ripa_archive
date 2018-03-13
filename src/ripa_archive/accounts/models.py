@@ -71,6 +71,17 @@ class User(AbstractBaseUser):
         else:
             return self.get_full_name().strip()
 
+    def is_child_of(self, user):
+        parent = self.parent
+
+        while parent is not None:
+            if parent == user:
+                return True
+
+            parent = parent.parent
+
+        return False
+
     @property
     def ref(self):
         return self.id
