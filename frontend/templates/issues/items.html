@@ -23,7 +23,7 @@
                 </div>
             {% endif %}
             <hr>
-            {% if issue.issues %}
+            {% if issue.children %}
                 {% include "issues/items.html" with issues=issue.children depth=depth|add:1 %}
             {% endif %}
         </li>
