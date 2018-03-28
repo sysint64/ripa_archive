@@ -16,6 +16,7 @@
                         <span class="fullness-block">
                             <span class="finished fullness">Закончено: {{ item.fullness_percents.finished|floatformat:1|intcomma }}%</span>
                             <span class="approved fullness">Одобрено: {{ item.fullness_percents.approved|floatformat:1|intcomma }}%</span>
+                            <span class="confirmed fullness">Утверждено: {{ item.fullness_percents.confirmed|floatformat:1|intcomma }}%</span>
                         </span>
                     </div>
                 {% endfor %}

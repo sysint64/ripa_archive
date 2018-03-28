@@ -24,41 +24,41 @@
                     {{ remark.text }}
                 </blockquote>
 
-                {% if not remark.is_accepted %}
-                    {% if user_is_editor %}
-                        <ul class="editor-tools">
-                            {% if not remark.is_finished %}
-                                <li>
-                                    <a href="#" class="mark-as-finished"
-                                       data-remark-id="{{ remark.pk }}">
-                                        {% trans "Mark as finished" %} <i class="fa fa-check"></i>
-                                    </a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    {% else %}
-                        {% if not remark.is_active %}
-                            <ul class="reviewer-tools">
-                                <li>
-                                    <a href="#" class="accept-remark"
-                                       data-remark-id="{{ remark.pk }}">
-                                        {% trans "Accept" %} <i class="fa fa-check"></i>
-                                    </a>
-                                </li>
-
-                                {% if not remark.is_rejected %}
-                                    <li>
-                                        <a href="!action:write-remark/?reject_remark_id={{ remark.pk }}"
-                                           class="reject-remark"
-                                        >
-                                            {% trans "Reject" %} <i class="fa fa-times"></i>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        {% endif %}
-                    {% endif %}
-                {% endif %}
+{#                {% if not remark.is_accepted %}#}
+{#                    {% if is_owner %}#}
+{#                        <ul class="editor-tools">#}
+{#                            {% if not remark.is_finished %}#}
+{#                                <li>#}
+{#                                    <a href="#" class="mark-as-finished"#}
+{#                                       data-remark-id="{{ remark.pk }}">#}
+{#                                        {% trans "Mark as finished" %} <i class="fa fa-check"></i>#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                            {% endif %}#}
+{#                        </ul>#}
+{#                    {% else %}#}
+{#                        {% if not remark.is_active %}#}
+{#                            <ul class="reviewer-tools">#}
+{#                                <li>#}
+{#                                    <a href="#" class="accept-remark"#}
+{#                                       data-remark-id="{{ remark.pk }}">#}
+{#                                        {% trans "Accept" %} <i class="fa fa-check"></i>#}
+{#                                    </a>#}
+{#                                </li>#}
+{##}
+{#                                {% if not remark.is_rejected %}#}
+{#                                    <li>#}
+{#                                        <a href="!action:write-remark/?reject_remark_id={{ remark.pk }}"#}
+{#                                           class="reject-remark"#}
+{#                                        >#}
+{#                                            {% trans "Reject" %} <i class="fa fa-times"></i>#}
+{#                                        </a>#}
+{#                                    </li>#}
+{#                                {% endif %}#}
+{#                            </ul>#}
+{#                        {% endif %}#}
+{#                    {% endif %}#}
+{#                {% endif %}#}
                 <br>
             </div>
         </li>

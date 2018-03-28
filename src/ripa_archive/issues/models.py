@@ -39,10 +39,12 @@ class Issue(models.Model):
         total = self.issueitem_set.count()
         finished_count = self.issueitem_set.filter(status=IssueItem.Status.FINISHED).count()
         approved_count = self.issueitem_set.filter(status=IssueItem.Status.APPROVED).count()
+        confirmed_count = self.issueitem_set.filter(status=IssueItem.Status.CONFIRMED).count()
 
         return {
-            "finished": (finished_count + approved_count) / total * 100,
-            "approved": approved_count / total * 100,
+            "finished": (finished_count + approved_count + confirmed_count) / total * 100,
+            "approved": (approved_count + confirmed_count) / total * 100,
+            "confirmed": confirmed_count / total * 100,
         }
 
     @property
@@ -52,6 +54,10 @@ class Issue(models.Model):
     @property
     def is_finished(self):
         return int(self.fullness_percents["finished"]) == 100
+
+    @property
+    def is_confirmed(self):
+        return int(self.fullness_percents["confirmed"]) == 100
 
     def css_class(self):
         if self.is_approved:
@@ -69,12 +75,16 @@ class IssueItem(models.Model):
         FINISHED = "2"
         APPROVED = "3"
         REJECTED = "4"
+        CONFIRMED = "5"
+        PAUSED = "6"
 
         CHOICES = (
             (OPEN, _("Open")),
             (IN_PROGRESS, _("In progress")),
             (FINISHED, _("Finished")),
             (APPROVED, _("Approved")),
+            (CONFIRMED, _("Confirmed")),
+            (PAUSED, _("Paused")),
         )
 
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
@@ -85,6 +95,10 @@ class IssueItem(models.Model):
     @property
     def is_open(self):
         return self.status == IssueItem.Status.OPEN
+
+    @property
+    def is_paused(self):
+        return self.status == IssueItem.Status.PAUSED
 
     @property
     def is_in_progress(self):
@@ -110,6 +124,7 @@ class IssueItem(models.Model):
             IssueItem.Status.FINISHED: " finished",
             IssueItem.Status.APPROVED: " approved",
             IssueItem.Status.REJECTED: " rejected",
+            IssueItem.Status.CONFIRMED: " approved",
         }.get(self.status, "")
 
 

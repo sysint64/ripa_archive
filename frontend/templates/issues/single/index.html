@@ -41,6 +41,7 @@
     <div class="x_panel">
         <div class="x_title">
             <h2>{{ issue.name }}</h2>
+{#            TODO: uncomments       #}
 {#            {% if user_is_follow %}#}
 {#                <a href="#" id="toggle-follow" title="{% trans "Do not follow" %}">#}
 {#                    <i class="fa fa-eye-slash"></i>#}
@@ -64,28 +65,44 @@
                             {% include "issues/single/remarks.html" with remarks=issue_item.remark_set.all %}
                         {% endif %}
 
-                        {% if reviewer %}
-                            <a href="!action:write-remark/" class="btn btn-sm btn-primary">
-                                {% trans "Write remark" %}
+                        {% if displays_approve_button and issue_item.is_finished %}
+                            <a class="btn btn-sm btn-primary approve-issues-item" data-id="{{ issue_item.id }}">
+                                Одобрить пункт
                             </a>
+                        {% endif %}
 
-                            {% if issue_item.is_finished %}
-                                <a class="btn btn-sm btn-primary approve-issues-item" data-id="{{ issue_item.id }}">
-                                    Одобрить пункт
-                                </a>
-                            {% endif %}
-                        {% else %}
-                            {% if issue_item.is_open %}
-                                <a class="btn btn-sm btn-primary start-issues-item" data-id="{{ issue_item.id }}">
-                                    Начать работу над пунктом
-                                </a>
-                            {% endif %}
+                        {% if displays_confirm_button and issue_item.is_finished %}
+                            <a class="btn btn-sm btn-primary confirm-issues-item" data-id="{{ issue_item.id }}">
+                                Утвердить пункт
+                            </a>
+                        {% endif %}
 
-                            {% if issue_item.is_in_progress %}
-                                <a class="btn btn-sm btn-primary finish-issues-item" data-id="{{ issue_item.id }}">
-                                    Завершить работу над пунктом
-                                </a>
-                            {% endif %}
+                        {% if displays_start_button and issue_item.is_open %}
+                            <a class="btn btn-sm btn-primary start-issues-item" data-id="{{ issue_item.id }}">
+                                Начать работу над пунктом
+                            </a>
+                        {% endif %}
+
+                        {% if displays_finish_button and issue_item.is_in_progress %}
+                            <a class="btn btn-sm btn-primary finish-issues-item" data-id="{{ issue_item.id }}">
+                                Завершить работу над пунктом
+                            </a>
+                        {% endif %}
+
+                        {% if displays_reject_button and issue_item.is_finihsed %}
+                            <a href="{% url "issues:write-remark" issue_id=issue.id issue_item_id=issue_item.id %}?reject"
+                               class="btn btn-sm btn-primary decline-issues-item" data-id="{{ issue_item.id }}"
+                            >
+                                Отклонить
+                            </a>
+                        {% endif %}
+
+                        {% if issue_item.displays_review_button and issue_item.is_in_progress %}
+                            <a href="{% url "issues:write-remark" issue_id=issue.id issue_item_id=issue_item.id %}"
+                               class="btn btn-sm btn-primary review-issues-item"
+                            >
+                                Написать комментарий
+                            </a>
                         {% endif %}
                     </div>
                 {% endfor %}

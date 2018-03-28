@@ -20,6 +20,8 @@ urlpatterns = [
     url(r'^(?P<issue_id>[0-9]+)/!action:start-working-on-item', actions_views.start_working_on_item, name="start-working-on-item"),
     url(r'^(?P<issue_id>[0-9]+)/!action:finish-working-on-item', actions_views.finish_working_on_item, name="finish-working-on-item"),
     url(r'^(?P<issue_id>[0-9]+)/!action:approve-working-on-item', actions_views.approve_working_on_item, name="approve-working-on-item"),
+    url(r'^(?P<issue_id>[0-9]+)/!action:confirm-item', actions_views.confirm_item, name="confirm-item"),
+    url(r'^(?P<issue_id>[0-9]+)/!action:pause-working-on-item', actions_views.pause_working_on_item, name="pause-working-on-item"),
 
     url(
         r'^!validator:create-issue/$',

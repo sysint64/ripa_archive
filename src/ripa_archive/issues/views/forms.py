@@ -128,6 +128,7 @@ def write_remark(request, issue_id, issue_item_id):
 
     reject_remark_id = request.GET.get("reject_remark_id")
     remark_to_reject = None
+    reject_issue_item = request.GET.get("reject")
 
     if reject_remark_id is not None:
         reject_remark_id = get_request_int_or_404(request, "GET", "reject_remark_id")
@@ -151,6 +152,11 @@ def write_remark(request, issue_id, issue_item_id):
         remark.issue_item = issue_item
         remark.user = request.user
         remark.save()
+
+        if reject_issue_item is not None:
+            remark_to_reject = remark
+            issue_item.status = IssueItem.Status.IN_PROGRESS
+            issue_item.save()
 
         # Reject remark
         if remark_to_reject is not None:

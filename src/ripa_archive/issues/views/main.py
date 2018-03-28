@@ -22,6 +22,13 @@ def issues_base_context(request):
 # TODO: Add permissions
 @login_required(login_url="accounts:login")
 def issues(request):
+    """
+    TODO:
+    Потом он сказал, что там где идет нумерация задач #1, #4 и т.д.
+    это нужно убрать сделать фильтр вместо #1  должна быть маркировка по типу задач,
+    Например красный и буква Б - безопасность, это надо придумать и продумать какую маркировку делать,
+    чтобы потом можно было отфильтровывать и смотреть по типу задач
+    """
     issues = []
 
     def create_issue_payload(for_user):
@@ -56,11 +63,31 @@ def issues(request):
 
 # TODO: Add permissions
 def issue(request, issue_id):
+    """
+    Кнопка одобрить (Status.APPROVED) - доступна вышестоящему по иерархии,
+    кнопка старт (Status.IN_PROGRESS) - нажимает юзер,
+    кнопка пауза (Status.PAUSED) - может нажать и юзер и вышестоящий по иерархии,
+    кнопка завершить (Status.FINISHED) - нажимает юзер и может если нужно нажать вышестоящий по иерархии,
+    кнопка отклонить (Status.REJECTED) - нажимает вышестоящий по иерархии и
+    кнопка утвердить (Status.CONFIRMED)- нажимает вышестоящий по иерархии
+    """
     issue = get_object_or_404(Issue, id=issue_id)
     context = issues_base_context(request)
+
+    is_user_superior_in_hierarchy = issue.owner.is_child_of(request.user)
+    is_owner = request.user == issue.owner
+
     context.update({
         "issue": issue,
         "title": issue.name,
-        "reviewer": issue.owner.is_child_of(request.user)
+        "reviewer": is_user_superior_in_hierarchy,
+        "is_owner": is_owner,
+        "displays_approve_button": is_user_superior_in_hierarchy,
+        "displays_confirm_button": is_user_superior_in_hierarchy,
+        "displays_start_button": is_owner,
+        "displays_pause_button": is_owner or is_user_superior_in_hierarchy,
+        "displays_finish_button": is_owner or is_user_superior_in_hierarchy,
+        "displays_reject_button": is_user_superior_in_hierarchy,
+        "displays_review_button": is_user_superior_in_hierarchy
     })
     return TemplateResponse(template="issues/single/index.html", request=request, context=context)
