@@ -2,6 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from forms.ajax import AjaxModelForm
+from ripa_archive.accounts.models import User
 from ripa_archive.documents import validators
 from ripa_archive.issues.models import Issue, IssueItem, Remark
 
@@ -35,7 +36,7 @@ class CreateIssueWithOwnerForm(AjaxModelForm):
 class IssueItemForm(AjaxModelForm):
     class Meta:
         model = IssueItem
-        fields = "name", "content"
+        fields = "users", "name", "content"
 
     name = forms.CharField(
         validators=[validators.name_validator],
@@ -43,6 +44,24 @@ class IssueItemForm(AjaxModelForm):
         required=True,
         label=_("Name")
     )
+
+    users = forms.ModelMultipleChoiceField(
+        label=_("Users"),
+        widget=forms.CheckboxSelectMultiple(),
+        required=False,
+        queryset=User.objects.all(),
+    )
+
+    # TODO: Не работает почему-то :(
+    # users = forms.ModelMultipleChoiceField(
+    #     label=_("Users"),
+    #     required=False,
+    #     queryset=User.objects.all(),
+    #     widget=forms.SelectMultiple(attrs={
+    #         "data-width": "fit",
+    #         "data-live-search": "true"
+    #     }),
+    # )
 
 
 class RemarkForm(AjaxModelForm):

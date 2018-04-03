@@ -41,6 +41,7 @@ class User(AbstractBaseUser):
     )
 
     parent = models.ForeignKey("User", null=True, on_delete=models.SET_NULL, default=None, related_name='parent_user')
+
     avatar_image = models.ImageField(_("Avatar image"), blank=True)
     first_name = models.CharField(_("First name"), max_length=30, blank=True)
     last_name = models.CharField(_("Last name"), max_length=30, blank=True)

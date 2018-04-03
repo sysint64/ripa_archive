@@ -1,4 +1,5 @@
 from django.db import models, transaction
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
@@ -68,6 +69,21 @@ class Issue(models.Model):
             return ""
 
 
+class IssueItemManager(models.Manager):
+    def items_for_issue(self, issue):
+        items = []
+
+        for item in super().get_queryset().filter(issue=issue):
+            items.append(item)
+
+        issues1 = super().get_queryset().filter(issue__is_active=True, users=issue.owner)
+
+        for issue in issues1:
+            items.append(issue)
+
+        return items
+
+
 class IssueItem(models.Model):
     class Status:
         OPEN = "0"
@@ -91,6 +107,9 @@ class IssueItem(models.Model):
     name = models.CharField(max_length=NAME_MAX_LENGTH, default="No name")
     content = models.TextField()
     status = models.CharField(max_length=1, default=Status.OPEN)
+    users = models.ManyToManyField(User)
+
+    objects = IssueItemManager()
 
     @property
     def is_open(self):

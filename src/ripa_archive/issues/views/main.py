@@ -5,7 +5,7 @@ from django.template.response import TemplateResponse
 from django.utils.translation import ugettext_lazy as _
 
 from ripa_archive.accounts.models import User
-from ripa_archive.issues.models import Issue
+from ripa_archive.issues.models import Issue, IssueItem
 
 ISSUES_ADD_MENU = (
     {"name": _("Issue"), "permalink": "!action:create-issue"},
@@ -79,6 +79,7 @@ def issue(request, issue_id):
 
     context.update({
         "issue": issue,
+        "issue_items": IssueItem.objects.items_for_issue(issue),
         "title": issue.name,
         "reviewer": is_user_superior_in_hierarchy,
         "is_owner": is_owner,

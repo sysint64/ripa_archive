@@ -15,8 +15,6 @@ from ripa_archive.issues.forms import IssueItemForm, CreateIssueWithOwnerForm, C
 from ripa_archive.issues.models import IssueItem, Issue, Remark
 from ripa_archive.issues.views.main import issues_base_context
 from ripa_archive.notifications import notifications_factory
-from ripa_archive.permissions import codes
-from ripa_archive.permissions.decorators import require_permissions
 from ripa_archive.views import MultiFormView
 
 
