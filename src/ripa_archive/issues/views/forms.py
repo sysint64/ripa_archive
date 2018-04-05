@@ -60,6 +60,7 @@ class CreateIssue(MultiFormView):
         item = form.save(commit=False)
         item.issue = self.issue
         item.save()
+        form.save_m2m()
 
 
 # TODO: reduce repetition
@@ -115,6 +116,7 @@ class UpdateIssue(EditPermissions):
         item = form.save(commit=False)
         item.issue = self.issue
         item.save()
+        form.save_m2m()
 
 
 @require_http_methods(["GET", "POST"])

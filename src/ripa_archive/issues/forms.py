@@ -45,23 +45,23 @@ class IssueItemForm(AjaxModelForm):
         label=_("Name")
     )
 
-    users = forms.ModelMultipleChoiceField(
-        label=_("Users"),
-        widget=forms.CheckboxSelectMultiple(),
-        required=False,
-        queryset=User.objects.all(),
-    )
-
-    # TODO: Не работает почему-то :(
     # users = forms.ModelMultipleChoiceField(
     #     label=_("Users"),
+    #     widget=forms.CheckboxSelectMultiple(),
     #     required=False,
     #     queryset=User.objects.all(),
-    #     widget=forms.SelectMultiple(attrs={
-    #         "data-width": "fit",
-    #         "data-live-search": "true"
-    #     }),
     # )
+
+    # TODO: Не работает почему-то :(
+    users = forms.ModelMultipleChoiceField(
+        label=_("Users"),
+        required=False,
+        queryset=User.objects.all(),
+        widget=forms.SelectMultiple(attrs={
+            "data-width": "fit",
+            "data-live-search": "true"
+        }),
+    )
 
 
 class RemarkForm(AjaxModelForm):
