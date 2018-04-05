@@ -53,7 +53,7 @@
     $(".confirm-issues-item").click(function(event) {
         executeActionWithConfirm(
             null,
-            "confirm-working-on-item",
+            "confirm-item",
             {
                 "id": $(this).data("id")
             },
