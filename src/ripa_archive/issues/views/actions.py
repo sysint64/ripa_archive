@@ -32,7 +32,8 @@ def delete(request):
 # TODO: @require_permissions
 def start_working_on_item(request, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
-    issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"), issue=issue)
+    # issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"), issue=issue)
+    issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"))
 
     if issue.owner != request.user:
         raise PermissionError()
@@ -48,7 +49,8 @@ def start_working_on_item(request, issue_id):
 # TODO: @require_permissions
 def pause_working_on_item(request, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
-    issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"), issue=issue)
+    # issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"), issue=issue)
+    issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"))
 
     is_user_superior_in_hierarchy = issue.owner.is_child_of(request.user)
     is_owner = request.user == issue.owner
@@ -67,7 +69,8 @@ def pause_working_on_item(request, issue_id):
 # TODO: @require_permissions
 def confirm_item(request, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
-    issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"), issue=issue)
+    # issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"), issue=issue)
+    issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"))
 
     is_user_superior_in_hierarchy = issue.owner.is_child_of(request.user)
 
@@ -85,7 +88,8 @@ def confirm_item(request, issue_id):
 # TODO: @require_permissions
 def finish_working_on_item(request, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
-    issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"), issue=issue)
+    # issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"), issue=issue)
+    issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"))
 
     is_user_superior_in_hierarchy = issue.owner.is_child_of(request.user)
     is_owner = request.user == issue.owner
@@ -104,7 +108,8 @@ def finish_working_on_item(request, issue_id):
 # TODO: @require_permissions
 def approve_working_on_item(request, issue_id):
     issue = get_object_or_404(Issue, pk=issue_id)
-    issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"), issue=issue)
+    # issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"), issue=issue)
+    issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"))
 
     if not issue.owner.is_child_of(request.user):
         raise PermissionError()

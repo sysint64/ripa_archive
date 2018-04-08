@@ -99,6 +99,7 @@ def issue(request, issue_id):
         "title": issue.name,
         "reviewer": is_user_superior_in_hierarchy,
         "is_owner": is_owner,
+        "user": request.user,
         "displays_approve_button": is_user_superior_in_hierarchy,
         "displays_confirm_button": is_user_superior_in_hierarchy,
         "displays_start_button": is_owner,
