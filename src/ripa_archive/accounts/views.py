@@ -132,7 +132,7 @@ def update(request, user_id):
 
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, _("Success added"))
+        messages.success(request, _("Success updated"))
         return redirect("accounts:index")
 
     return TemplateResponse(template="forms/form.html", request=request, context=context)

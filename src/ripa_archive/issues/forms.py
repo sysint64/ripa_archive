@@ -5,12 +5,13 @@ from forms.ajax import AjaxModelForm
 from ripa_archive.accounts.models import User
 from ripa_archive.documents import validators
 from ripa_archive.issues.models import Issue, IssueItem, Remark
+from ripa_archive.labels.models import Label
 
 
 class CreateIssueForm(AjaxModelForm):
     class Meta:
         model = Issue
-        fields = "name",
+        fields = "name", "labels"
 
     name = forms.CharField(
         validators=[validators.name_validator],
@@ -19,17 +20,37 @@ class CreateIssueForm(AjaxModelForm):
         label=_("Name")
     )
 
+    labels = forms.ModelMultipleChoiceField(
+        label=_("Labels"),
+        required=False,
+        queryset=Label.objects.all(),
+        widget=forms.SelectMultiple(attrs={
+            "data-width": "fit",
+            "data-live-search": "true"
+        }),
+    )
+
 
 class CreateIssueWithOwnerForm(AjaxModelForm):
     class Meta:
         model = Issue
-        fields = "owner", "name",
+        fields = "owner", "name", "labels",
 
     name = forms.CharField(
         validators=[validators.name_validator],
         max_length=validators.NAME_MAX_LENGTH,
         required=True,
         label=_("Name")
+    )
+
+    labels = forms.ModelMultipleChoiceField(
+        label=_("Labels"),
+        required=False,
+        queryset=Label.objects.all(),
+        widget=forms.SelectMultiple(attrs={
+            "data-width": "fit",
+            "data-live-search": "true"
+        }),
     )
 
 
@@ -45,14 +66,6 @@ class IssueItemForm(AjaxModelForm):
         label=_("Name")
     )
 
-    # users = forms.ModelMultipleChoiceField(
-    #     label=_("Users"),
-    #     widget=forms.CheckboxSelectMultiple(),
-    #     required=False,
-    #     queryset=User.objects.all(),
-    # )
-
-    # TODO: Не работает почему-то :(
     users = forms.ModelMultipleChoiceField(
         label=_("Users"),
         required=False,

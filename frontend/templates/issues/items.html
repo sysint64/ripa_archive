@@ -18,6 +18,12 @@
                             <span class="approved fullness">Одобрено: {{ item.fullness_percents.approved|floatformat:1|intcomma }}%</span>
                             <span class="confirmed fullness">Утверждено: {{ item.fullness_percents.confirmed|floatformat:1|intcomma }}%</span>
                         </span>
+
+                        {% for label in item.labels.all %}
+                            <span class="label" style="background: {{ label.hex_color }}">
+                                {{ label.code }}
+                            </span>
+                        {% endfor %}
                     </div>
                 {% endfor %}
             {% else %}

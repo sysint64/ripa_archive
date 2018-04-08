@@ -40,6 +40,12 @@
                     </a>
                 </li>
 
+                <li{% if active_url_name == "labels" %} class="active"{% endif %}>
+                    <a href="{% url "labels:index" %}">
+                        <i class="fa fa-tags"></i> {% trans "Labels" %}
+                    </a>
+                </li>
+
                 {% user_has_permission "users_can_read_profile" as users_can_read_profile %}
                 {% user_has_permission "users_can_edit" as users_can_edit %}
                 {% user_has_permission "users_can_edit" as users_can_delete %}

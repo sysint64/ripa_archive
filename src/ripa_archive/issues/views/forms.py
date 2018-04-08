@@ -53,6 +53,7 @@ class CreateIssue(MultiFormView):
             self.issue.owner = request.user
 
         self.issue.save()
+        form.save_m2m()
 
         return super().post(request, **kwargs)
 
@@ -109,6 +110,7 @@ class UpdateIssue(EditPermissions):
         self.issue = form.save(commit=False)
         self.issue.owner = request.user
         self.issue.save()
+        form.save_m2m()
 
         return super().post(request, **kwargs)
 

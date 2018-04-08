@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ripa_archive.accounts.models import User
 from ripa_archive.issues.models import Issue, IssueItem
+from ripa_archive.labels.models import Label
 
 ISSUES_ADD_MENU = (
     {"name": _("Issue"), "permalink": "!action:create-issue"},
@@ -31,10 +32,23 @@ def issues(request):
     """
     issues = []
 
+    filter_label = request.GET.get("label")
+
+    try:
+        filter_label = int(filter_label)
+        filter_label = Label.objects.get(pk=filter_label)
+    except Exception:
+        filter_label = None
+
     def create_issue_payload(for_user):
+        issues = Issue.objects.active_issues().filter(owner=for_user)
+
+        if filter_label is not None:
+            issues = issues.filter(labels=filter_label)
+
         return {
             "owner": for_user,
-            "issues": Issue.objects.active_issues().filter(owner=for_user),
+            "issues": issues,
             "children": []
         }
 
@@ -52,6 +66,8 @@ def issues(request):
     context = issues_base_context(request)
     context.update({
         "issues": issues,
+        "active_label": filter_label,
+        "labels": Label.objects.all(),
         "module_name": "issue",
         "title": _("Issues"),
         "edit_text": _("Edit issue"),

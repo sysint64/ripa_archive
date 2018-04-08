@@ -1,4 +1,4 @@
-{% extends "module_list.html" %}
+{% extends "module_list_filtered.html" %}
 
 {% load i18n %}
 {% load permissions %}
@@ -12,6 +12,17 @@
 {% block styles %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static "styles/issues.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block filter %}
+    <h3>{% trans "Labels" %}</h3>
+    <ul>
+        <li {% if active_label is None %}class="active"{% endif %}><a href="?">All</a></li>
+
+        {% for label in labels %}
+            <li {% if active_label.pk == label.pk %}class="active"{% endif %}><a href="?label={{ label.pk }}">{{ label }}</a></li>
+        {% endfor %}
+    </ul>
 {% endblock %}
 
 {% block items_content %}

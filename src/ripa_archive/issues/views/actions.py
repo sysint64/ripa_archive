@@ -38,7 +38,7 @@ def start_working_on_item(request, issue_id):
         raise PermissionError()
 
     issue_item.status = IssueItem.Status.IN_PROGRESS
-    issue_item.save()
+    issue_item.save(),
     messages.success(request._request, _("Successfully started working on issue item"))
     return Response({}, status=status.HTTP_200_OK)
 

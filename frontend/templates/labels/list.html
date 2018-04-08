@@ -1,0 +1,24 @@
+{% extends "module_list.html" %}
+
+{% load i18n %}
+{% load permissions %}
+{% load staticfiles %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "styles/labels.sass" %}" type="text/x-sass">
+{% endblock %}
+
+{% block table_header %}
+    <th>{% trans "Code" %}</th>
+    <th>{% trans "Name" %}</th>
+    <th>{% trans "Color" %}</th>
+{% endblock %}
+
+{% block table_detail %}
+    <td>{{ item.code }}</td>
+    <td>{{ item.name }}</td>
+    <td>
+        <div class="color-badge" style="background: {{ item.hex_color }};"></div>
+    </td>
+{% endblock %}

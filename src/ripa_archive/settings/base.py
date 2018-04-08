@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'ripa_archive.notifications.apps.NotificationsConfig',
     'ripa_archive.chat.apps.ChatConfig',
     'ripa_archive.issues.apps.IssuesConfig',
+    'ripa_archive.labels.apps.LabelsConfig',
 ]
 
 MIDDLEWARE = [

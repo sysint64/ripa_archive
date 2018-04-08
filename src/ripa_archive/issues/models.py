@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ripa_archive.accounts.models import User
 from ripa_archive.documents.validators import NAME_MAX_LENGTH
+from ripa_archive.labels.models import Label
 
 
 class IssuesManager(models.Manager):
@@ -18,6 +19,7 @@ class Issue(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=60)
     is_active = models.BooleanField(default=True)
+    labels = models.ManyToManyField(Label)
 
     objects = IssuesManager()
 

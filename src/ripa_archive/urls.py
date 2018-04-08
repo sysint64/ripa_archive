@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^accounts/', include('ripa_archive.accounts.urls', namespace="accounts")),
     url(r'^permissions/', include('ripa_archive.permissions.urls', namespace="permissions")),
     url(r'^issues/', include('ripa_archive.issues.urls', namespace="issues")),
+    url(r'^labels/', include('ripa_archive.labels.urls', namespace="labels")),
     url(r'^notifications/$', notifications, name="notifications"),
     url(r'^chat/$', chat, name="chat"),
     url(r'^activity/$', users_activity, name="activity"),
