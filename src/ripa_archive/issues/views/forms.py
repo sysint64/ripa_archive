@@ -101,14 +101,18 @@ class UpdateIssue(EditPermissions):
 
     @transaction.atomic
     def post(self, request, **kwargs):
+        set_auto_owner = False
         instance = self.get_instance_or_404(kwargs["issue_id"])
-        form = CreateIssueForm(prefix="main", data=request.POST, instance=instance)
+        form = CreateIssueWithOwnerForm(prefix="main", data=request.POST, instance=instance)
 
         if not form.is_valid():
             raise SuspiciousOperation()
 
         self.issue = form.save(commit=False)
-        self.issue.owner = request.user
+
+        if set_auto_owner:
+            self.issue.owner = request.user
+
         self.issue.save()
         form.save_m2m()
 
