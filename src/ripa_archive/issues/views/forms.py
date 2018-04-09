@@ -90,7 +90,7 @@ class UpdateIssue(EditPermissions):
         instance = self.get_instance_or_404(kwargs["issue_id"])
         context = super().get_context_data(**kwargs)
         context.update({
-            "main_data_form": CreateIssueForm(prefix="main", instance=instance),
+            "main_data_form": CreateIssueWithOwnerForm(prefix="main", instance=instance),
             "submit_title": _("Update issue"),
             "add_title": _("Add another item")
         })
