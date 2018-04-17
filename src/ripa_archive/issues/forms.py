@@ -11,30 +11,20 @@ from ripa_archive.labels.models import Label
 class CreateIssueForm(AjaxModelForm):
     class Meta:
         model = Issue
-        fields = "name", "labels"
+        fields = "name",
 
     name = forms.CharField(
         validators=[validators.name_validator],
         max_length=validators.NAME_MAX_LENGTH,
         required=True,
         label=_("Name")
-    )
-
-    labels = forms.ModelMultipleChoiceField(
-        label=_("Labels"),
-        required=False,
-        queryset=Label.objects.all(),
-        widget=forms.SelectMultiple(attrs={
-            "data-width": "fit",
-            "data-live-search": "true"
-        }),
     )
 
 
 class CreateIssueWithOwnerForm(AjaxModelForm):
     class Meta:
         model = Issue
-        fields = "owner", "name", "labels",
+        fields = "owner", "name",
 
     name = forms.CharField(
         validators=[validators.name_validator],
@@ -43,21 +33,11 @@ class CreateIssueWithOwnerForm(AjaxModelForm):
         label=_("Name")
     )
 
-    labels = forms.ModelMultipleChoiceField(
-        label=_("Labels"),
-        required=False,
-        queryset=Label.objects.all(),
-        widget=forms.SelectMultiple(attrs={
-            "data-width": "fit",
-            "data-live-search": "true"
-        }),
-    )
-
 
 class IssueItemForm(AjaxModelForm):
     class Meta:
         model = IssueItem
-        fields = "users", "name", "content"
+        fields = "users", "labels", "name", "content"
 
     name = forms.CharField(
         validators=[validators.name_validator],
@@ -70,6 +50,16 @@ class IssueItemForm(AjaxModelForm):
         label=_("Users"),
         required=False,
         queryset=User.objects.all(),
+        widget=forms.SelectMultiple(attrs={
+            "data-width": "fit",
+            "data-live-search": "true"
+        }),
+    )
+
+    labels = forms.ModelMultipleChoiceField(
+        label=_("Labels"),
+        required=False,
+        queryset=Label.objects.all(),
         widget=forms.SelectMultiple(attrs={
             "data-width": "fit",
             "data-live-search": "true"

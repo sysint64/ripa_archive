@@ -16,6 +16,23 @@
         event.preventDefault();
     });
 
+    $(".pause-issues-item").click(function(event) {
+        executeActionWithConfirm(
+            null,
+            "pause-working-on-item",
+            {
+                "id": $(this).data("id")
+            },
+            _("Pause working on this item?"),
+            function () {
+                showWaitDialog();
+                location.reload();
+            }
+        );
+
+        event.preventDefault();
+    });
+
     $(".finish-issues-item").click(function(event) {
         executeActionWithConfirm(
             null,

@@ -44,7 +44,7 @@ def issues(request):
         issues = Issue.objects.active_issues().filter(owner=for_user)
 
         if filter_label is not None:
-            issues = issues.filter(labels=filter_label)
+            issues = issues.filter(issueitem__labels=filter_label)
 
         return {
             "owner": for_user,

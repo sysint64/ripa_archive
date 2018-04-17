@@ -11,7 +11,7 @@
                          data-ref="{{ item.ref }}" data-group="{{ module_name }}s"
                          data-href="{{ item.permalink }}"
                     >
-                        <span class="id"># {{ item.id }}</span>
+{#                        <span class="id"># {{ item.id }}</span>#}
                         <span class="name">{{ item }}</span>
                         <span class="fullness-block">
                             <span class="finished fullness">Закончено: {{ item.fullness_percents.finished|floatformat:1|intcomma }}%</span>
@@ -19,7 +19,7 @@
                             <span class="confirmed fullness">Утверждено: {{ item.fullness_percents.confirmed|floatformat:1|intcomma }}%</span>
                         </span>
 
-                        {% for label in item.labels.all %}
+                        {% for label in item.labels %}
                             <span class="label" style="background: {{ label.hex_color }}">
                                 {{ label.code }}
                             </span>

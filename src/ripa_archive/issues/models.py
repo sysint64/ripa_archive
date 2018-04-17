@@ -19,12 +19,21 @@ class Issue(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=60)
     is_active = models.BooleanField(default=True)
-    labels = models.ManyToManyField(Label)
 
     objects = IssuesManager()
 
     def __str__(self):
         return self.name
+
+    @property
+    def labels(self):
+        labels = []
+
+        for item in IssueItem.objects.items_for_issue(self):
+            labels.extend(item.labels.all())
+
+        print(labels)
+        return labels
 
     @property
     def ref(self):
@@ -110,12 +119,13 @@ class IssueItem(models.Model):
     content = models.TextField()
     status = models.CharField(max_length=1, default=Status.OPEN)
     users = models.ManyToManyField(User)
+    labels = models.ManyToManyField(Label)
 
     objects = IssueItemManager()
 
     @property
     def is_open(self):
-        return self.status == IssueItem.Status.OPEN
+        return self.status == IssueItem.Status.OPEN or self.status == IssueItem.Status.PAUSED
 
     @property
     def is_paused(self):
@@ -146,6 +156,18 @@ class IssueItem(models.Model):
             IssueItem.Status.APPROVED: " approved",
             IssueItem.Status.REJECTED: " rejected",
             IssueItem.Status.CONFIRMED: " approved",
+        }.get(self.status, "")
+
+    @property
+    def status_name(self):
+        return {
+            IssueItem.Status.OPEN: "Открыт",
+            IssueItem.Status.IN_PROGRESS: "В работе",
+            IssueItem.Status.FINISHED: "Завершен",
+            IssueItem.Status.APPROVED: "Одобрен",
+            IssueItem.Status.REJECTED: "Отклонен",
+            IssueItem.Status.CONFIRMED: "Утвержден",
+            IssueItem.Status.PAUSED: "Приостановлен",
         }.get(self.status, "")
 
 

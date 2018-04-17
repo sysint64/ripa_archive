@@ -1,20 +1,63 @@
+@import "consts"
+
 .issue-item
     border-bottom: 1px solid #eee
     padding: 5px
     color: #000
-    &.finished
-        background: #ddefe7
-        border-color: #aae49b
+    //&.finished
+    //    background: #ddefe7
+    //    border-color: #aae49b
+    //
+    //&.in-progress
+    //    background: #efdecf
+    //    border-color: #dcc39c
+    //
+    //&.approved
+    //    background: #ddefe7
+    //    border-color: #aae49b
 
-    &.in-progress
-        background: #efdecf
-        border-color: #dcc39c
-
-    &.approved
-        background: #ddefe7
-        border-color: #aae49b
-
-    .approved-icon
+    .icon
         margin-left: 10px
-        opacity: 1
-        color: #5b974a
+        opacity: 0.5
+        //color: #5b974a
+
+.issue-item-action-menu
+    list-style-type: none
+    padding-left: 0
+    font-size: 10px
+    font-weight: bold
+    float: right
+    position: relative
+    margin-top: -35px
+
+    li
+        display: block
+        float: left
+        margin-left: 5px
+        height: 16px
+
+        &.one-selected-tools, &.at-least-one-selected-tools
+            display: none
+
+    a
+        display: block
+        float: left
+        padding: 5px 12px 3px
+        background: #999
+        font-weight: 400
+        font-size: 11px
+        text-transform: uppercase
+        letter-spacing: 0.5px
+        color: #fff
+        border-radius: 15px
+
+        &:hover
+            background: $green
+
+.status
+    display: inline-block
+    margin-left: 20px
+    color: #777
+
+.label
+    margin-right: 10px
