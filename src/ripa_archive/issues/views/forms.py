@@ -161,7 +161,8 @@ def write_remark(request, issue_id, issue_item_id):
 
         if reject_issue_item is not None:
             remark_to_reject = remark
-            issue_item.status = IssueItem.Status.IN_PROGRESS
+            issue_item.status = IssueItem.Status.REJECTED
+            issue_item.is_approved = False
             issue_item.save()
 
         # Reject remark

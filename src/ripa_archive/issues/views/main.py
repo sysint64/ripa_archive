@@ -102,7 +102,7 @@ def issue(request, issue_id):
         "user": request.user,
         "displays_approve_button": is_user_superior_in_hierarchy,
         "displays_confirm_button": is_user_superior_in_hierarchy,
-        "displays_start_button": is_owner,
+        "displays_start_button": is_owner or is_user_superior_in_hierarchy,
         "displays_pause_button": is_owner or is_user_superior_in_hierarchy,
         "displays_finish_button": is_owner or is_user_superior_in_hierarchy,
         "displays_reject_button": is_user_superior_in_hierarchy,

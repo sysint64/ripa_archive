@@ -50,12 +50,12 @@ class Issue(models.Model):
         # и получить прирост в производительности.
         total = self.issueitem_set.count()
         finished_count = self.issueitem_set.filter(status=IssueItem.Status.FINISHED).count()
-        approved_count = self.issueitem_set.filter(status=IssueItem.Status.APPROVED).count()
+        approved_count = self.issueitem_set.filter(is_approved=True).count()
         confirmed_count = self.issueitem_set.filter(status=IssueItem.Status.CONFIRMED).count()
 
         return {
-            "finished": (finished_count + approved_count + confirmed_count) / total * 100,
-            "approved": (approved_count + confirmed_count) / total * 100,
+            "finished": (finished_count + confirmed_count) / total * 100,
+            "approved": approved_count / total * 100,
             "confirmed": confirmed_count / total * 100,
         }
 
@@ -100,18 +100,15 @@ class IssueItem(models.Model):
         OPEN = "0"
         IN_PROGRESS = "1"
         FINISHED = "2"
-        APPROVED = "3"
-        REJECTED = "4"
-        CONFIRMED = "5"
-        PAUSED = "6"
+        REJECTED = "3"
+        CONFIRMED = "4"
 
         CHOICES = (
             (OPEN, _("Open")),
             (IN_PROGRESS, _("In progress")),
             (FINISHED, _("Finished")),
-            (APPROVED, _("Approved")),
             (CONFIRMED, _("Confirmed")),
-            (PAUSED, _("Paused")),
+            (REJECTED, _("Rejected")),
         )
 
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
@@ -120,16 +117,14 @@ class IssueItem(models.Model):
     status = models.CharField(max_length=1, default=Status.OPEN)
     users = models.ManyToManyField(User)
     labels = models.ManyToManyField(Label)
+    is_paused = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
 
     objects = IssueItemManager()
 
     @property
     def is_open(self):
-        return self.status == IssueItem.Status.OPEN or self.status == IssueItem.Status.PAUSED
-
-    @property
-    def is_paused(self):
-        return self.status == IssueItem.Status.PAUSED
+        return self.status == IssueItem.Status.OPEN
 
     @property
     def is_in_progress(self):
@@ -140,8 +135,8 @@ class IssueItem(models.Model):
         return self.status == IssueItem.Status.FINISHED
 
     @property
-    def is_approved(self):
-        return self.status == IssueItem.Status.APPROVED
+    def is_confirmed(self):
+        return self.status == IssueItem.Status.CONFIRMED
 
     @property
     def is_rejected(self):
@@ -153,7 +148,6 @@ class IssueItem(models.Model):
             IssueItem.Status.OPEN: " open",
             IssueItem.Status.IN_PROGRESS: " in-progress",
             IssueItem.Status.FINISHED: " finished",
-            IssueItem.Status.APPROVED: " approved",
             IssueItem.Status.REJECTED: " rejected",
             IssueItem.Status.CONFIRMED: " approved",
         }.get(self.status, "")
@@ -164,10 +158,8 @@ class IssueItem(models.Model):
             IssueItem.Status.OPEN: "Открыт",
             IssueItem.Status.IN_PROGRESS: "В работе",
             IssueItem.Status.FINISHED: "Завершен",
-            IssueItem.Status.APPROVED: "Одобрен",
             IssueItem.Status.REJECTED: "Отклонен",
             IssueItem.Status.CONFIRMED: "Утвержден",
-            IssueItem.Status.PAUSED: "Приостановлен",
         }.get(self.status, "")
 
 

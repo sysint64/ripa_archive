@@ -35,10 +35,14 @@ def start_working_on_item(request, issue_id):
     # issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"), issue=issue)
     issue_item = get_object_or_404(IssueItem, pk=request.data.get("id"))
 
-    if issue.owner != request.user:
+    is_user_superior_in_hierarchy = issue.owner.is_child_of(request.user)
+    is_owner = request.user == issue.owner
+
+    if not is_owner and not is_user_superior_in_hierarchy:
         raise PermissionError()
 
     issue_item.status = IssueItem.Status.IN_PROGRESS
+    issue_item.is_paused = False
     issue_item.save(),
     messages.success(request._request, _("Successfully started working on issue item"))
     return Response({}, status=status.HTTP_200_OK)
@@ -58,7 +62,7 @@ def pause_working_on_item(request, issue_id):
     if not is_owner and not is_user_superior_in_hierarchy:
         raise PermissionError()
 
-    issue_item.status = IssueItem.Status.PAUSED
+    issue_item.is_paused = True
     issue_item.save()
     messages.success(request._request, _("Successfully started working on issue item"))
     return Response({}, status=status.HTTP_200_OK)
@@ -114,7 +118,7 @@ def approve_working_on_item(request, issue_id):
     if not issue.owner.is_child_of(request.user):
         raise PermissionError()
 
-    issue_item.status = IssueItem.Status.APPROVED
+    issue_item.is_approved = True
     issue_item.save()
     messages.success(request._request, _("Successfully approved issue item"))
     return Response({}, status=status.HTTP_200_OK)

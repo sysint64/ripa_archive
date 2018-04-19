@@ -56,7 +56,12 @@
 
                             <span class="title">{{ issue_item.name }}</span>
 
-                            <span class="status">Статус: {{ issue_item.status_name }}</span>
+                            <span class="status">
+                                Статус: {{ issue_item.status_name }}
+                                {% if issue_item.is_paused %}
+                                    (Приостановлен)
+                                {% endif %}
+                            </span>
                         </h2>
 
                         {{ issue_item.content|linebreaks }}
@@ -78,19 +83,21 @@
                         {% endif %}
 
                         <ul class="issue-item-action-menu">
-                            {% if displays_start_button and issue_item.is_open %}
-                                <li>
-                                    <a
-                                        href=""
-                                        class="start-issues-item"
-                                        data-id="{{ issue_item.id }}"
-                                    >
-                                        Старт
-                                    </a>
-                                </li>
+                            {% if displays_start_button and issue_item.is_approved and not issue_item.is_finished and not issue_item.is_confirmed %}
+                                {% if not issue_item.is_in_progress or issue_item.is_paused %}
+                                    <li>
+                                        <a
+                                            href=""
+                                            class="start-issues-item"
+                                            data-id="{{ issue_item.id }}"
+                                        >
+                                            Старт
+                                        </a>
+                                    </li>
+                                {% endif %}
                             {% endif %}
 
-                            {% if displays_pause_button and issue_item.is_in_progress %}
+                            {% if displays_pause_button and issue_item.is_in_progress and not issue_item.is_paused %}
                                 <li>
                                     <a
                                         href=""
@@ -114,7 +121,7 @@
                                 </li>
                             {% endif %}
 
-                            {% if displays_approve_button and issue_item.is_finished %}
+                            {% if displays_approve_button and issue_item.is_open and not issue_item.is_approved %}
                                 <li>
                                     <a
                                         href=""
@@ -138,7 +145,7 @@
                                 </li>
                             {% endif %}
 
-                            {% if displays_reject_button %}
+                            {% if displays_reject_button and not issue_item.is_rejected and not issue_item.is_confirmed %}
                                 <li>
                                     <a
                                         href="{% url "issues:write-remark" issue_id=issue.id issue_item_id=issue_item.id %}?reject"
