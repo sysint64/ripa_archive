@@ -130,7 +130,7 @@ class UpdateIssue(EditPermissions):
 # TODO: @require_permissions
 def write_remark(request, issue_id, issue_item_id):
     issue = get_object_or_404(Issue, pk=issue_id)
-    issue_item = get_object_or_404(IssueItem, pk=issue_item_id, issue=issue)
+    issue_item = get_object_or_404(IssueItem, pk=issue_item_id)
 
     reject_remark_id = request.GET.get("reject_remark_id")
     remark_to_reject = None

@@ -157,7 +157,7 @@
                                 </li>
                             {% endif %}
 
-                            {% if issue_item.displays_review_button %}
+                            {% if displays_review_button %}
                                 <li>
                                     <a
                                         href="{% url "issues:write-remark" issue_id=issue.id issue_item_id=issue_item.id %}"
