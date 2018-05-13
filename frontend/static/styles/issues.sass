@@ -1,12 +1,12 @@
 .module
-    ul:nth-child(1)
+    ul.issues:nth-child(1)
         padding-left: 0
 
-    ul
+    ul.issues
         list-style-type: none
         padding-left: 25px
 
-    li
+    ul.issues li
         .selectable
             font-size: 14px
             padding: 5px 10px
@@ -16,11 +16,11 @@
                 padding: 0 5px
                 color: #888
 
-            &.approved
-                background: #d4efe2
-
-            &.finished
-                background: #d6e3f8
+            //&.approved
+            //    background: #d4efe2
+            //
+            //&.finished
+            //    background: #d6e3f8
 
         .selected
             background: #1ABB9C !important
@@ -29,12 +29,19 @@
             .id
                 color: #fff
 
+            h4
+                color: #fff
+
+            .status
+                color: #fff
+
         .no-active-issues
             padding: 5px 10px
             color: #888
 
         .owner
             font-size: 16px
+            color: #000
 
         hr
             margin: 5px 0
@@ -45,6 +52,8 @@
 
         .fullness-block
             display: inline-block
+            float: right
+
         .fullness
             display: inline-block
             padding: 0 3px
@@ -63,8 +72,23 @@
                 background: #1ABB9C
                 color: #fff
 
+h4
+    font-size: 14px
+    color: #000
+
+ul.issue_items
+    list-style-type: disc
+    //padding-left: 100px
+
 .label
-    float: right
+    float: left
     font-size: 14px
     padding: 3px 8px
-    margin-left: 10px
+    margin-right: 4px
+
+.selected
+    color: #fff !important
+
+.status
+    color: #000
+    float: right

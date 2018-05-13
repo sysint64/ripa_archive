@@ -1,9 +1,15 @@
 {% load humanize %}
 
-<ul>
+<ul class="issues">
     {% for issue in issues %}
         <li>
-            <div class="owner">Планы для пользователя {{ issue.owner }}</div>
+            <div class="owner selectable data-double-click-link"
+                 data-id="{{ issue.id }}"
+                 data-ref="{{ issue.issues.first.ref }}" data-group="{{ module_name }}s"
+                 data-href="{{ issue.issues.first.permalink }}"
+            >
+                Планы для пользователя {{ issue.owner }}
+            </div>
             {% if issue.issues.count > 0 %}
                 {% for item in issue.issues.all %}
                     <div class="selectable context-menu data-double-click-link{{ item.css_class }}"
@@ -11,19 +17,39 @@
                          data-ref="{{ item.ref }}" data-group="{{ module_name }}s"
                          data-href="{{ item.permalink }}"
                     >
-{#                        <span class="id"># {{ item.id }}</span>#}
                         <span class="name">{{ item }}</span>
-                        <span class="fullness-block">
-                            <span class="finished fullness">Закончено: {{ item.fullness_percents.finished|floatformat:1|intcomma }}%</span>
-                            <span class="approved fullness">Одобрено: {{ item.fullness_percents.approved|floatformat:1|intcomma }}%</span>
-                            <span class="confirmed fullness">Утверждено: {{ item.fullness_percents.confirmed|floatformat:1|intcomma }}%</span>
-                        </span>
 
                         {% for label in item.labels %}
                             <span class="label" style="background: {{ label.hex_color }}">
                                 {{ label.code }}
                             </span>
                         {% endfor %}
+
+                        <span class="fullness-block">
+                            <span
+                                class="finished fullness">Закончено: {{ item.fullness_percents.finished|floatformat:1|intcomma }}%</span>
+                            <span
+                                class="approved fullness">Одобрено: {{ item.fullness_percents.approved|floatformat:1|intcomma }}%</span>
+                            <span
+                                class="confirmed fullness">Утверждено: {{ item.fullness_percents.confirmed|floatformat:1|intcomma }}%</span>
+                        </span>
+
+                        <h4>Пункты ({{ item.issue_item|length }}):</h4>
+                        <div>
+                            <ul class="issue_items">
+                                {% for issue_item in item.issue_item %}
+                                    <li>
+                                        <span class="title">{{ issue_item.name }}</span>
+                                        <span class="status">
+                                            Статус: {{ issue_item.status_name }}
+                                            {% if issue_item.is_paused %}
+                                                (Приостановлен)
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 {% endfor %}
             {% else %}

@@ -44,6 +44,10 @@ class Issue(models.Model):
         return reverse("issues:single", kwargs={"issue_id": self.id})
 
     @property
+    def issue_item(self):
+        return IssueItem.objects.items_for_issue(self)
+
+    @property
     @transaction.atomic
     def fullness_percents(self):
         # NOTE: Этот запрос наверное можно переписать с использованием аггрегаций
