@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, password_validation
+from django.contrib.auth.forms import UserCreationForm
 
 from forms.ajax import AjaxForm, AjaxModelForm
 from forms.consts import YES_NO_CHOICES
@@ -74,3 +75,49 @@ class UserForm(AjaxModelForm):
             "data-width": "fit",
         }),
     )
+
+
+class UserUpdatePasswordForm(AjaxForm):
+    def __init__(self, data=None, files=None, instance=None):
+        self.instance = instance
+        super().__init__(data=data, files=files)
+
+    old_password = forms.CharField(
+        label=_("Old password"),
+        strip=False,
+        widget=forms.PasswordInput,
+    )
+
+    password1 = forms.CharField(
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput,
+    )
+
+    password2 = forms.CharField(
+        label=_("Password confirmation"),
+        widget=forms.PasswordInput,
+        strip=False,
+        help_text=_("Enter the same password as before, for verification."),
+    )
+
+    def clean_old_password(self):
+        old_password = self.cleaned_data.get("old_password")
+
+        if not self.instance.check_password(old_password):
+            raise forms.ValidationError(
+                "Неверный пароль",
+                code='password_mismatch',
+            )
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(
+                UserCreationForm.error_messages['password_mismatch'],
+                code='password_mismatch',
+            )
+        # password_validation.validate_password(self.cleaned_data.get('password2'), self.instance)
+        return password2

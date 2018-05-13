@@ -5,14 +5,14 @@ from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
-from django.contrib.auth import login
+from django.contrib.auth import login, update_session_auth_hash
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from ripa_archive.accounts.forms import LoginForm, UserForm
+from ripa_archive.accounts.forms import LoginForm, UserForm, UserUpdatePasswordForm
 from ripa_archive.accounts.input_serializers import BulkInputSerializer
 from ripa_archive.accounts.models import User
 from ripa_archive.activity.models import Activity
@@ -132,6 +132,34 @@ def update(request, user_id):
 
     if request.method == "POST" and form.is_valid():
         form.save()
+        messages.success(request, _("Success updated"))
+        return redirect("accounts:index")
+
+    return TemplateResponse(template="forms/form.html", request=request, context=context)
+
+
+@require_http_methods(["GET", "POST"])
+@require_permissions([codes.USERS_CAN_EDIT])
+def update_password(request, user_id):
+    instance = get_object_or_404(User, id=user_id)
+
+    if request.method == "POST":
+        form = UserUpdatePasswordForm(request.POST, request.FILES, instance = instance)
+    else:
+        form = UserUpdatePasswordForm(instance = instance)
+
+    context = users_base_context(request)
+    context.update({
+        "form_title": _("Update user"),
+        "form": form,
+        "submit_title": _("Update"),
+        "validator_url": reverse("accounts:validator-update-password", kwargs={"id": user_id}),
+    })
+
+    if request.method == "POST" and form.is_valid():
+        instance.set_password(form.cleaned_data["password1"])
+        instance.save()
+        update_session_auth_hash(request, instance)
         messages.success(request, _("Success updated"))
         return redirect("accounts:index")
 
