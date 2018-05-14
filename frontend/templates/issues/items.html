@@ -3,7 +3,7 @@
 <ul class="issues">
     {% for issue in issues %}
         <li>
-            <div class="owner selectable data-double-click-link"
+            <div class="owner selectable data-double-click-link issues-items-header"
                  data-id="{{ issue.id }}"
                  data-ref="{{ issue.issues.first.ref }}" data-group="{{ module_name }}s"
                  data-href="{{ issue.issues.first.permalink }}"

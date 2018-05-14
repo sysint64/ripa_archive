@@ -88,10 +88,10 @@ class IssueItemManager(models.Manager):
     def items_for_issue(self, issue):
         items = []
 
-        for item in super().get_queryset().filter(issue=issue):
+        for item in super().get_queryset().filter(issue=issue, status__in=IssueItem.Status.ALLOWED_STATUSES):
             items.append(item)
 
-        issues1 = super().get_queryset().filter(issue__is_active=True, users=issue.owner)
+        issues1 = super().get_queryset().filter(issue__is_active=True, users=issue.owner, status__in=IssueItem.Status.ALLOWED_STATUSES)
 
         for issue in issues1:
             items.append(issue)
@@ -114,6 +114,8 @@ class IssueItem(models.Model):
             (CONFIRMED, _("Confirmed")),
             (REJECTED, _("Rejected")),
         )
+
+        ALLOWED_STATUSES = OPEN, IN_PROGRESS, FINISHED, REJECTED, CONFIRMED
 
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
     name = models.CharField(max_length=NAME_MAX_LENGTH, default="No name")
