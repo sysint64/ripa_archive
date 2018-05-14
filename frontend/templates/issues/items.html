@@ -12,7 +12,7 @@
             </div>
             {% if issue.issues.count > 0 %}
                 {% for item in issue.issues.all %}
-                    <div class="selectable context-menu data-double-click-link{{ item.css_class }}"
+                    <div class="issues-items-container selectable context-menu data-double-click-link{{ item.css_class }}"
                          data-id="{{ issue.id }}"
                          data-ref="{{ item.ref }}" data-group="{{ module_name }}s"
                          data-href="{{ item.permalink }}"

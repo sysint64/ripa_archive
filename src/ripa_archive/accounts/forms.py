@@ -49,6 +49,15 @@ class UserForm(AjaxModelForm):
                  "group", "is_active", \
                  "avatar_image"
 
+    parent = forms.ModelChoiceField(
+        label=_("Parent"),
+        required=False,
+        queryset=User.objects.all(),
+        widget=forms.Select(attrs={
+            "data-width": "fit",
+        }),
+    )
+
     gender = forms.ChoiceField(
         label=_("Gender"),
         required=False,
